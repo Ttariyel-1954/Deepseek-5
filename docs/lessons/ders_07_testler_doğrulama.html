@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dərs 7 — Testlər və Doğrulama</title>
+<style>
+  :root{
+    --mavi:#0f3d5c; --mavi2:#14557e; --mavi3:#0a2c44;
+    --yasi:#0e9f6e; --yasi2:#0b7a54;
+    --qirmizi:#b91c1c; --boz:#f4f6f8; --metin:#1f2937; --ac:#6b7280;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;color:var(--metin);line-height:1.65;background:#eef1f4}
+  header{background:linear-gradient(135deg,var(--mavi3),var(--mavi) 60%,var(--mavi2));color:#fff;padding:2.2rem 1.5rem 1.8rem;border-bottom:4px solid var(--yasi)}
+  .qab{max-width:1050px;margin:0 auto;padding:0 1rem}
+  header h1{font-size:1.7rem;font-weight:700}
+  header .alt{color:#cfe0ec;margin-top:.4rem;font-size:1rem}
+  header .nişan{display:inline-block;background:var(--yasi);color:#fff;font-size:.75rem;font-weight:700;padding:.25rem .7rem;border-radius:999px;margin-top:.8rem;letter-spacing:.5px}
+  nav{background:#fff;border-bottom:1px solid #dde3e8;position:sticky;top:0;z-index:10;box-shadow:0 2px 6px rgba(15,61,92,.06)}
+  nav .qab{display:flex;flex-wrap:wrap;gap:.3rem;padding:.5rem 1rem;align-items:center}
+  nav a{color:var(--mavi);text-decoration:none;font-size:.85rem;padding:.3rem .65rem;border-radius:6px}
+  nav a:hover{background:#e8f2fa;color:var(--mavi2)}
+  main{max-width:1050px;margin:2rem auto;padding:0 1rem}
+  .kart{background:#fff;border:1px solid #e0e5ea;border-radius:12px;padding:1.8rem 2rem;margin-bottom:1.8rem;box-shadow:0 2px 8px rgba(15,61,92,.05)}
+  h2{color:var(--mavi);font-size:1.35rem;margin-bottom:1rem;padding-bottom:.5rem;border-bottom:2px solid var(--yasi);display:flex;align-items:center;gap:.5rem}
+  h2 .no{background:var(--mavi);color:#fff;font-size:.8rem;padding:.15rem .6rem;border-radius:6px}
+  h3{color:var(--mavi2);font-size:1.08rem;margin:1.4rem 0 .6rem}
+  h4{color:var(--mavi2);font-size:.95rem;margin:1rem 0 .3rem}
+  p{margin-bottom:.9rem}
+  ul,ol{margin:0 0 1rem 1.4rem}
+  li{margin-bottom:.35rem}
+  table{width:100%;border-collapse:collapse;margin:1rem 0 1.4rem;font-size:.88rem}
+  th{background:var(--mavi);color:#fff;text-align:left;padding:.55rem .7rem;font-weight:600}
+  td{padding:.5rem .7rem;border-bottom:1px solid #e8edf1;vertical-align:top}
+  tr:nth-child(even) td{background:#f7fafb}
+  code{font-family:'SF Mono',Consolas,'Courier New',monospace;background:#eef3f7;color:#0b4a6f;padding:.15rem .4rem;border-radius:4px;font-size:.85rem}
+  pre{background:#0f1e2a;color:#dce9f2;padding:1.2rem 1.4rem;border-radius:10px;overflow-x:auto;margin:1rem 0 1.4rem;font-size:.8rem;line-height:1.55;border-left:4px solid var(--yasi)}
+  pre code{background:none;color:inherit;padding:0;font-size:inherit}
+  pre .cm{color:#7d9bb0} pre .kw{color:#7dd3fc} pre .s{color:#86efac} pre .n{color:#fca5a5}
+  .diqqet{background:#fef3f2;border:1px solid #f5c2c0;border-left:4px solid var(--qirmizi);padding:1rem 1.2rem;border-radius:8px;margin:1.2rem 0}
+  .meslehet{background:#e8f6ef;border:1px solid #b9e6d0;border-left:4px solid var(--yasi);padding:1rem 1.2rem;border-radius:8px;margin:1.2rem 0}
+  .info{background:#eaf3fb;border:1px solid #c3dcf0;border-left:4px solid var(--mavi);padding:1rem 1.2rem;border-radius:8px;margin:1.2rem 0}
+  .tebrik{background:#fff8e6;border:1px solid #f0dfa8;border-left:4px solid #f59e0b;padding:1rem 1.2rem;border-radius:8px;margin:1.2rem 0}
+  footer{background:var(--mavi3);color:#b9cfdd;text-align:center;padding:1.5rem;font-size:.85rem;margin-top:2.5rem}
+  .hansı{color:var(--mavi);font-size:.82rem;margin:.4rem 0}
+  .ok{color:var(--yasi);font-weight:700}.no2{color:var(--qirmizi);font-weight:700}
+  @media(max-width:600px){main{padding:0 .5rem}.kart{padding:1.2rem}h1{font-size:1.3rem!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="qab">
+    <div class="nişan">Dərs 7 / 8 · Test və Doğrulama</div>
+    <h1>Jest Testləri, curl ilə API Yoxlama, AI Endpoint, Baza Doğrulama</h1>
+    <div class="alt">DeepSeek-5 ERP — Hər şeyin işlədiyini sübut edirik</div>
+  </div>
+</header>
+
+<nav>
+  <div class="qab">
+    <a href="#meqsed">Məqsəd</a>
+    <a href="#baza">Baza doğrulama</a>
+    <a href="#api">API curl</a>
+    <a href="#jest">Jest</a>
+    <a href="#ai">AI testi</a>
+    <a href="#end">End-to-end</a>
+    <a href="#tekrar">Tapşırıq</a>
+  </div>
+</nav>
+
+<main>
+
+<section class="kart" id="meqsed">
+  <h2><span class="no">0</span> Dərsin Məqsədi</h2>
+  <p>Bu dərs bütün sistemin <strong>doğrulanmasını</strong> öyrədir. Dörd səviyyədə yoxlayacaqsınız:</p>
+  <ol>
+    <li><strong>Baza doğrulama</strong> — SQL sorğuları ilə strukturu və məlumat bütövlüyünü yoxlama;</li>
+    <li><strong>API doğrulama</strong> — curl ilə HTTP endpointləri test etmə;</li>
+    <li><strong>Avtomatik testlər</strong> — Jest ilə vahid (unit) və inteqrasiya (integration) testləri;</li>
+    <li><strong>AI endpoint testi</strong> — mock rejimində AI sorğusunun işlədiyini yoxlama.</li>
+  </ol>
+  <div class="hansı"><strong>Real fayllar:</strong> <code>database/03_test_queries.sql</code>, <code>database/04_analitik_sorgular.sql</code>, <code>backend/tests/</code> strukturu</div>
+</section>
+
+<section class="kart" id="baza">
+  <h2><span class="no">1</span> Baza Doğrulama Sorğuları</h2>
+
+  <p><code>database/03_test_queries.sql</code> faylında 10+ test sorğusu var. Ən vacibləri:</p>
+
+  <h3>1.1. Plan-fakt təhlili (#1)</h3>
+  <pre><code>SELECT l.layihe_id, l.kod, l.ad AS layihe,
+       l.plan_budce,
+       COALESCE(SUM(x.mebleg), 0) AS fakt_xerc,
+       l.plan_budce - COALESCE(SUM(x.mebleg), 0) AS qaliq,
+       ROUND(100.0 * COALESCE(SUM(x.mebleg), 0) / NULLIF(l.plan_budce, 0), 2) AS istifade_faizi
+FROM layihe.layihe l
+LEFT JOIN maliyye.xerc x ON x.layihe_id = l.layihe_id
+WHERE l.silinib = FALSE
+GROUP BY l.layihe_id
+ORDER BY l.layihe_id;</code></pre>
+  <p><strong>Gözlənilən:</strong> L-2026-001 → fakt 68,700 / plan 850,000 → istifadə faizi ≈ 8.08.</p>
+
+  <h3>1.2. Tender qənaəti (#2)</h3>
+  <pre><code>SELECT t.kod AS tender_kod, t.ad AS tender,
+       t.qiymet_serhedi AS elan_mebleg,
+       ti.sirket_ad AS qalib_sirket, ti.teklif_mebleg,
+       t.qiymet_serhedi - ti.teklif_mebleg AS qenayet,
+       ROUND(100.0 * (t.qiymet_serhedi - ti.teklif_mebleg) / NULLIF(t.qiymet_serhedi, 0), 2) AS qenayet_faizi
+FROM satinalma.tender t
+JOIN satinalma.tender_istirakci ti ON ti.tender_id = t.tender_id AND ti.qalib = TRUE
+WHERE t.status_id = (SELECT status_id FROM satinalma.tender_status WHERE kod='qalib')
+ORDER BY qenayet DESC;</code></pre>
+  <p><strong>Gözlənilən:</strong> T-2026-001 → 850,000 − 780,000 = 70,000 AZN qənaət (8.24%). T-2026-003 → 620,000 − 590,000 = 30,000 AZN (4.84%).</p>
+
+  <h3>1.3. Regionlar üzrə layihə statistikası (#5)</h3>
+  <pre><code>SELECT r.ad AS region,
+       COUNT(l.layihe_id) AS layihe_sayi,
+       COALESCE(SUM(l.plan_budce), 0) AS plan_budce,
+       COALESCE(SUM(x.mebleg), 0) AS fakt_xerc
+FROM ref.region r
+LEFT JOIN ref.seher s ON s.region_id = r.region_id
+LEFT JOIN layihe.layihe l ON l.seher_id = s.seher_id AND l.silinib = FALSE
+LEFT JOIN maliyye.xerc x ON x.layihe_id = l.layihe_id
+GROUP BY r.region_id
+ORDER BY plan_budce DESC;</code></pre>
+  <p><strong>Gözlənilən:</strong> Bakı regionu ən çox plan büdcəyə malikdir (fasad təmiri + dam təmiri layihələri orada).</p>
+
+  <h3>1.4. Layihə üzrə işçi sayı və orta maaş (#3)</h3>
+  <p>Kadr planlaması üçün: hər layihədə neçə işçi, orta maaş nə qədər.</p>
+  <pre><code>SELECT l.kod, l.ad AS layihe,
+       COUNT(DISTINCT t.isci_id) AS isci_sayi,
+       ROUND(AVG(i.maas), 2) AS orta_maas,
+       COUNT(DISTINCT t.teyinat_id) AS teyinat_sayi
+FROM layihe.layihe l
+LEFT JOIN kadr.layihe_isci_teyinat t ON t.layihe_id = l.layihe_id
+LEFT JOIN kadr.isci i ON i.isci_id = t.isci_id
+WHERE l.silinib = FALSE
+GROUP BY l.layihe_id
+ORDER BY isci_sayi DESC;</code></pre>
+  <p><strong>Gözlənilən:</strong> L-2026-001-də 2 işçi təyinatı, L-2026-004-də 1, L-2026-005-də 1; digərləri 0.</p>
+
+  <h3>1.5. Ən çox istifadə olunan materiallar (#4)</h3>
+  <p>Təchizat optimallaşdırması: ən çox dəyəri olan materiallar.</p>
+  <pre><code>SELECT mn.ad AS material, mn.vahid,
+       SUM(lm.miqdar) AS toplam_miqdar,
+       SUM(lm.miqdar * lm.qiymet) AS toplam_deyer
+FROM layihe.layihe_material lm
+JOIN ref.material_novu mn ON mn.material_novu_id = lm.material_novu_id
+GROUP BY mn.material_novu_id
+ORDER BY toplam_deyer DESC;</code></pre>
+  <p><strong>Gözlənilən:</strong> Tikinti kərpici (145,000 × 0.45 = 65,250 AZN) ən yüksək ümumi dəyərə malikdir; sonra Portland sement (420 × 210 = 88,200 AZN).</p>
+
+  <h3>1.6. Müqavilə ödəniş vəziyyəti (#6) — Borc idarəsi</h3>
+  <pre><code>SELECT m.nomre, m.podratci,
+       m.mebleg AS muqavile_mebleg,
+       COALESCE(SUM(o.mebleg), 0) AS odenen,
+       m.mebleg - COALESCE(SUM(o.mebleg), 0) AS qaliq_borc,
+       ROUND(100.0 * COALESCE(SUM(o.mebleg), 0) / NULLIF(m.mebleg, 0), 2) AS odenis_faizi
+FROM satinalma.muqavile m
+LEFT JOIN maliyye.odenis o ON o.muqavile_id = m.muqavile_id
+WHERE m.aktif = TRUE
+GROUP BY m.muqavile_id
+ORDER BY qaliq_borc DESC;</code></pre>
+  <p><strong>Gözlənilən:</strong> MQ-2026-015 → məbləğ 780,000, ödənilən 500,000, borc 280,000 (64.10%). MQ-2026-008 → məbləğ 590,000, ödənilən 450,000, borc 140,000 (76.27%).</p>
+
+  <h3>1.7. İş növləri üzrə orta layihə müddəti (#8)</h3>
+  <pre><code>SELECT isn.ad AS is_novu,
+       COUNT(l.layihe_id) AS layihe_sayi,
+       ROUND(AVG(l.son_tarix - l.bashlama_tarixi), 0) AS orta_gun,
+       ROUND(AVG(l.son_tarix - l.bashlama_tarixi) / 30.0, 1) AS orta_ay
+FROM ref.is_novu isn
+LEFT JOIN layihe.layihe l ON l.is_novu_id = isn.is_novu_id AND l.silinib = FALSE
+WHERE l.layihe_id IS NOT NULL
+GROUP BY isn.is_novu_id
+ORDER BY orta_gun DESC;</code></pre>
+
+  <h3>1.8. Ay üzrə xərclərin dinamikası (#10)</h3>
+  <pre><code>SELECT TO_CHAR(tarix, 'YYYY-MM') AS ay,
+       COUNT(xerc_id) AS xerc_sayi,
+       SUM(mebleg) AS xerc_mebleg
+FROM maliyye.xerc
+GROUP BY TO_CHAR(tarix, 'YYYY-MM')
+ORDER BY ay;</code></pre>
+  <p><strong>Gözlənilən:</strong> 2026-04 (2 xərc, 20,700 AZN), 2026-05 (2 xərc, 104,000 AZN), 2026-03 (1 xərc, 82,150), 2026-06 (1 xərc, 4,500), 2026-08 (1 xərc, 3,500).</p>
+
+  <div class="meslehet">
+    <strong>Məsləhət:</strong> Bütün test sorğularını bir fayldan icra edin:
+    <pre><code>psql -U deepseek_admin -h localhost -d deepseek_erp_v6 -f database/03_test_queries.sql</code></pre>
+  </div>
+
+  <h3>1.9. Yeni sxemlərin analitik sorğularının doğrulanması</h3>
+  <p><code>database/04_analitik_sorgular.sql</code> faylı ai/sened/risk/keyfiyyet/logistika/tehlike/audit sxemləri üçün əlavə analitik sorğular təqdim edir. Ən vacibləri:</p>
+  <pre><code><span class="cm">-- Risk növləri üzrə paylanma (RISK-2)</span>
+SELECT risk_novu, COUNT(*) AS sayi,
+       ROUND(AVG(derece), 1) AS orta_derece,
+       COUNT(*) FILTER (WHERE status = 'aciq') AS aciq_sayi
+FROM risk.risk
+GROUP BY risk_novu ORDER BY sayi DESC;
+<span class="cm">-- Gözlənilən: maliyye=2, hava=2, texniki=1, tedaruk=1, kadr=1, tehlike=1, huquqi=1</span>
+
+<span class="cm">-- Uğursuz giriş cəhdləri (AUDİT-2)</span>
+SELECT istifadeci_ad, ip,
+       COUNT(*) FILTER (WHERE success = FALSE) AS ugursuz,
+       COUNT(*) FILTER (WHERE success = TRUE) AS ugurlu
+FROM audit.giris_log
+GROUP BY istifadeci_ad, ip
+ORDER BY ugursuz DESC;
+<span class="cm">-- Gözlənilən: ramin.eliyev 1 uğursuz, elcin.memmedov 1 uğursuz</span></code></pre>
+</section>
+
+<section class="kart" id="api">
+  <h2><span class="no">2</span> curl ilə API Doğrulama</h2>
+
+  <h3>1.10. Trigger və funksiyaların doğrulaması</h3>
+  <p>Dərs 2-dəki triggerlərin real işlədiyini aşağıdakı ssenari ilə yoxlayın:</p>
+  <pre><code><span class="cm">-- 1. updated_at triggeri: region-i yenilə, updated_at dəyişməlidir</span>
+SELECT updated_at FROM ref.region WHERE region_id = 1;
+<span class="cm">-- qeyd et, sonra:</span>
+UPDATE ref.region SET qeyd = 'test' WHERE region_id = 1;
+SELECT updated_at FROM ref.region WHERE region_id = 1;
+<span class="cm">-- → updated_at dəyişdi ✓</span>
+
+<span class="cm">-- 2. Audit triggeri: xərc yaz, audit_log-da qeyd olmalıdır</span>
+INSERT INTO maliyye.xerc (layihe_id, madde_id, mebleg, tarix, tesvir)
+VALUES (1, (SELECT madde_id FROM maliyye.budce_madde WHERE kod='DIG'),
+        500, CURRENT_DATE, 'Audit testi');
+SELECT sxem, cedvel, emeliyyat, yeni_deyer ->> 'xerc_id' AS xerc_id
+FROM audit.audit_log WHERE cedvel = 'xerc'
+ORDER BY audit_id DESC LIMIT 1;
+<span class="cm">-- → INSERT əməliyyatı izlənildi ✓ (test xərcini sonra silin)</span>
+DELETE FROM maliyye.xerc WHERE tesvir = 'Audit testi';
+
+<span class="cm">-- 3. Sənəd versiya triggeri</span>
+UPDATE sened.sened SET ad = ad WHERE sened_id = 1;
+SELECT versiya FROM sened.sened WHERE sened_id = 1;
+<span class="cm">-- → versiya 1-dən 2-yə artdı ✓</span></code></pre>
+
+  <h3>1.11. Bütün strukturun bir sorğu ilə yoxlanması</h3>
+  <p>Bazanın tam "sağlamlıq hesabatı" — sxem, cədvəl, funksiya və trigger sayları bir yerdə:</p>
+  <pre><code>SELECT 'sxem' AS kategoriya, COUNT(DISTINCT schemaname) AS sayi
+FROM pg_tables WHERE schemaname IN
+  ('ref','layihe','satinalma','maliyye','kadr','hesabat',
+   'ai','sened','risk','keyfiyyet','logistika','tehlike','audit')
+UNION ALL
+SELECT 'cedvel', COUNT(*) FROM pg_tables WHERE schemaname IN
+  ('ref','layihe','satinalma','maliyye','kadr','hesabat',
+   'ai','sened','risk','keyfiyyet','logistika','tehlike','audit')
+UNION ALL
+SELECT 'funksiya', COUNT(*) FROM pg_proc p
+  JOIN pg_namespace n ON n.oid = p.pronamespace
+  WHERE n.nspname IN ('ref','layihe','satinalma','maliyye','kadr','hesabat',
+                      'ai','sened','risk','keyfiyyet','logistika','tehlike','audit')
+UNION ALL
+SELECT 'trigger', COUNT(*) FROM pg_trigger t
+  JOIN pg_class c ON c.oid = t.tgrelid
+  JOIN pg_namespace n ON n.oid = c.relnamespace
+  WHERE NOT t.tgisinternal AND n.nspname NOT IN ('pg_catalog','information_schema');</code></pre>
+  <p><strong>Gözlənilən:</strong> sxem=13, cedvel=48, funksiya=18, trigger=32.</p>
+
+  <h2><span class="no">2</span> curl ilə API Doğrulama</h2>
+
+  <h3>2.1. Health check</h3>
+  <pre><code>curl -s http://localhost:5001/health | python3 -m json.tool
+<span class="cm"># → {"status": "ok", "baza": "2026-08-25T...", "vaxt": "..."}</span></code></pre>
+
+  <h3>2.2. Login və token əldə etmə</h3>
+  <pre><code><span class="cm"># Token dəyişənə yaz</span>
+TOKEN=$(curl -s -X POST http://localhost:5001/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"username":"test_admin","parol":"test123"}' | python3 -c \
+  "import sys,json; print(json.load(sys.stdin)['token'])")
+
+echo "TOKEN=$TOKEN"</code></pre>
+
+  <h3>2.3. Layihə endpointi</h3>
+  <pre><code><span class="cm"># Bütün layihələr</span>
+curl -s http://localhost:5001/api/layihe -H "Authorization: Bearer $TOKEN" | python3 -m json.tool
+
+<span class="cm"># Sayı yoxla (jq varsa)</span>
+curl -s http://localhost:5001/api/layihe -H "Authorization: Bearer $TOKEN" | jq 'length'
+<span class="cm"># → 5</span></code></pre>
+
+  <h3>2.4. Xəta hallarının doğrulanması</h3>
+  <pre><code><span class="cm"># Tokensiz → 401</span>
+curl -s -o /dev/null -w "%{http_code}\n" http://localhost:5001/api/layihe
+<span class="cm"># → 401</span>
+
+<span class="cm"># Yanlış marşrut → 404</span>
+curl -s -o /dev/null -w "%{http_code}\n" http://localhost:5001/api/yoxdur
+<span class="cm"># → 404</span>
+
+<span class="cm"># Yanlış parol → 401</span>
+curl -s -o /dev/null -w "%{http_code}\n" -X POST http://localhost:5001/api/auth/login \
+  -H "Content-Type: application/json" -d '{"username":"test_admin","parol":"yanlis"}'
+<span class="cm"># → 401</span></code></pre>
+
+  <table>
+    <tr><th>Yoxlama</th><th>Əmr</th><th>Gözlənilən kod</th></tr>
+    <tr><td>Health</td><td><code>curl /health</code></td><td><span class="ok">200</span></td></tr>
+    <tr><td>Layihələr (token)</td><td><code>curl /api/layihe -H "Bearer"</code></td><td><span class="ok">200</span></td></tr>
+    <tr><td>Tokensiz</td><td><code>curl /api/layihe</code></td><td><span class="no2">401</span></td></tr>
+    <tr><td>Yanlış marşrut</td><td><code>curl /api/yoxdur</code></td><td><span class="no2">404</span></td></tr>
+    <tr><td>Yanlış parol</td><td><code>POST /auth/login</code></td><td><span class="no2">401</span></td></tr>
+    <tr><td>Dublikat yaratma</td><td><code>POST /api/layihe (eyni kod)</code></td><td><span class="no2">409</span></td></tr>
+  </table>
+</section>
+
+<section class="kart" id="jest">
+  <h2><span class="no">3</span> Jest Avtomatik Testləri</h2>
+
+  <h3>3.1. Jest konfiqurasiyası</h3>
+  <p><code>package.json</code>-a əlavə edin:</p>
+  <pre><code><span class="s">"jest"</span>: {
+  <span class="s">"testEnvironment"</span>: "node",
+  <span class="s">"testMatch"</span>: ["**/tests/**/*.test.js"]
+}</code></pre>
+
+  <h3>3.2. Vahid test — <code>tests/unit/auth.test.js</code></h3>
+  <p>Parol heşi və token funksiyalarını heç bir xarici asılılıq olmadan test edir:</p>
+  <pre><code>const { hashPassword, verifyPassword, signToken, verifyToken } = require('../../src/config/auth');
+
+describe('Auth util', () => {
+  test('parol heşlənir və yoxlanır', async () => {
+    const hash = await hashPassword('sirr123');
+    expect(hash).not.toBe('sirr123');          <span class="cm">// düz mətn saxlanmır</span>
+    const duz = await verifyPassword('sirr123', hash);
+    expect(duz).toBe(true);
+  });
+
+  test('yanlış parol qəbul edilmir', async () => {
+    const hash = await hashPassword('dogru');
+    const duz = await verifyPassword('yanlis', hash);
+    expect(duz).toBe(false);
+  });
+
+  test('token imzalanır və doğrulanır', () => {
+    const token = signToken({ user_id: 1, role: 'admin' });
+    const payload = verifyToken(token);
+    expect(payload.user_id).toBe(1);
+    expect(payload.role).toBe('admin');
+  });
+
+  test('korlanmış token xəta verir', () => {
+    expect(() =&gt; verifyToken('eyni.deyil.gecerli')).toThrow();
+  });
+});</code></pre>
+
+  <h3>3.3. İnteqrasiya testi — <code>tests/integration/api.test.js</code></h3>
+  <p>Dərs 3-də 10 test yazmışdıq. Burada onları tamamlayırıq:</p>
+  <pre><code>const request = require('supertest');
+const app = require('../../src/app');
+
+describe('DeepSeek-5 ERP API', () => {
+  let token;
+
+  beforeAll(async () =&gt; {
+    const res = await request(app)
+      .post('/api/auth/login')
+      .send({ username: 'test_admin', parol: 'test123' });
+    token = res.body.token;
+  });
+
+  test('GET /health → ok', async () =&gt; {
+    const res = await request(app).get('/health');
+    expect(res.status).toBe(200);
+    expect(res.body.status).toBe('ok');
+  });
+
+  test('GET /api/layihe → 5 layihə', async () =&gt; {
+    const res = await request(app)
+      .get('/api/layihe')
+      .set('Authorization', 'Bearer ' + token);
+    expect(res.status).toBe(200);
+    expect(res.body.length).toBe(5);
+  });
+
+  test('GET /api/layihe tokensiz → 401', async () =&gt; {
+    const res = await request(app).get('/api/layihe');
+    expect(res.status).toBe(401);
+  });
+
+  test('POST /api/layihe → 201', async () =&gt; {
+    const res = await request(app)
+      .post('/api/layihe')
+      .set('Authorization', 'Bearer ' + token)
+      .send({ muessise_id: 1, is_novu_id: 1, kod: 'T-2026-XX',
+              ad: 'Test layihəsi', plan_budce: 1000 });
+    expect(res.status).toBe(201);
+  });
+
+  test('AI sorğusu mock rejimində → hazir', async () =&gt; {
+    const res = await request(app)
+      .post('/api/ai/sorgu')
+      .set('Authorization', 'Bearer ' + token)
+      .send({ agent_id: 4, layihe_id: 1, teyinat_novu: 'budce_prognozu',
+              verilənlər: { xerc_umumi: 68700, progres: 60 } });
+    expect(res.status).toBe(200);
+    expect(res.body.status).toBe('hazir');
+    expect(res.body.cixis).toBeDefined();
+  });
+});</code></pre>
+
+  <pre><code>npm test
+<span class="cm"># Test Suites: 2 passed, Tests: 9 passed</span></code></pre>
+
+  <h3>3.4. Model vahid testi — <code>tests/unit/muqavileModel.test.js</code></h3>
+  <p>Model testləri üçün real baza əvəzinə <strong>mock pool</strong> istifadə olunur. Bu, testləri sürətləndirir və bazadan asılı etmir:</p>
+  <pre><code>jest.mock('../../src/config/db', () =&gt; ({
+  pool: { query: jest.fn() },
+}));
+
+const { pool } = require('../../src/config/db');
+const muqavileModel = require('../../src/models/muqavileModel');
+
+describe('muqavileModel', () =&gt; {
+  beforeEach(() =&gt; { jest.clearAllMocks(); });
+
+  test('findAll borc vəziyyətini view-dən gətirir', async () =&gt; {
+    pool.query.mockResolvedValue({ rows: [{ muqavile_id: 1, qaliq_borc: '280000.00' }] });
+
+    const nəticə = await muqavileModel.findAll();
+    expect(pool.query).toHaveBeenCalledWith(
+      expect.stringContaining('hesabat.muqavile_odenis_veziyyeti')
+    );
+    expect(nəticə[0].qaliq_borc).toBe('280000.00');
+  });
+
+  test('findById yalnız aktiv müqaviləni qaytarır', async () =&gt; {
+    pool.query.mockResolvedValue({ rows: [{ muqavile_id: 2, aktif: true }] });
+    const m = await muqavileModel.findById(2);
+    expect(m.aktif).toBe(true);
+    expect(pool.query.mock.calls[0][1]).toEqual([2]);
+  });
+});</code></pre>
+  <p><code>jest.mock()</code> modulu saxta (fake) obyektlə əvəz edir — beləliklə <code>pool.query</code> real baza yerinə nəzarət edilən mock funksiyaya çevrilir.</p>
+</section>
+
+<section class="kart" id="ai">
+  <h2><span class="no">4</span> AI Endpoint Testi</h2>
+
+  <h3>4.1. Mock rejimdə AI sorğusu</h3>
+  <pre><code><span class="cm"># AI_MODE=mock olduğunu yoxla (backend/.env)</span>
+grep AI_MODE backend/.env
+<span class="cm"># → AI_MODE=mock</span>
+
+curl -s -X POST http://localhost:5001/api/ai/sorgu \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $TOKEN" \
+  -d '{
+    "agent_id": 4,
+    "layihe_id": 1,
+    "teyinat_novu": "budce_prognozu",
+    "verilənlər": {"xerc_umumi": 68700, "progres": 60}
+  }' | python3 -m json.tool</code></pre>
+
+  <p><strong>Gözlənilən cavab:</strong></p>
+  <pre><code>{
+  "teyinat_id": 10,
+  "status": "hazir",
+  "cixis": {
+    "prognoz_budce": 823000,
+    "sapma_faizi": -3.2,
+    "tovsiye": "Material alışını rübün sonuna saxlayın"
+  }
+}</code></pre>
+
+  <h3>4.2. AI tapşırığının bazaya yazıldığını yoxla</h3>
+  <pre><code>SELECT t.teyinat_id, t.teyinat_novu, t.status, t.giris_json, t.cixis_json
+FROM ai.ai_teyinat t
+WHERE t.teyinat_id = (SELECT MAX(teyinat_id) FROM ai.ai_teyinat);</code></pre>
+
+  <h3>4.3. Xəta yolu — xesver statusu</h3>
+  <p>Mövcud olmayan <code>agent_id</code> ilə sorğu göndərsəniz:</p>
+  <pre><code>curl -s -X POST http://localhost:5001/api/ai/sorgu \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $TOKEN" \
+  -d '{"agent_id": 9999, "layihe_id": 1, "teyinat_novu": "budce_prognozu"}'
+<span class="cm"># → {"xeta":"Agent tapılmadı"} (404)</span></code></pre>
+</section>
+
+<section class="kart" id="end">
+  <h2><span class="no">5</span> Uçdan-uca (End-to-End) Doğrulama Cədvəli</h2>
+
+  <p>Bütün sistemin sağlamlığını yoxlayan yekun yoxlama siyahısı:</p>
+  <table>
+    <tr><th>#</th><th>Səviyyə</th><th>Yoxlama</th><th>Nəticə</th></tr>
+    <tr><td>1</td><td>Baza</td><td>13 sxem, 48 cədvəl</td><td><code>SELECT ... FROM pg_tables</code> → 48</td></tr>
+    <tr><td>2</td><td>Baza</td><td>18 funksiya, 32 trigger</td><td><code>\df</code> + information_schema.triggers</td></tr>
+    <tr><td>3</td><td>Baza</td><td>Seed məlumat sayları</td><td>layihe=5, isci=8, agent=6, risk=8</td></tr>
+    <tr><td>4</td><td>Baza</td><td>Trigger: audit yazır</td><td>UPDATE layihe → audit_log sətir</td></tr>
+    <tr><td>5</td><td>API</td><td>Health check</td><td>200 + baza vaxtı</td></tr>
+    <tr><td>6</td><td>API</td><td>Auth</td><td>login → token, yanlış → 401</td></tr>
+    <tr><td>7</td><td>API</td><td>CRUD</td><td>GET/POST layihe, tender, muqavile</td></tr>
+    <tr><td>8</td><td>AI</td><td>Mock sorğu</td><td>status=hazir + cixis JSON</td></tr>
+    <tr><td>9</td><td>AI</td><td>ai_log yazılır</td><td>yeni log sətiri</td></tr>
+    <tr><td>10</td><td>Frontend</td><td>Login + Dashboard</td><td>Brauzerdə kartlar və cədvəl</td></tr>
+  </table>
+
+  <div class="info">
+    <strong>Test məlumatını təmizlə:</strong> Dərs 3/5-də yaratdığınız test layihəsini silmək üçün:
+    <pre><code>DELETE FROM layihe.layihe WHERE kod = 'T-2026-XX';
+DELETE FROM layihe.layihe WHERE kod = 'T-2026-TEST';</code></pre>
+    <code>silinib</code> soft-delete olduğundan, əsl silmə üçün birbaşa DELETE istifadə edirik (yalnız test qeydləri üçün).
+  </div>
+</section>
+
+<section class="kart" id="tekrar">
+  <h2><span class="no">6</span> Təkrarlama Tapşırığı</h2>
+  <div class="tebrik"><strong>Ev tapşırığı:</strong> Dərsə baxmadan:</div>
+  <ol>
+    <li><code>03_test_queries.sql</code>-dən #6 (müqavilə borcu) sorğusunu yazın və gözlənilən nəticəni hesablayın (MQ-2026-015 üçün borc = ?).</li>
+    <li>curl ilə: token əldə edin, 5 layihənin olduğunu yoxlayın.</li>
+    <li>Jest-də <code>muqavileModel</code> üçün 1 vahid test yazın (müqavilə borcu hesablanması).</li>
+    <li>AI endpoint-inə <code>risk_analizi</code> tapşırığı göndərin (agent_id=3), mock nəticəni yoxlayın.</li>
+    <li>Bazada triggerlərin sayının 32 olduğunu sübut edən sorğu yazın.</li>
+  </ol>
+  <div class="meslehet">
+    <strong>Bu addımda nə öyrəndin?</strong> Baza səviyyəsində doğrulama sorğuları; curl ilə API status kodlarının yoxlanması (200/401/404/409); Jest vahid testləri (parol/token); inteqrasiya testləri (Supertest); AI endpoint-in mock rejimdə testi; uçdan-uca doğrulama siyahısı.
+  </div>
+</section>
+
+</main>
+
+<footer>
+  DeepSeek-5 ERP · Tədris Sənədləri · Dərs 7/8 — Testlər və Doğrulama · <span style="color:#7dd3fc">docs/lessons/ders_07_testler_doğrulama.html</span>
+</footer>
+
+</body>
+</html>

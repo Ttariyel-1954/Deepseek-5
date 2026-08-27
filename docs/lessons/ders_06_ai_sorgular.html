@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dərs 6 — 36 AI Nümayiş Sorğusu</title>
+<style>
+  :root{
+    --mavi:#0f3d5c; --mavi2:#14557e; --mavi3:#0a2c44;
+    --yasi:#0e9f6e; --yasi2:#0b7a54;
+    --qirmizi:#b91c1c; --boz:#f4f6f8; --metin:#1f2937; --ac:#6b7280;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;color:var(--metin);line-height:1.65;background:#eef1f4}
+  header{background:linear-gradient(135deg,var(--mavi3),var(--mavi) 60%,var(--mavi2));color:#fff;padding:2.2rem 1.5rem 1.8rem;border-bottom:4px solid var(--yasi)}
+  .qab{max-width:1050px;margin:0 auto;padding:0 1rem}
+  header h1{font-size:1.7rem;font-weight:700}
+  header .alt{color:#cfe0ec;margin-top:.4rem;font-size:1rem}
+  header .nişan{display:inline-block;background:var(--yasi);color:#fff;font-size:.75rem;font-weight:700;padding:.25rem .7rem;border-radius:999px;margin-top:.8rem;letter-spacing:.5px}
+  nav{background:#fff;border-bottom:1px solid #dde3e8;position:sticky;top:0;z-index:10;box-shadow:0 2px 6px rgba(15,61,92,.06)}
+  nav .qab{display:flex;flex-wrap:wrap;gap:.3rem;padding:.5rem 1rem;align-items:center}
+  nav a{color:var(--mavi);text-decoration:none;font-size:.85rem;padding:.3rem .65rem;border-radius:6px}
+  nav a:hover{background:#e8f2fa;color:var(--mavi2)}
+  main{max-width:1050px;margin:2rem auto;padding:0 1rem}
+  .kart{background:#fff;border:1px solid #e0e5ea;border-radius:12px;padding:1.8rem 2rem;margin-bottom:1.8rem;box-shadow:0 2px 8px rgba(15,61,92,.05)}
+  h2{color:var(--mavi);font-size:1.35rem;margin-bottom:1rem;padding-bottom:.5rem;border-bottom:2px solid var(--yasi);display:flex;align-items:center;gap:.5rem}
+  h2 .no{background:var(--mavi);color:#fff;font-size:.8rem;padding:.15rem .6rem;border-radius:6px}
+  h3{color:var(--mavi2);font-size:1.08rem;margin:1.4rem 0 .6rem}
+  h4{color:var(--mavi2);font-size:.95rem;margin:1rem 0 .3rem}
+  p{margin-bottom:.9rem}
+  ul,ol{margin:0 0 1rem 1.4rem}
+  li{margin-bottom:.35rem}
+  table{width:100%;border-collapse:collapse;margin:1rem 0 1.4rem;font-size:.87rem}
+  th{background:var(--mavi);color:#fff;text-align:left;padding:.55rem .7rem;font-weight:600}
+  td{padding:.5rem .7rem;border-bottom:1px solid #e8edf1;vertical-align:top}
+  tr:nth-child(even) td{background:#f7fafb}
+  code{font-family:'SF Mono',Consolas,'Courier New',monospace;background:#eef3f7;color:#0b4a6f;padding:.15rem .4rem;border-radius:4px;font-size:.85rem}
+  pre{background:#0f1e2a;color:#dce9f2;padding:1.2rem 1.4rem;border-radius:10px;overflow-x:auto;margin:1rem 0 1.4rem;font-size:.8rem;line-height:1.55;border-left:4px solid var(--yasi)}
+  pre code{background:none;color:inherit;padding:0;font-size:inherit}
+  pre .cm{color:#7d9bb0} pre .kw{color:#7dd3fc} pre .s{color:#86efac} pre .n{color:#fca5a5}
+  .diqqet{background:#fef3f2;border:1px solid #f5c2c0;border-left:4px solid var(--qirmizi);padding:1rem 1.2rem;border-radius:8px;margin:1.2rem 0}
+  .meslehet{background:#e8f6ef;border:1px solid #b9e6d0;border-left:4px solid var(--yasi);padding:1rem 1.2rem;border-radius:8px;margin:1.2rem 0}
+  .info{background:#eaf3fb;border:1px solid #c3dcf0;border-left:4px solid var(--mavi);padding:1rem 1.2rem;border-radius:8px;margin:1.2rem 0}
+  .tebrik{background:#fff8e6;border:1px solid #f0dfa8;border-left:4px solid #f59e0b;padding:1rem 1.2rem;border-radius:8px;margin:1.2rem 0}
+  footer{background:var(--mavi3);color:#b9cfdd;text-align:center;padding:1.5rem;font-size:.85rem;margin-top:2.5rem}
+  .hansı{color:var(--mavi);font-size:.82rem;margin:.4rem 0}
+  .qbadge{display:inline-block;background:var(--yasi);color:#fff;font-size:.75rem;font-weight:700;padding:.1rem .5rem;border-radius:4px;margin-right:.4rem}
+  @media(max-width:600px){main{padding:0 .5rem}.kart{padding:1.2rem}h1{font-size:1.3rem!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="qab">
+    <div class="nişan">Dərs 6 / 8 · AI Sorğuları</div>
+    <h1>36 AI Nümayiş Sorğusunun Tam İzahları</h1>
+    <div class="alt">DeepSeek-5 ERP — Hər sorğu nə verir, AI-ya necə verilir</div>
+  </div>
+</header>
+
+<nav>
+  <div class="qab">
+    <a href="#meqsed">Məqsəd</a>
+    <a href="#cevrel">Çevrələr</a>
+    <a href="#ref">ref</a>
+    <a href="#layihe">layihe</a>
+    <a href="#satinalma">satinalma</a>
+    <a href="#maliyye">maliyye</a>
+    <a href="#kadr">kadr</a>
+    <a href="#ai">ai</a>
+    <a href="#digər">Digər sxemlər</a>
+    <a href="#funksiya">Funksiyalar</a>
+    <a href="#view">View-lər</a>
+    <a href="#yekun">Yekun</a>
+    <a href="#tekrar">Tapşırıq</a>
+  </div>
+</nav>
+
+<main>
+
+<section class="kart" id="meqsed">
+  <h2><span class="no">0</span> Dərsin Məqsədi</h2>
+  <p><code>database/05_ai_nuyis_sorgular.sql</code> faylında <strong>36 sorğu</strong> var. Bu dərsdə hər sorğunun nə verdiyini, hansı biznes sualına cavab olduğunu və <strong>AI-ya necə veriləcəyini</strong> öyrənəcəksiniz. Bu sorğular AI agentlərinə "bazanın mənzərəsi" kimi verilir — AI sorğunun nəticəsini oxuyub təhlil edir, tövsiyələr hazırlayır.</p>
+
+  <div class="info">
+    <strong>AI-ya necə verilir?</strong> Dərs 4-dəki <code>promptBuilder</code> bu sorğuların nəticəsini kontekst kimi istifadə edir. Axın: SQL sorğu işlə → nəticə cədvəlini mətnə çevir → <code>aiService</code> ilə AI-ya göndər → AI təhlil/tövsiyə qaytarır.
+  </div>
+  <div class="hansı"><strong>Real fayl:</strong> <code>database/05_ai_nuyis_sorgular.sql</code></div>
+</section>
+
+<section class="kart" id="cevrel">
+  <h2><span class="no">1</span> Sorğuların Çevrələri</h2>
+  <p>36 sorğu baza sxemlərinə görə qruplaşıb. AI hər sxemi ayrıca "görür" — beləliklə, hər AI agenti öz sahəsi üzrə tam məlumat alır.</p>
+  <table>
+    <tr><th>Çevrə</th><th>Sorğular</th><th>Baza sahəsi</th></tr>
+    <tr><td>İstinad məlumatları</td><td>Q1–Q4</td><td>region, seher, muessise, is_novu, material_novu</td></tr>
+    <tr><td>Layihə idarəetməsi</td><td>Q5–Q7</td><td>layihe, layihe_merhele, layihe_material</td></tr>
+    <tr><td>Tender/müqavilə</td><td>Q8–Q10</td><td>tender, istirakci, muqavile, material_tedaruk</td></tr>
+    <tr><td>Maliyyə</td><td>Q11–Q13</td><td>budce_madde, xerc, odenis</td></tr>
+    <tr><td>Kadr</td><td>Q14–Q15</td><td>isci, vezife, layihe_isci_teyinat</td></tr>
+    <tr><td>AI qatı</td><td>Q16–Q21</td><td>ai_model, ai_agent, ai_teyinat, ai_qerar, ai_prognoz, ai_mesaj, ai_log</td></tr>
+    <tr><td>Sənəd/risk/keyfiyyət</td><td>Q22–Q24</td><td>sened, risk, keyfiyyet</td></tr>
+    <tr><td>Logistika/təhlükəsizlik</td><td>Q25–Q27</td><td>logistika, tehlike</td></tr>
+    <tr><td>Audit + funksiyalar</td><td>Q28–Q30</td><td>audit, funksiya nümayişi</td></tr>
+    <tr><td>View-lər</td><td>Q31–Q35</td><td>hesabat view-ləri</td></tr>
+    <tr><td>Yekun xəritə</td><td>Q36</td><td>pg_tables (sxem xəritəsi)</td></tr>
+  </table>
+</section>
+
+<section class="kart" id="ref">
+  <h2><span class="no">2</span> ref Sxemi — İstinad Məlumatları (Q1–Q4)</h2>
+
+  <h4><span class="qbadge">Q1</span> Regionlar və şəhərlər xəritəsi</h4>
+  <p><strong>Nə verir:</strong> Hər iqtisadi rayon üçün ona aid şəhərlər. <strong>AI-ya necə:</strong> "Azərbaycanın iqtisadi rayon strukturu hansıdır?" sualına coğrafi kontekst.</p>
+  <pre><code>SELECT r.ad AS region, s.ad AS seher
+FROM ref.region r
+LEFT JOIN ref.seher s ON s.region_id = r.region_id
+ORDER BY r.ad, s.ad;</code></pre>
+
+  <h4><span class="qbadge">Q2</span> Təhsil müəssisələri (müştəri bazası)</h4>
+  <p><strong>Nə verir:</strong> Hər müəssisənin VÖEN, şəhəri, növü, telefonu. <strong>AI-ya necə:</strong> "Müştəri portfeli necə paylanıb?" — regional müştəri analizi üçün.</p>
+  <pre><code>SELECT m.ad AS muessise, m.voen, s.ad AS seher, n.ad AS novu, m.telefon
+FROM ref.muessise m
+JOIN ref.seher s ON s.seher_id = m.seher_id
+JOIN ref.muessise_novu n ON n.nov_id = m.nov_id
+ORDER BY m.ad;</code></pre>
+
+  <h4><span class="qbadge">Q3</span> İş növləri (hierarxik)</h4>
+  <p><strong>Nə verir:</strong> Ana iş növü → uşaq iş növü quruluşu (TQ → TQ-01...). <strong>AI-ya necə:</strong> İş təsnifatını anlamaq üçün; "hansı iş növləri var" sualına.</p>
+  <pre><code>SELECT parent.ad AS parent_novu, child.ad AS child_novu, child.kod
+FROM ref.is_novu child
+LEFT JOIN ref.is_novu parent ON parent.is_novu_id = child.parent_id
+ORDER BY parent_novu NULLS FIRST, child_novu;</code></pre>
+
+  <h4><span class="qbadge">Q4</span> Material kataloqu (hierarxik)</h4>
+  <p><strong>Nə verir:</strong> Material kateqoriyası → material + vahid. <strong>AI-ya necə:</strong> Material tədarükü planlamasında hansı materialların mövcud olduğunu göstərir.</p>
+  <pre><code>SELECT parent.ad AS kategoriya, child.ad AS material, child.vahid
+FROM ref.material_novu child
+LEFT JOIN ref.material_novu parent ON parent.material_novu_id = child.parent_id
+ORDER BY kategoriya NULLS FIRST, material;</code></pre>
+</section>
+
+<section class="kart" id="layihe">
+  <h2><span class="no">3</span> layihe Sxemi — Layihə İdarəetməsi (Q5–Q7)</h2>
+
+  <h4><span class="qbadge">Q5</span> Bütün layihələrin tam icmalı</h4>
+  <p><strong>Nə verir:</strong> Kod, ad, status, plan büdcə, fakt xərc, qalıq, progress. <strong>AI-ya necə:</strong> Ən vacib sorğu — "layihə portfeli necədir, hansı layihə risklidir?" sualına.</p>
+  <pre><code>SELECT l.kod, l.ad AS layihe, st.ad AS status,
+       l.plan_budce,
+       COALESCE(SUM(x.mebleg), 0) AS fakt_xerc,
+       l.plan_budce - COALESCE(SUM(x.mebleg), 0) AS qaliq,
+       l.progres || '%' AS progress
+FROM layihe.layihe l
+JOIN layihe.layihe_status st ON st.status_id = l.status_id
+LEFT JOIN maliyye.xerc x ON x.layihe_id = l.layihe_id
+WHERE l.silinib = FALSE
+GROUP BY l.layihe_id, st.ad
+ORDER BY l.layihe_id;</code></pre>
+
+  <h4><span class="qbadge">Q6</span> Mərhələlər və real progress</h4>
+  <p><strong>Nə verir:</strong> Plan vs real faiz, plan vs real tarix, "GEÇİKİB/VAXTINDA" işarəsi. <strong>AI-ya necə:</strong> Müddət risklərinin aşkarlanması — "hansı mərhələ gecikir?"</p>
+  <pre><code>SELECT l.kod, m.ad AS merhele, m.plan_faiz, m.real_faiz,
+       m.plan_tarix, m.real_tarix,
+       CASE WHEN m.real_tarix > m.plan_tarix THEN 'GEÇİKİB' ELSE 'VAXTINDA' END AS veziyyet
+FROM layihe.layihe_merhele m
+JOIN layihe.layihe l ON l.layihe_id = m.layihe_id
+ORDER BY l.layihe_id, m.merhele_id;</code></pre>
+
+  <h4><span class="qbadge">Q7</span> Layihə materialları və qiymətləndirmə</h4>
+  <p><strong>Nə verir:</strong> Material, miqdar, qiymət, toplam dəyər (miqdar × qiymət). <strong>AI-ya necə:</strong> Material büdcəsi təhlili.</p>
+  <pre><code>SELECT l.kod, mn.ad AS material, lm.miqdar, lm.vahid, lm.qiymet,
+       lm.miqdar * lm.qiymet AS toplam
+FROM layihe.layihe_material lm
+JOIN layihe.layihe l ON l.layihe_id = lm.layihe_id
+JOIN ref.material_novu mn ON mn.material_novu_id = lm.material_novu_id
+ORDER BY l.kod, mn.ad;</code></pre>
+</section>
+
+<section class="kart" id="satinalma">
+  <h2><span class="no">4</span> satinalma Sxemi (Q8–Q10)</h2>
+
+  <h4><span class="qbadge">Q8</span> Tender qalibləri və qənaət təhlili</h4>
+  <p><strong>Nə verir:</strong> Elan həddi, qalib şirkət, təklif məbləği, qənaət AZN və faiz. <strong>AI-ya necə:</strong> "Tenderlər nə qədər qənaət gətirdi? Hansı tender ən səmərəli idi?"</p>
+  <pre><code>SELECT t.kod, t.ad AS tender, st.ad AS status,
+       t.qiymet_serhedi, ti.sirket_ad AS qalib, ti.teklif_mebleg,
+       t.qiymet_serhedi - ti.teklif_mebleg AS qenayet,
+       ROUND(100.0 * (t.qiymet_serhedi - ti.teklif_mebleg) / t.qiymet_serhedi, 2) AS qenayet_faizi
+FROM satinalma.tender t
+JOIN satinalma.tender_status st ON st.status_id = t.status_id
+LEFT JOIN satinalma.tender_istirakci ti ON ti.tender_id = t.tender_id AND ti.qalib = TRUE
+WHERE t.status_id = (SELECT status_id FROM satinalma.tender_status WHERE kod='qalib')
+ORDER BY qenayet DESC;</code></pre>
+
+  <h4><span class="qbadge">Q9</span> Müqavilə ödəniş vəziyyəti (borc idarəsi)</h4>
+  <p><strong>Nə verir:</strong> Müqavilə məbləği, ödənilən, qalıq borc, ödəniş faizi. <strong>AI-ya necə:</strong> "Hansı podratçıya nə qədər borcumuz var?" — kreditor riski analizi.</p>
+  <pre><code>SELECT m.nomre, m.podratci, l.kod AS layihe,
+       m.mebleg AS muqavile_mebleg,
+       COALESCE(SUM(o.mebleg), 0) AS odenen,
+       m.mebleg - COALESCE(SUM(o.mebleg), 0) AS qaliq_borc,
+       ROUND(100.0 * COALESCE(SUM(o.mebleg), 0) / m.mebleg, 1) AS odenis_faizi
+FROM satinalma.muqavile m
+JOIN layihe.layihe l ON l.layihe_id = m.layihe_id
+LEFT JOIN maliyye.odenis o ON o.muqavile_id = m.muqavile_id
+GROUP BY m.muqavile_id, l.kod
+ORDER BY qaliq_borc DESC;</code></pre>
+
+  <h4><span class="qbadge">Q10</span> Material tədarükü icmalı</h4>
+  <p><strong>Nə verir:</strong> Müqavilə üzrə material tədarükü (miqdar, vahid, qiymət). <strong>AI-ya necə:</strong> Tədarük planlaması və podratçı müqayisəsi.</p>
+  <pre><code>SELECT m.nomre, mn.ad AS material, mt.miqdar, mt.vahid, mt.qiymet
+FROM satinalma.material_tedaruk mt
+JOIN satinalma.muqavile m ON m.muqavile_id = mt.muqavile_id
+JOIN ref.material_novu mn ON mn.material_novu_id = mt.material_novu_id
+ORDER BY m.nomre;</code></pre>
+</section>
+
+<section class="kart" id="maliyye">
+  <h2><span class="no">5</span> maliyye Sxemi (Q11–Q13)</h2>
+
+  <h4><span class="qbadge">Q11</span> Büdcə maddələri üzrə xərclər</h4>
+  <p><strong>Nə verir:</strong> Hər büdcə maddəsi üzrə xərc sayı və cəmi. <strong>AI-ya necə:</strong> "Pul ən çox hara gedir?" — xərc strukturunun təhlili.</p>
+
+  <h4><span class="qbadge">Q12</span> Ay üzrə xərc dinamikası (maliyyə trendi)</h4>
+  <p><strong>Nə verir:</strong> Aylıq xərc sayı və məbləği. <strong>AI-ya necə:</strong> "Xərc tendensiyası artır, yoxsa azalır?" — büdcə proqnozu üçün giriş.</p>
+  <pre><code>SELECT TO_CHAR(tarix, 'YYYY-MM') AS ay, COUNT(*) AS xerc_sayi, SUM(mebleg) AS mebleg
+FROM maliyye.xerc
+GROUP BY 1 ORDER BY 1;</code></pre>
+
+  <h4><span class="qbadge">Q13</span> Ödənişlər üzrə icmal</h4>
+  <p><strong>Nə verir:</strong> Hər ödənişin müqaviləsi, məbləği, tarixi, növü (bank/nağd/hesab). <strong>AI-ya necə:</strong> Likvidlik və ödəniş axını analizi.</p>
+  <pre><code>SELECT o.odenis_id, m.nomre, o.mebleg, o.tarix, o.odenis_novu
+FROM maliyye.odenis o
+JOIN satinalma.muqavile m ON m.muqavile_id = o.muqavile_id
+ORDER BY o.tarix;</code></pre>
+</section>
+
+<section class="kart" id="kadr">
+  <h2><span class="no">6</span> kadr Sxemi (Q14–Q15)</h2>
+
+  <h4><span class="qbadge">Q14</span> İşçilər və vəzifələri (maaş təhlili)</h4>
+  <p><strong>Nə verir:</strong> İşçi, FIN, vəzifə, maaş, status, maaşa görə sıralanmış. <strong>AI-ya necə:</strong> "Ən yüksək maaş alanlar kimlərdir?" — kadr xərcləri təhlili.</p>
+  <pre><code>SELECT i.ad_soyad, i.fin, v.ad AS vezife, i.maas, i.status
+FROM kadr.isci i
+JOIN kadr.vezife v ON v.vezife_id = i.vezife_id
+ORDER BY i.maas DESC;</code></pre>
+
+  <h4><span class="qbadge">Q15</span> Layihə üzrə işçi təyinatları (kadr planlaması)</h4>
+  <p><strong>Nə verir:</strong> Hansı işçi hansı layihəyə, hansı günlük məbləğlə təyin olunub. <strong>AI-ya necə:</strong> Resurs planlaması və işçi yüklənməsi analizi.</p>
+  <pre><code>SELECT l.kod, i.ad_soyad, v.ad AS vezife, t.gunelik_mebleg,
+       t.bashlama_tarixi, t.son_tarix
+FROM kadr.layihe_isci_teyinat t
+JOIN layihe.layihe l ON l.layihe_id = t.layihe_id
+JOIN kadr.isci i ON i.isci_id = t.isci_id
+JOIN kadr.vezife v ON v.vezife_id = COALESCE(t.vezife_id, i.vezife_id)
+ORDER BY l.kod;</code></pre>
+</section>
+
+<section class="kart" id="ai">
+  <h2><span class="no">7</span> ai Sxemi — AI Qatı (Q16–Q21)</h2>
+  <p>Bu sorğular AI sisteminin <strong>özünü</strong> təhlil edir — AI-nın fəaliyyətini AI izləyir.</p>
+
+  <h4><span class="qbadge">Q16</span> AI agentləri və model konfiqurasiyası</h4>
+  <p><strong>Nə verir:</strong> Hər agentin adı, vəzifəsi, bağlı olduğu model və provider. <strong>AI-ya necə:</strong> "Hazırda hansı AI agentlər aktivdir?" — sistem özünü tanıyır.</p>
+  <pre><code>SELECT a.ad AS agent, a.vezife, m.ad AS model, m.provider, m.model_ref
+FROM ai.ai_agent a
+JOIN ai.ai_model m ON m.model_id = a.model_id
+WHERE a.aktif = TRUE
+ORDER BY a.ad;</code></pre>
+
+  <h4><span class="qbadge">Q17</span> AI tapşırıqları və həyat dövrü</h4>
+  <p><strong>Nə verir:</strong> Tapşırıq növü, status (golecek/islemede/hazir/xesver), təsdiq statusu, qiymət. <strong>AI-ya necə:</strong> "Hansı tapşırıqlar gözləyir, hansı xəta verib?" — iş yükü idarəsi.</p>
+
+  <h4><span class="qbadge">Q18</span> AI qərarları — əminlik və təsdiq</h4>
+  <p><strong>Nə verir:</strong> Qərar növü, əminlik faizi, status, əsaslandırma. <strong>AI-ya necə:</strong> "Ən yüksək əminlikli qərarlar hansılardır?" — qərar keyfiyyəti analizi.</p>
+  <pre><code>SELECT q.qerar_novu, q.eminlik, q.status, q.esaslandirma, a.ad AS agent
+FROM ai.ai_qerar q
+JOIN ai.ai_teyinat t ON t.teyinat_id = q.teyinat_id
+JOIN ai.ai_agent a ON a.agent_id = t.agent_id
+ORDER BY q.eminlik DESC;</code></pre>
+
+  <h4><span class="qbadge">Q19</span> AI proqnozları — proqnoz vs real (dəqiqlik)</h4>
+  <p><strong>Nə verir:</strong> Proqnoz növü, proqnoz dəyəri, real dəyər, ehtimal, dəqiqlik. <strong>AI-ya necə:</strong> "Proqnozlarımız nə dərəcədə dəqiqdir?" — model kalibrləşməsi.</p>
+
+  <h4><span class="qbadge">Q20</span> AI mesajları — xəbərdarlıq sistemi</h4>
+  <p><strong>Nə verir:</strong> Mövzu, əhəmiyyət (asagi/normal/yuksek/kritik), oxunub statusu. <strong>AI-ya necə:</strong> "İnsanların diqqətinə çatmayan kritik xəbərdarlıqlar varmı?"</p>
+
+  <h4><span class="qbadge">Q21</span> AI xərclərinin izlənməsi (token/məbləğ)</h4>
+  <p><strong>Nə verir:</strong> Hər agentin log sayı, token və AZN xərci. <strong>AI-ya necə:</strong> "AI əməliyyatı nəyə başa gəlir?" — xərc optimallaşdırması.</p>
+  <pre><code>SELECT a.ad AS agent, COUNT(l.log_id) AS log_sayi,
+       COALESCE(SUM(l.serf_olunan_tokens), 0) AS tokens,
+       COALESCE(SUM(l.serf_olunan_xerc), 0) AS xerc_azn
+FROM ai.ai_agent a
+LEFT JOIN ai.ai_log l ON l.agent_id = a.agent_id
+GROUP BY a.agent_id ORDER BY xerc_azn DESC;</code></pre>
+</section>
+
+<section class="kart" id="digər">
+  <h2><span class="no">8</span> Sənəd, Risk, Keyfiyyət, Logistika, Təhlükəsizlik (Q22–Q27)</h2>
+
+  <h4><span class="qbadge">Q22</span> Sənədlər və statusları</h4>
+  <p>Sənəd növü, adı, nömrəsi, statusu, versiyası. <strong>AI:</strong> "Hansı sənədlər təsdiq gözləyir?"</p>
+
+  <h4><span class="qbadge">Q23</span> Risk profili (ehtimal × təsir)</h4>
+  <p>Risk növü, ehtimal, təsir, dərəcə, səviyyə (KRİTİK/ORTA/AZ). <strong>AI:</strong> "Hansı risklər kritikdir, müdaxilə tələb edir?" — Dərs 2-dəki <code>derece GENERATED</code> kolonunu göstərir.</p>
+  <pre><code>SELECT l.kod, r.risk_novu, r.tesvir, r.ehtimal, r.tesir, r.derece,
+       CASE WHEN r.derece >= 60 THEN 'KRİTİK' WHEN r.derece >= 30 THEN 'ORTA' ELSE 'AZ' END AS seviyye
+FROM risk.risk r
+JOIN layihe.layihe l ON l.layihe_id = r.layihe_id
+ORDER BY r.derece DESC;</code></pre>
+
+  <h4><span class="qbadge">Q24</span> Keyfiyyət yoxlamaları və qüsurlar</h4>
+  <p>Yoxlama növü, nəticə, tarix, qüsur sayı, açıq qüsur sayı. <strong>AI:</strong> "Hansı layihədə keyfiyyət problemi var?"</p>
+
+  <h4><span class="qbadge">Q25</span> Anbar qalıqları</h4>
+  <p>Anbar, material, qalıq (daxil − çıxar), vahid. <strong>AI:</strong> "Hansı material azalıb, yenidən sifariş lazımdır?"</p>
+  <pre><code>SELECT a.ad AS anbar, mn.ad AS material,
+       SUM(CASE WHEN mh.hereket_novu = 'daxil' THEN mh.miqdar
+                WHEN mh.hereket_novu = 'cixar' THEN -mh.miqdar ELSE 0 END) AS qaliq,
+       mn.vahid
+FROM logistika.anbar a
+JOIN logistika.material_hereket mh ON mh.anbar_id = a.anbar_id
+JOIN ref.material_novu mn ON mn.material_novu_id = mh.material_novu_id
+GROUP BY a.anbar_id, a.ad, mn.material_novu_id, mn.ad, mn.vahid
+ORDER BY a.ad, mn.ad;</code></pre>
+
+  <h4><span class="qbadge">Q26</span> Çatdırılma gecikmələri</h4>
+  <p>Təchizatçı, material, plan vs real tarix, gecikmə günü. <strong>AI:</strong> "Hansı təchizatçı sistematik gecikir?" — təchizatçı reytinqi üçün giriş.</p>
+  <pre><code>SELECT tc.ad AS tedarukcu, mn.ad AS material, c.plan_tarix, c.real_tarix,
+       (c.real_tarix - c.plan_tarix) AS gecikme_gunu, c.status
+FROM logistika.catdirilma c
+JOIN logistika.tedarukcu tc ON tc.tedarukcu_id = c.tedarukcu_id
+JOIN ref.material_novu mn ON mn.material_novu_id = c.material_novu_id
+WHERE c.real_tarix > c.plan_tarix
+ORDER BY gecikme_gunu DESC;</code></pre>
+
+  <h4><span class="qbadge">Q27</span> Əmək təhlükəsizliyi — hadisələr və təlimlər</h4>
+  <p>İşçi üzrə təlim sayı, müddəti bitən təlim sayı, hadisə sayı. <strong>AI:</strong> "Hansı işçilərin təlim sertifikatı yenilənməlidir?"</p>
+  <pre><code>SELECT i.ad_soyad, COUNT(tl.telim_id) AS telim_sayi,
+       COUNT(tl.telim_id) FILTER (WHERE tl.etibarliliq_sonu < CURRENT_DATE) AS muddeti_biten,
+       COUNT(o.olay_id) AS hadise_sayi
+FROM kadr.isci i
+LEFT JOIN tehlike.telim tl ON tl.isci_id = i.isci_id
+LEFT JOIN tehlike.olay o ON o.tesevver_eden = i.isci_id
+WHERE i.status = 'aktiv'
+GROUP BY i.isci_id ORDER BY hadise_sayi DESC;</code></pre>
+</section>
+
+<section class="kart" id="funksiya">
+  <h2><span class="no">9</span> Audit və Funksiya Nümayişi (Q28–Q30)</h2>
+
+  <h4><span class="qbadge">Q28</span> Audit izi — ən çox dəyişiklik edilən cədvəllər</h4>
+  <p><strong>Nə verir:</strong> Cədvəl + əməliyyat (INSERT/UPDATE/DELETE) üzrə say. <strong>AI-ya necə:</strong> "Sistemdə ən çox hansı məlumat dəyişir?" — fəaliyyət mənzərəsi.</p>
+  <pre><code>SELECT sxem || '.' || cedvel AS cedvel, emeliyyat, COUNT(*) AS sayi
+FROM audit.audit_log
+GROUP BY sxem, cedvel, emeliyyat
+ORDER BY sayi DESC;</code></pre>
+
+  <h4><span class="qbadge">Q29</span> Funksiya nümayişi — progress və büdcə istifadəsi</h4>
+  <p><strong>Nə verir:</strong> Hər layihə üçün <code>layihe_progres()</code>, <code>layihe_budce_istifade()</code>, <code>layihe_umumi_xerc()</code>, <code>muqavile_borcu()</code> funksiyalarının nəticələri. <strong>AI-ya necə:</strong> Dərs 2-dəki funksiyaların "canlı" istifadəsi — AI hazır hesablanmış göstəriciləri alır.</p>
+  <pre><code>SELECT l.kod,
+       layihe.layihe_progres(l.layihe_id) AS progress_faizi,
+       maliyye.layihe_budce_istifade(l.layihe_id) AS budce_istifade_faizi,
+       maliyye.layihe_umumi_xerc(l.layihe_id) AS umumi_xerc,
+       maliyye.muqavile_borcu(COALESCE(
+         (SELECT muqavile_id FROM satinalma.muqavile WHERE layihe_id = l.layihe_id LIMIT 1), 0)) AS muqavile_borcu
+FROM layihe.layihe l
+WHERE l.silinib = FALSE
+ORDER BY l.layihe_id;</code></pre>
+
+  <h4><span class="qbadge">Q30</span> AI funksiyası — büdcə proqnozu</h4>
+  <p><strong>Nə verir:</strong> <code>ai.ai_plan_budce_prognozu()</code> funksiyasının hər layihə üçün proqnozu. <strong>AI-ya necə:</strong> Ən birbaşa AI inteqrasiyası — proqnoz artıq SQL-də hesablanır, AI onu yalnız şərh edir.</p>
+  <pre><code>SELECT l.kod, l.plan_budce, maliyye.layihe_umumi_xerc(l.layihe_id) AS indi_xerc,
+       ai.ai_plan_budce_prognozu(l.layihe_id) AS proqnoz_son_deyer
+FROM layihe.layihe l
+WHERE l.silinib = FALSE
+ORDER BY l.layihe_id;</code></pre>
+</section>
+
+<section class="kart" id="view">
+  <h2><span class="no">10</span> View-lər (Q31–Q35)</h2>
+  <p>Dərs 2-də qurduğumuz view-lər hazır hesabat kimi AI-ya verilir — AI-ya yalnız nəticəni şərh etmək qalır.</p>
+  <table>
+    <tr><th>Sorğu</th><th>View</th><th>AI-ya veriləndə sual</th></tr>
+    <tr><td><span class="qbadge">Q31</span></td><td><code>hesabat.layihe_tam_icmal</code></td><td>"Layihələrin tam mənzərəsini təhlil et, riskli olanları göstər."</td></tr>
+    <tr><td><span class="qbadge">Q32</span></td><td><code>hesabat.ai_faaliyyet</code></td><td>"AI agentlərinin effektivliyini qiymətləndir."</td></tr>
+    <tr><td><span class="qbadge">Q33</span></td><td><code>hesabat.layihe_risk_icmali</code></td><td>"Layihələr üzrə risk profili çıxar, prioritetləşdir."</td></tr>
+    <tr><td><span class="qbadge">Q34</span></td><td><code>hesabat.muqavile_odenis_veziyyeti</code></td><td>"Hansı müqavilələrin borcu yüksəkdir?"</td></tr>
+    <tr><td><span class="qbadge">Q35</span></td><td><code>hesabat.tender_effektivlik</code></td><td>"Tender qənaəti aylara görə necə dəyişib?"</td></tr>
+  </table>
+  <pre><code>SELECT * FROM hesabat.layihe_tam_icmal ORDER BY layihe_id;
+SELECT * FROM hesabat.ai_faaliyyet;
+SELECT * FROM hesabat.layihe_risk_icmali;
+SELECT * FROM hesabat.muqavile_odenis_veziyyeti;
+SELECT * FROM hesabat.tender_effektivlik;</code></pre>
+</section>
+
+<section class="kart" id="yekun">
+  <h2><span class="no">11</span> Yekun Xəritə (Q36)</h2>
+
+  <h4><span class="qbadge">Q36</span> Bütün sxemlər və cədvəl sayı</h4>
+  <p><strong>Nə verir:</strong> Hər sxemdəki cədvəl sayı. <strong>AI-ya necə:</strong> Bu, AI-nın baza haqqında "ümumi xəritə" aldığı sorğudur — AI-a verilən ilk kontekst. Dərs 1-də də yoxlama üçün istifadə etdik.</p>
+  <pre><code>SELECT schemaname, COUNT(*) AS cedvel_sayi
+FROM pg_tables
+WHERE schemaname IN ('ref','layihe','satinalma','maliyye','kadr','hesabat',
+                     'ai','sened','risk','keyfiyyet','logistika','tehlike','audit')
+GROUP BY schemaname ORDER BY schemaname;</code></pre>
+  <p><strong>Gözlənilən nəticə:</strong> 13 sətir, cəmi 48 cədvəl (ai=7, audit=3, kadr=3, keyfiyyet=3, layihe=5, logistika=4, maliyye=3, ref=6, risk=2, satinalma=5, sened=4, tehlike=3, hesabat=0-view).</p>
+</section>
+
+<section class="kart" id="tekrar">
+  <h2><span class="no">12</span> Təkrarlama Tapşırığı</h2>
+  <div class="tebrik"><strong>Ev tapşırığı:</strong> Dərsə baxmadan:</div>
+  <ol>
+    <li>Q5 sorğusunu yazın (layihə tam icmalı: kod, ad, status, plan, fakt, qalıq, progress).</li>
+    <li>Q9 sorğusunu yazın (müqavilə borcu: məbləğ, ödənilən, borc, faiz).</li>
+    <li>Q23 sorğusunu yazın (risk profili: dərəcəyə görə KRİTİK/ORTA/AZ səviyyəsi).</li>
+    <li>Q30 sorğusunu yazın (<code>ai_plan_budce_prognozu</code> funksiyası ilə).</li>
+    <li>Fikirləşin: Hansı 3 sorğu birlikdə AI-ya "tam layihə sağlamlığı" mənzərəsi verərdi? Niyə?</li>
+  </ol>
+  <div class="meslehet">
+    <strong>Bu addımda nə öyrəndin?</strong> 36 sorğunun hər birinin biznes dəyəri; sorğuların AI konteksti kimi istifadəsi; JOIN, GROUP BY, FILTER, CASE, subquery texnikalarının real tətbiqi; funksiyaların AI proqnozunda rolu; view-lərin hesabat qatı kimi istifadəsi.
+  </div>
+</section>
+
+</main>
+
+<footer>
+  DeepSeek-5 ERP · Tədris Sənədləri · Dərs 6/8 — AI Sorğuları · <span style="color:#7dd3fc">docs/lessons/ders_06_ai_sorgular.html</span>
+</footer>
+
+</body>
+</html>

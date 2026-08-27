@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dərs 2 — Funksiyalar, Triggerlər və View-lər</title>
+<style>
+  :root{
+    --mavi:#0f3d5c; --mavi2:#14557e; --mavi3:#0a2c44;
+    --yasi:#0e9f6e; --yasi2:#0b7a54;
+    --qirmizi:#b91c1c; --boz:#f4f6f8; --metin:#1f2937; --ac:#6b7280;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;color:var(--metin);line-height:1.65;background:#eef1f4}
+  header{background:linear-gradient(135deg,var(--mavi3),var(--mavi) 60%,var(--mavi2));color:#fff;padding:2.2rem 1.5rem 1.8rem;border-bottom:4px solid var(--yasi)}
+  .qab{max-width:1050px;margin:0 auto;padding:0 1rem}
+  header h1{font-size:1.7rem;font-weight:700}
+  header .alt{color:#cfe0ec;margin-top:.4rem;font-size:1rem}
+  header .nişan{display:inline-block;background:var(--yasi);color:#fff;font-size:.75rem;font-weight:700;padding:.25rem .7rem;border-radius:999px;margin-top:.8rem;letter-spacing:.5px}
+  nav{background:#fff;border-bottom:1px solid #dde3e8;position:sticky;top:0;z-index:10;box-shadow:0 2px 6px rgba(15,61,92,.06)}
+  nav .qab{display:flex;flex-wrap:wrap;gap:.3rem;padding:.5rem 1rem;align-items:center}
+  nav a{color:var(--mavi);text-decoration:none;font-size:.85rem;padding:.3rem .65rem;border-radius:6px}
+  nav a:hover{background:#e8f2fa;color:var(--mavi2)}
+  main{max-width:1050px;margin:2rem auto;padding:0 1rem}
+  .kart{background:#fff;border:1px solid #e0e5ea;border-radius:12px;padding:1.8rem 2rem;margin-bottom:1.8rem;box-shadow:0 2px 8px rgba(15,61,92,.05)}
+  h2{color:var(--mavi);font-size:1.35rem;margin-bottom:1rem;padding-bottom:.5rem;border-bottom:2px solid var(--yasi);display:flex;align-items:center;gap:.5rem}
+  h2 .no{background:var(--mavi);color:#fff;font-size:.8rem;padding:.15rem .6rem;border-radius:6px}
+  h3{color:var(--mavi2);font-size:1.08rem;margin:1.4rem 0 .6rem}
+  h4{color:var(--mavi2);font-size:.98rem;margin:1.1rem 0 .4rem}
+  p{margin-bottom:.9rem}
+  ul,ol{margin:0 0 1rem 1.4rem}
+  li{margin-bottom:.35rem}
+  table{width:100%;border-collapse:collapse;margin:1rem 0 1.4rem;font-size:.88rem}
+  th{background:var(--mavi);color:#fff;text-align:left;padding:.55rem .7rem;font-weight:600}
+  td{padding:.5rem .7rem;border-bottom:1px solid #e8edf1;vertical-align:top}
+  tr:nth-child(even) td{background:#f7fafb}
+  code{font-family:'SF Mono',Consolas,'Courier New',monospace;background:#eef3f7;color:#0b4a6f;padding:.15rem .4rem;border-radius:4px;font-size:.85rem}
+  pre{background:#0f1e2a;color:#dce9f2;padding:1.2rem 1.4rem;border-radius:10px;overflow-x:auto;margin:1rem 0 1.4rem;font-size:.8rem;line-height:1.55;border-left:4px solid var(--yasi)}
+  pre code{background:none;color:inherit;padding:0;font-size:inherit}
+  pre .cm{color:#7d9bb0} pre .kw{color:#7dd3fc} pre .s{color:#86efac} pre .n{color:#fca5a5}
+  .diqqet{background:#fef3f2;border:1px solid #f5c2c0;border-left:4px solid var(--qirmizi);padding:1rem 1.2rem;border-radius:8px;margin:1.2rem 0}
+  .meslehet{background:#e8f6ef;border:1px solid #b9e6d0;border-left:4px solid var(--yasi);padding:1rem 1.2rem;border-radius:8px;margin:1.2rem 0}
+  .info{background:#eaf3fb;border:1px solid #c3dcf0;border-left:4px solid var(--mavi);padding:1rem 1.2rem;border-radius:8px;margin:1.2rem 0}
+  .tebrik{background:#fff8e6;border:1px solid #f0dfa8;border-left:4px solid #f59e0b;padding:1rem 1.2rem;border-radius:8px;margin:1.2rem 0}
+  .tir{display:flex;gap:.9rem;margin:1.2rem 0}
+  .tir .n{background:var(--mavi);color:#fff;min-width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.9rem;flex-shrink:0}
+  .tir .b{flex:1}
+  footer{background:var(--mavi3);color:#b9cfdd;text-align:center;padding:1.5rem;font-size:.85rem;margin-top:2.5rem}
+  .hansı{color:var(--mavi);font-size:.82rem;margin:.4rem 0}
+  @media(max-width:600px){main{padding:0 .5rem}.kart{padding:1.2rem}h1{font-size:1.3rem!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="qab">
+    <div class="nişan">Dərs 2 / 8 · Proqramlaşdırma Qatı</div>
+    <h1>18 Funksiya, 32 Trigger və 13 View-in Yaradılması</h1>
+    <div class="alt">DeepSeek-5 ERP — Biznes məntiqini verilənlər bazası səviyyəsində qururuq</div>
+  </div>
+</header>
+
+<nav>
+  <div class="qab">
+    <a href="#meqsed">Məqsəd</a>
+    <a href="#icra">İcra</a>
+    <a href="#funk">Funksiyalar</a>
+    <a href="#trigger">Triggerlər</a>
+    <a href="#view">View-lər</a>
+    <a href="#yoxlama">Yoxlama</a>
+    <a href="#tekrar">Tapşırıq</a>
+  </div>
+</nav>
+
+<main>
+
+<section class="kart" id="meqsed">
+  <h2><span class="no">0</span> Dərsin Məqsədi</h2>
+  <p>Dərs 1-də baza strukturunu (13 sxem, 48 cədvəl) qurduq. İndi <strong>biznes məntiqini verilənlər bazasının özünə</strong> yerləşdiririk: <strong>18 funksiya</strong>, <strong>32 trigger</strong> və <strong>13 view</strong>. Bu, məntiqin backend kodundan asılı olmadan baza səviyyəsində işləməsini təmin edir — beləliklə, hər bir tətbiq (web, mobil, AI agenti) eyni qaydalarla işləyir.</p>
+  <ul>
+    <li><strong>Funksiyalar (18):</strong> köməkçi + biznes + audit + trigger funksiyaları;</li>
+    <li><strong>Triggerlər (32):</strong> updated_at avtomatik yenilənməsi, audit izi, biznes qaydaları;</li>
+    <li><strong>View-lər (13):</strong> analitik hesabatlar — plan-fakt, risk icmalı, anbar qalığı və s.</li>
+  </ul>
+  <div class="hansı"><strong>Real fayllar:</strong> <code>database/schemas/03_functions_triggers.sql</code>, <code>database/schemas/04_views.sql</code>, <code>database/schemas/01_create_tables.sql</code> (sonundakı 2 view)</div>
+</section>
+
+<section class="kart" id="icra">
+  <h2><span class="no">1</span> Skriptlərin İcrası</h2>
+  <p>Dərs 1-dən sonra aşağıdakı iki skripti icra edin. Ardıcıllıq vacibdir: <code>03</code> (funksiya/trigger) əvvəl, <code>04</code> (view-lər) sonra — çünki bəzi view-lər funksiya və ya mövcud sütunlardan istifadə edir.</p>
+  <pre><code>psql -U deepseek_admin -h localhost -d deepseek_erp_v6 -f database/schemas/03_functions_triggers.sql
+psql -U deepseek_admin -h localhost -d deepseek_erp_v6 -f database/schemas/04_views.sql</code></pre>
+  <div class="meslehet">
+    <strong>QEYD:</strong> <code>03</code> faylı <code>progres</code> kolonundan istifadə edən trigger yaradır (merhele_progres_func). Ona görə Dərs 1-dəki <code>005_add_progres.sql</code> migrasiyası əvvəlcə icra olunmalıdır.
+  </div>
+</section>
+
+<section class="kart" id="funk">
+  <h2><span class="no">2</span> 18 Funksiya — İzahlarla</h2>
+
+  <h3>2.1. Köməkçi funksiyalar (2)</h3>
+
+  <div class="tir"><div class="n">1</div><div class="b">
+    <h4>ref.set_updated_at() — trigger funksiyası</h4>
+    <p><code>updated_at</code> sütununu avtomatik yeniləyir. Bu, hər <code>BEFORE UPDATE</code> triggerinin ürəyidir. <code>NEW</code> — dəyişdiriləcək yeni sətir deməkdir.</p>
+    <pre><code>CREATE OR REPLACE FUNCTION ref.set_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at := NOW();
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;</code></pre>
+  </div></div>
+
+  <div class="tir"><div class="n">2</div><div class="b">
+    <h4>ref.normalize_text(t TEXT) — mətn normallaşdırma</h4>
+    <p>Axtarış üçün mətni kiçildir və Azərbaycan hərflərini Latın ekvivalentinə çevirir: <code>Ə→A, Ö→O, Ü→U, Ç→C, Ş→S, I→I</code>. <code>IMMUTABLE</code> — eyni girişə həmişə eyni çıxış (indeks üçün əlverişli).</p>
+    <pre><code>CREATE OR REPLACE FUNCTION ref.normalize_text(t TEXT)
+RETURNS TEXT AS $$
+BEGIN
+    RETURN lower(translate(t, 'ƏəÖöÜüÇçŞşIİ', 'AaOoUuCcSsIi'));
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;</code></pre>
+  </div></div>
+
+  <h3>2.2. Biznes funksiyaları (9)</h3>
+
+  <div class="tir"><div class="n">3</div><div class="b">
+    <h4>layihe.layihe_progres(p_layihe_id) — layihə progressi</h4>
+    <p>Layihənin mərhələlər üzrə <strong>orta real faizini</strong> qaytarır. <code>COALESCE(AVG(...), 0)</code> — mərhələ yoxdursa 0.</p>
+    <pre><code>SELECT COALESCE(AVG(real_faiz), 0)
+INTO v_progres
+FROM layihe.layihe_merhele
+WHERE layihe_id = p_layihe_id;
+RETURN ROUND(v_progres, 2);</code></pre>
+  </div></div>
+
+  <div class="tir"><div class="n">4</div><div class="b">
+    <h4>maliyye.layihe_umumi_xerc(p_layihe_id) — ümumi xərc</h4>
+    <p>Layihə üzrə bütün xərclərin cəmi. Bu funksiya başqa funksiyalar tərəfindən də çağırılır (komponent yanaşması).</p>
+    <pre><code>SELECT COALESCE(SUM(mebleg), 0)
+INTO v_toplam
+FROM maliyye.xerc
+WHERE layihe_id = p_layihe_id;
+RETURN v_toplam;</code></pre>
+  </div></div>
+
+  <div class="tir"><div class="n">5</div><div class="b">
+    <h4>maliyye.layihe_budce_istifade(p_layihe_id) — büdcə istifadə faizi</h4>
+    <p>Plan büdcənin nə qədəri xərclənib. 4 nömrəli funksiyanı çağırır. Plan 0-dırsa 0 qaytarır; nəticəni 999.99 ilə məhdudlaşdırır.</p>
+    <pre><code>v_xerc := maliyye.layihe_umumi_xerc(p_layihe_id);
+IF v_plan IS NULL OR v_plan = 0 THEN RETURN 0; END IF;
+v_faiz := ROUND(100.0 * v_xerc / v_plan, 2);
+RETURN LEAST(v_faiz, 999.99);</code></pre>
+  </div></div>
+
+  <div class="tir"><div class="n">6</div><div class="b">
+    <h4>maliyye.muqavile_borcu(p_muqavile_id) — qalıq borc</h4>
+    <p>Müqavilə məbləği ilə edilən ödənişlər arasındakı fərq.</p>
+    <pre><code>SELECT m.mebleg - COALESCE(SUM(o.mebleg), 0)
+INTO v_borc
+FROM satinalma.muqavile m
+LEFT JOIN maliyye.odenis o ON o.muqavile_id = m.muqavile_id
+WHERE m.muqavile_id = p_muqavile_id
+GROUP BY m.muqavile_id;
+RETURN COALESCE(v_borc, 0);</code></pre>
+  </div></div>
+
+  <div class="tir"><div class="n">7</div><div class="b">
+    <h4>satinalma.tender_qenayeti(p_tender_id) — tender qənaəti</h4>
+    <p>Elan qiymət həddi ilə qalib təklif arasındakı fərq = dövlət vəsaiti qənaəti.</p>
+    <pre><code>SELECT t.qiymet_serhedi - ti.teklif_mebleg
+INTO v_qenayet
+FROM satinalma.tender t
+JOIN satinalma.tender_istirakci ti
+  ON ti.tender_id = t.tender_id AND ti.qalib = TRUE
+WHERE t.tender_id = p_tender_id;
+RETURN COALESCE(v_qenayet, 0);</code></pre>
+  </div></div>
+
+  <div class="tir"><div class="n">8</div><div class="b">
+    <h4>risk.risk_derecesi(p_ehtimal, p_tesir) — risk dərəcəsi</h4>
+    <p>Standart risk düsturu: <code>ehtimal × təsir / 100</code>. Nəticə 0–100 arası. Bu funksiya <code>risk.risk</code> cədvəlindəki GENERATED sütunun riyaziyyatını təkrarlayır.</p>
+    <pre><code>RETURN ROUND(p_ehtimal * p_tesir / 100, 2);</code></pre>
+  </div></div>
+
+  <div class="tir"><div class="n">9</div><div class="b">
+    <h4>kadr.layihe_kadr_deyeri(p_layihe_id) — kadr dəyəri</h4>
+    <p>Layihə üzrə işçilərin ümumi dəyəri: <code>günlük məbləğ × iş günləri</code>. Tarix yoxdursa cari tarix qəbul edilir.</p>
+    <pre><code>SELECT COALESCE(SUM(
+    gunelik_mebleg * COALESCE(
+        (COALESCE(son_tarix, CURRENT_DATE) - COALESCE(bashlama_tarixi, CURRENT_DATE)),
+        0)
+), 0)
+INTO v_deyer
+FROM kadr.layihe_isci_teyinat
+WHERE layihe_id = p_layihe_id;</code></pre>
+  </div></div>
+
+  <div class="tir"><div class="n">10</div><div class="b">
+    <h4>ai.ai_plan_budce_prognozu(p_layihe_id) — AI büdcə proqnozu</h4>
+    <p><strong>Bu layihənin fərqləndirici funksiyasıdır.</strong> Sadə riyazi model: cari xərc / progress → tamamlanma proqnozu. Progress 0-dırsa plan qaytarır (hələ başlamayıb).</p>
+    <pre><code>v_xerc := maliyye.layihe_umumi_xerc(p_layihe_id);
+v_progres := layihe.layihe_progres(p_layihe_id);
+IF v_progres &lt;= 0 THEN
+    v_prognoz := v_plan;
+ELSE
+    v_prognoz := ROUND(v_xerc * 100.0 / v_progres, 2);
+END IF;
+RETURN v_prognoz;</code></pre>
+    <p><strong>Məntiq:</strong> əgər layihə 60% icra olunub və 68,700 AZN xərclənibsə, tamamlanma proqnozu = 68,700 × 100 / 60 ≈ <strong>114,500 AZN</strong>.</p>
+  </div></div>
+
+  <div class="tir"><div class="n">11</div><div class="b">
+    <h4>hesabat.ayliq_maliyye_hesabati(p_ay DATE) — aylıq hesabat</h4>
+    <p><code>RETURNS TABLE</code> — çoxsətirli nəticə qaytaran funksiya. Verilmiş ay üçün xərc və ödəniş cəmlərini gətirir.</p>
+    <pre><code>RETURN QUERY
+SELECT
+    TO_CHAR(p_ay, 'YYYY-MM'),
+    (SELECT COALESCE(SUM(mebleg), 0) FROM maliyye.xerc
+     WHERE TO_CHAR(tarix, 'YYYY-MM') = TO_CHAR(p_ay, 'YYYY-MM')),
+    (SELECT COALESCE(SUM(mebleg), 0) FROM maliyye.odenis
+     WHERE TO_CHAR(tarix, 'YYYY-MM') = TO_CHAR(p_ay, 'YYYY-MM'));</code></pre>
+  </div></div>
+
+  <h3>2.3. Audit və trigger funksiyaları (7)</h3>
+
+  <div class="tir"><div class="n">12</div><div class="b">
+    <h4>audit.audit_trigger_func() — ümumi audit funksiyası</h4>
+    <p>Ən mürəkkəb funksiya. İstənilən cədvəldə <code>INSERT/UPDATE/DELETE</code>-i izləyir:</p>
+    <ul>
+      <li><code>OLD</code>/<code>NEW</code> sətirlərini JSONB-yə çevirir;</li>
+      <li>Sətirin <strong>əsas açarını</strong> avtomatik tapır (<code>%_id</code> ilə bitən sütun, lakin parent_id istisna);</li>
+      <li><code>audit.audit_log</code>-a qeyd yazır.</li>
+    </ul>
+    <pre><code>IF TG_OP IN ('UPDATE','DELETE') THEN old_json := to_jsonb(OLD); END IF;
+IF TG_OP IN ('INSERT','UPDATE') THEN new_json := to_jsonb(NEW); END IF;
+
+FOR k IN SELECT jsonb_object_keys(COALESCE(new_json, old_json)) LOOP
+    IF k LIKE '%\_id' AND k NOT IN ('parent_id','teyinat_id','istirakci_id') THEN
+        BEGIN
+            rec_id := (COALESCE(new_json, old_json) ->> k)::INTEGER;
+            EXIT;
+        EXCEPTION WHEN OTHERS THEN CONTINUE;
+        END;
+    END IF;
+END LOOP;
+
+INSERT INTO audit.audit_log (sxem, cedvel, qeyd_id, emeliyyat, kohne_deyer, yeni_deyer)
+VALUES (TG_TABLE_SCHEMA, TG_TABLE_NAME, rec_id, TG_OP, old_json, new_json);
+RETURN COALESCE(NEW, OLD);</code></pre>
+  </div></div>
+
+  <div class="tir"><div class="n">13</div><div class="b">
+    <h4>satinalma.tender_qalib_trigger_func()</h4>
+    <p>Bir iştirakçı <code>qalib = TRUE</code> işarələnəndə tender cədvəlini avtomatik yeniləyir: qalib iştirakçını yazır və statusu <code>qalib</code>-ə çəkir.</p>
+  </div></div>
+
+  <div class="tir"><div class="n">14</div><div class="b">
+    <h4>maliyye.xerc_budce_nezaret_func()</h4>
+    <p>Xərc əlavə ediləndə layihə büdcəsinin aşılıb-aşılmadığını yoxlayır; aşılıbsa <code>audit.sistem_log</code>-a <code>warn</code> səviyyəli qeyd yazır.</p>
+    <pre><code>IF v_plan IS NOT NULL AND v_plan > 0 AND v_toplam > v_plan THEN
+    INSERT INTO audit.sistem_log (seviyye, menbe, mesaj, kontekst)
+    VALUES ('warn', 'budce_nezaret',
+            format('Layihə %s (%s) büdcə həddini aşır: plan=%s, toplam xərc=%s',
+                   v_layihe_kod, NEW.layihe_id, v_plan, v_toplam),
+            jsonb_build_object('layihe_id', NEW.layihe_id, 'yeni_xerc', NEW.mebleg));
+END IF;</code></pre>
+  </div></div>
+
+  <div class="tir"><div class="n">15</div><div class="b">
+    <h4>layihe.merhele_progres_func()</h4>
+    <p>Mərhələ dəyişəndə (INSERT/UPDATE/DELETE) layihənin <code>progres</code> sütununu yenidən hesablayır — 3 nömrəli funksiyanı çağırır. DELETE-də <code>OLD.layihe_id</code> istifadə olunur.</p>
+  </div></div>
+
+  <div class="tir"><div class="n">16</div><div class="b">
+    <h4>kadr.isci_status_func()</h4>
+    <p><code>isden_ayrilma</code> tarixi doldurulanda işçinin statusu <code>passiv</code> olur; yoxdursa <code>aktiv</code>.</p>
+    <pre><code>IF NEW.isden_ayrilma IS NOT NULL THEN NEW.status := 'passiv';
+ELSE NEW.status := 'aktiv'; END IF;</code></pre>
+  </div></div>
+
+  <div class="tir"><div class="n">17</div><div class="b">
+    <h4>sened.sened_versiya_func()</h4>
+    <p>Sənəd yenilənəndə versiya nömrəsini avtomatik artırır.</p>
+    <pre><code>NEW.versiya := OLD.versiya + 1;</code></pre>
+  </div></div>
+
+  <div class="tir"><div class="n">18</div><div class="b">
+    <h4>sened.tesdiq_emeliyyat_func()</h4>
+    <p>Təsdiq cədvəlində status <code>tesdiqlendi</code> olarsa, əsas sənədin statusu da <code>tesdiqlendi</code> olur; <code>redd_edildi</code> olarsa sənəd <code>qaralama</code>-ya qayıdır.</p>
+  </div></div>
+</section>
+
+<section class="kart" id="trigger">
+  <h2><span class="no">3</span> 32 Trigger — Qruplarla</h2>
+
+  <table>
+    <tr><th>Qrup</th><th>Say</th><th>Trigger adları</th><th>İşlədiyi cədvəllər</th></tr>
+    <tr><td>1. updated_at avtomatik yenilənməsi</td><td><strong>18</strong></td><td><code>trg_*_uat</code></td><td>region, seher, muessise_novu, muessise, is_novu, material_novu, layihe, tender, muqavile, isci, vezife, ai_model, ai_agent, ai_teyinat, risk, sened, tedarukcu, anbar</td></tr>
+    <tr><td>2. Audit izi</td><td><strong>8</strong></td><td><code>trg_audit_*</code></td><td>layihe, isci, xerc, muqavile, tender, odenis, muessise, ai_teyinat</td></tr>
+    <tr><td>3. Tender qalibi</td><td><strong>1</strong></td><td><code>trg_tender_qalib</code></td><td>tender_istirakci</td></tr>
+    <tr><td>4. Büdcə nəzarəti</td><td><strong>1</strong></td><td><code>trg_xerc_budce_nezaret</code></td><td>xerc</td></tr>
+    <tr><td>5. Mərhələ progressi</td><td><strong>1</strong></td><td><code>trg_merhele_progres</code></td><td>layihe_merhele</td></tr>
+    <tr><td>6. İşçi statusu</td><td><strong>1</strong></td><td><code>trg_isci_status</code></td><td>isci</td></tr>
+    <tr><td>7. Sənəd versiyası</td><td><strong>1</strong></td><td><code>trg_sened_versiya</code></td><td>sened</td></tr>
+    <tr><td>8. Təsdiq əməliyyatı</td><td><strong>1</strong></td><td><code>trg_tesdiq_emeliyyat</code></td><td>sened.tesdiq</td></tr>
+  </table>
+
+  <p><strong>Ümumi: 18 + 8 + 1 + 1 + 1 + 1 + 1 + 1 = 32 trigger.</strong></p>
+
+  <h3>3.1. updated_at triggerlərinin nümunəsi</h3>
+  <p>18 cədvəldə eyni qayda — hər UPDATE zamanı <code>ref.set_updated_at()</code> çağırılır. Nümunə:</p>
+  <pre><code>CREATE TRIGGER trg_region_uat BEFORE UPDATE ON ref.region
+    FOR EACH ROW EXECUTE FUNCTION ref.set_updated_at();
+
+CREATE TRIGGER trg_layihe_uat BEFORE UPDATE ON layihe.layihe
+    FOR EACH ROW EXECUTE FUNCTION ref.set_updated_at();
+
+CREATE TRIGGER trg_ai_teyinat_uat BEFORE UPDATE ON ai.ai_teyinat
+    FOR EACH ROW EXECUTE FUNCTION ref.set_updated_at();</code></pre>
+
+  <h3>3.2. Audit triggerləri</h3>
+  <p>Kritik cədvəllərdəki hər dəyişiklik <code>audit.audit_log</code>-da izlənir:</p>
+  <pre><code>CREATE TRIGGER trg_audit_layihe AFTER INSERT OR UPDATE OR DELETE ON layihe.layihe
+    FOR EACH ROW EXECUTE FUNCTION audit.audit_trigger_func();
+CREATE TRIGGER trg_audit_xerc AFTER INSERT OR UPDATE OR DELETE ON maliyye.xerc
+    FOR EACH ROW EXECUTE FUNCTION audit.audit_trigger_func();
+CREATE TRIGGER trg_audit_ai_teyinat AFTER INSERT OR UPDATE OR DELETE ON ai.ai_teyinat
+    FOR EACH ROW EXECUTE FUNCTION audit.audit_trigger_func();</code></pre>
+
+  <h3>3.3. Tender qalibi — avtomatik biznes qaydası</h3>
+  <p>Seed-də iştirakçı <code>qalib=TRUE</code> yazılanda tender avtomatik yenilənir (Dərs 1-dəki əl ilə UPDATE-ə ehtiyac qalmır):</p>
+  <pre><code>CREATE TRIGGER trg_tender_qalib AFTER INSERT OR UPDATE OF qalib ON satinalma.tender_istirakci
+    FOR EACH ROW EXECUTE FUNCTION satinalma.tender_qalib_trigger_func();</code></pre>
+
+  <h3>3.4. Mərhələ progressi → layihə progressi</h3>
+  <p>Mərhələlər dəyişən kimi əsas layihənin <code>progres</code> sütunu yenilənir — hesabatlar həmişə təzə olur:</p>
+  <pre><code>CREATE TRIGGER trg_merhele_progres AFTER INSERT OR UPDATE OR DELETE ON layihe.layihe_merhele
+    FOR EACH ROW EXECUTE FUNCTION layihe.merhele_progres_func();</code></pre>
+
+  <div class="meslehet">
+    <strong>Trigger necə işləyir?</strong> Trigger = cədvəl üzərindəki hadisəyə (INSERT/UPDATE/DELETE) reaksiya. <code>BEFORE</code> — dəyişiklikdən əvvəl, <code>AFTER</code> — sonra. <code>FOR EACH ROW</code> — dəyişən hər sətir üçün. <code>EXECUTE FUNCTION</code> — çağırılacaq funksiya.
+  </div>
+</section>
+
+<section class="kart" id="view">
+  <h2><span class="no">4</span> 13 View — Analitik Hesabatlar</h2>
+
+  <p><em>View</em> = yadda saxlanmış SELECT sorğusu. Hər dəfə çağırılanda cari məlumatla işləyir. Layihədə 13 view var: 2-si <code>01_create_tables.sql</code>-də, 11-i <code>04_views.sql</code>-də.</p>
+
+  <h3>4.1. Dərs 1-də gələn 2 view</h3>
+  <table>
+    <tr><th>View</th><th>Məqsədi</th></tr>
+    <tr><td><code>hesabat.layihe_budce_fakt</code></td><td>Plan büdcə vs faktiki xərc, qalıq və istifadə faizi (plan-fakt təhlili)</td></tr>
+    <tr><td><code>hesabat.muqavile_odenis_veziyyeti</code></td><td>Müqavilə məbləği, ödənilən, qalıq borc, ödəniş faizi</td></tr>
+  </table>
+
+  <p>Nümunə — <code>layihe_budce_fakt</code> (LEFT JOIN + COALESCE + GROUP BY + CASE):</p>
+  <pre><code>CREATE OR REPLACE VIEW hesabat.layihe_budce_fakt AS
+SELECT
+    l.layihe_id, l.kod, l.ad AS layihe_adi, l.plan_budce,
+    COALESCE(SUM(x.mebleg), 0) AS fakt_xerc,
+    l.plan_budce - COALESCE(SUM(x.mebleg), 0) AS qaliq,
+    CASE WHEN l.plan_budce > 0
+         THEN ROUND(100.0 * COALESCE(SUM(x.mebleg), 0) / l.plan_budce, 2)
+         ELSE 0 END AS faiz
+FROM layihe.layihe l
+LEFT JOIN maliyye.xerc x ON x.layihe_id = l.layihe_id
+WHERE l.silinib = FALSE
+GROUP BY l.layihe_id
+ORDER BY l.layihe_id;</code></pre>
+
+  <h3>4.2. <code>04_views.sql</code>-dəki 11 view</h3>
+  <table>
+    <tr><th>#</th><th>View</th><th>Məqsədi</th><th>Önəmli texnika</th></tr>
+    <tr><td>1</td><td><code>layihe_tam_icmal</code></td><td>Layihənin bütün göstəriciləri bir yerdə (status, şəhər, xərc, risk sayı, açıq qüsur, işçi sayı)</td><td>Subquery-lərlə sayma</td></tr>
+    <tr><td>2</td><td><code>ai_faaliyyet</code></td><td>Hər agentin tapşırıq sayı, hazır/xəta, təsdiqlənmiş, orta qiymət</td><td><code>COUNT(...) FILTER (WHERE ...)</code></td></tr>
+    <tr><td>3</td><td><code>layihe_risk_icmali</code></td><td>Layihə risk sayı, yüksək risk sayı, orta dərəcə</td><td>SUM CASE, FILTER</td></tr>
+    <tr><td>4</td><td><code>anbar_qaliqlari</code></td><td>Hər anbarda hər materialın qalığı (daxil - çıxar)</td><td><code>CROSS JOIN</code> + CASE + HAVING</td></tr>
+    <tr><td>5</td><td><code>material_hereket_icmali</code></td><td>Material hərəkət tipləri üzrə say və cəm</td><td>GROUP BY material + hərəkət növü</td></tr>
+    <tr><td>6</td><td><code>keyfiyyet_icmali</code></td><td>Layihə üzrə yoxlama/keçid/qüsur statistikası</td><td>COUNT DISTINCT + FILTER</td></tr>
+    <tr><td>7</td><td><code>xerc_budce_madde</code></td><td>Büdcə maddələri üzrə xərc sayı, cəmi, ortası</td><td>ORDER BY toplam DESC NULLS LAST</td></tr>
+    <tr><td>8</td><td><code>ayliq_odenis_xerc</code></td><td>Aylıq xərc (+) və ödəniş (-) birləşdirilmiş</td><td><code>UNION ALL</code> ilə mənfi işarə</td></tr>
+    <tr><td>9</td><td><code>tender_effektivlik</code></td><td>Ay üzrə tender sayı, qənaət cəmi, orta qənaət faizi</td><td>NULLIF bölmədə sıfır qoruması</td></tr>
+    <tr><td>10</td><td><code>isci_tehlike</code></td><td>İşçilərin təlim sayı, hadisə sayı, sertifikat statusu (müddəti bitib?)</td><td>Subquery + CASE</td></tr>
+    <tr><td>11</td><td><code>sened_status_icmali</code></td><td>Sənəd növləri üzrə status paylanması</td><td>LEFT JOIN + FILTER</td></tr>
+  </table>
+
+  <h3>4.3. Nümunə view — <code>layihe_tam_icmal</code></h3>
+  <p>Birdən çox cədvəli JOIN edib, subquery ilə saylar hesablayır:</p>
+  <pre><code>CREATE OR REPLACE VIEW hesabat.layihe_tam_icmal AS
+SELECT
+    l.layihe_id, l.kod, l.ad AS layihe_adi,
+    mue.ad AS muessise, st.ad AS status, seh.ad AS seher,
+    l.plan_budce,
+    COALESCE(x.fakt_xerc, 0) AS fakt_xerc,
+    l.plan_budce - COALESCE(x.fakt_xerc, 0) AS qaliq,
+    l.progres,
+    (SELECT COUNT(*) FROM risk.risk r WHERE r.layihe_id = l.layihe_id) AS risk_sayi,
+    (SELECT COUNT(*) FROM keyfiyyet.qusur q
+     JOIN keyfiyyet.yoxlama y ON y.yoxlama_id = q.yoxlama_id
+     WHERE y.layihe_id = l.layihe_id AND q.status != 'baglanib') AS aciq_qusur,
+    (SELECT COUNT(DISTINCT t.isci_id) FROM kadr.layihe_isci_teyinat t
+     WHERE t.layihe_id = l.layihe_id) AS isci_sayi,
+    l.bashlama_tarixi, l.son_tarix
+FROM layihe.layihe l
+JOIN ref.muessise mue ON mue.muessise_id = l.muessise_id
+JOIN layihe.layihe_status st ON st.status_id = l.status_id
+LEFT JOIN ref.seher seh ON seh.seher_id = l.seher_id
+LEFT JOIN (SELECT layihe_id, SUM(mebleg) AS fakt_xerc FROM maliyye.xerc GROUP BY layihe_id) x
+       ON x.layihe_id = l.layihe_id
+WHERE l.silinib = FALSE;</code></pre>
+
+  <h3>4.4. Nümunə view — <code>anbar_qaliqlari</code></h3>
+  <p><code>CROSS JOIN</code> bütün anbar × material kombinasiyalarını yaradır; CASE ilə daxil/çıxar hesablanır; HAVING sıfır balansı gizlədir:</p>
+  <pre><code>CREATE OR REPLACE VIEW hesabat.anbar_qaliqlari AS
+SELECT
+    a.ad AS anbar, mn.ad AS material, mn.vahid,
+    COALESCE(SUM(CASE WHEN mh.hereket_novu = 'daxil' THEN mh.miqdar
+                      WHEN mh.hereket_novu = 'cixar' THEN -mh.miqdar
+                      ELSE 0 END), 0) AS qaliq
+FROM logistika.anbar a
+CROSS JOIN ref.material_novu mn
+LEFT JOIN logistika.material_hereket mh
+       ON mh.anbar_id = a.anbar_id AND mh.material_novu_id = mn.material_novu_id
+GROUP BY a.anbar_id, a.ad, mn.material_novu_id, mn.ad, mn.vahid
+HAVING COALESCE(SUM(CASE WHEN mh.hereket_novu = 'daxil' THEN mh.miqdar
+                         WHEN mh.hereket_novu = 'cixar' THEN -mh.miqdar ELSE 0 END), 0) != 0
+ORDER BY a.ad, mn.ad;</code></pre>
+</section>
+
+<section class="kart" id="yoxlama">
+  <h2><span class="no">5</span> Gözlənilən Nəticə və Yoxlama Yolları</h2>
+
+  <h3>5.1. Funksiya və trigger sayları</h3>
+  <pre><code><span class="cm">-- Bütün funksiyalar</span>
+SELECT p.proname, n.nspname AS sxem
+FROM pg_proc p
+JOIN pg_namespace n ON n.oid = p.pronamespace
+WHERE n.nspname IN ('ref','layihe','satinalma','maliyye','kadr','hesabat','ai','risk','sened','audit')
+ORDER BY n.nspname, p.proname;
+
+<span class="cm">-- Bütün triggerlər</span>
+SELECT event_object_schema AS sxem, event_object_table AS cedvel,
+       trigger_name, action_timing, event_manipulation
+FROM information_schema.triggers
+WHERE event_object_schema IN ('ref','layihe','satinalma','maliyye','kadr','ai','risk','sened','audit','logistika')
+ORDER BY event_object_schema;</code></pre>
+
+  <h3>5.2. Funksiyaları işə salma (nümunə çıxış)</h3>
+  <pre><code><span class="cm">-- Layihə progressi, büdcə istifadəsi, ümumi xərc, müqavilə borcu (Q29 sorğusu)</span>
+SELECT l.kod,
+       layihe.layihe_progres(l.layihe_id) AS progress_faizi,
+       maliyye.layihe_budce_istifade(l.layihe_id) AS budce_istifade_faizi,
+       maliyye.layihe_umumi_xerc(l.layihe_id) AS umumi_xerc,
+       maliyye.muqavile_borcu(COALESCE(
+         (SELECT muqavile_id FROM satinalma.muqavile WHERE layihe_id = l.layihe_id LIMIT 1), 0)) AS muqavile_borcu
+FROM layihe.layihe l
+WHERE l.silinib = FALSE
+ORDER BY l.layihe_id;</code></pre>
+  <p><strong>Gözlənilən nəticə (ilk sətir):</strong> <code>L-2026-001</code> → progress ≈ 20.00, büdcə istifadəsi ≈ 8.08 (68,700/850,000), ümumi xərc = 68,700, müqavilə borcu = 280,000 (780,000 − 500,000).</p>
+
+  <h3>5.3. Triggerlərin işlədiyini yoxlamaq</h3>
+  <pre><code><span class="cm">-- updated_at triggerini yoxla: tarixi dəyiş, updated_at yenilənməlidir</span>
+UPDATE ref.region SET ad = ad WHERE region_id = 1;
+SELECT region_id, updated_at FROM ref.region WHERE region_id = 1;
+
+<span class="cm">-- Audit triggerini yoxla: UPDATE sonrası audit_log-da qeyd olmalıdır</span>
+UPDATE layihe.layihe SET plan_budce = 860000 WHERE layihe_id = 1;
+SELECT sxem, cedvel, emeliyyat, kohne_deyer ->> 'plan_budce' AS kohne,
+       yeni_deyer ->> 'plan_budce' AS yeni
+FROM audit.audit_log WHERE cedvel = 'layihe' ORDER BY audit_id DESC LIMIT 3;
+
+<span class="cm">-- Büdcə aşırlığı triggerini yoxla: 1 layihəsinə 1,000,000 AZN xərc yaz</span>
+INSERT INTO maliyye.xerc (layihe_id, madde_id, mebleg, tarix, tesvir)
+VALUES (1, (SELECT madde_id FROM maliyye.budce_madde WHERE kod='DIG'), 1000000, CURRENT_DATE, 'Test');
+<span class="cm">-- sistem_log-da 'warn' qeydi yaranmalıdır</span>
+SELECT seviyye, menbe, mesaj FROM audit.sistem_log ORDER BY log_id DESC LIMIT 2;
+
+<span class="cm">-- Test üçün əlavə etdiyimiz xərci sil</span>
+DELETE FROM maliyye.xerc WHERE tesvir = 'Test';</code></pre>
+</section>
+
+<section class="kart" id="tekrar">
+  <h2><span class="no">6</span> Təkrarlama Tapşırığı</h2>
+  <div class="tebrik"><strong>Ev tapşırığı:</strong> Dərsə baxmadan:</div>
+  <ol>
+    <li><code>layihe.layihe_progres</code> funksiyasını əl ilə yazın (orta real_faiz, mərhələ yoxdursa 0).</li>
+    <li><code>ref.set_updated_at</code> trigger funksiyasını və onu <code>ref.muessise</code>-yə bağlayan triggeri yazın.</li>
+    <li><code>trg_isci_status</code> triggerinin məntiqini izah edin: nə vaxt işə düşür, nə edir?</li>
+    <li><code>hesabat.ai_faaliyyet</code> view-nin sorğusunu yazın: agent başına tapşırıq sayı, hazır sayı, təsdiq sayı, orta qiymət.</li>
+    <li>Yoxlayın ki, bütün 18 funksiya və 32 trigger bazada mövcuddur.</li>
+  </ol>
+
+  <div class="meslehet">
+    <strong>Bu addımda nə öyrəndin?</strong> PL/pgSQL funksiyaları (<code>CREATE OR REPLACE FUNCTION</code>, <code>DECLARE</code>, <code>BEGIN/END</code>); trigger funksiyalarının <code>NEW</code>/<code>OLD</code>/<code>TG_OP</code> dəyişənləri; trigger növləri (BEFORE/AFTER, FOR EACH ROW); JSONB ilə işləmə (<code>to_jsonb</code>, <code>jsonb_object_keys</code>); GENERATED kolonlar; view-lər və analitik SQL texnikaları (FILTER, CROSS JOIN, HAVING, UNION ALL, subquery).
+  </div>
+</section>
+
+</main>
+
+<footer>
+  DeepSeek-5 ERP · Tədris Sənədləri · Dərs 2/8 — Funksiyalar, Triggerlər və View-lər · <span style="color:#7dd3fc">docs/lessons/ders_02_funksiyalar_triggerler.html</span>
+</footer>
+
+</body>
+</html>

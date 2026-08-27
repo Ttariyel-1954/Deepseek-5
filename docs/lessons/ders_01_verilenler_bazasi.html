@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dərs 1 — Verilənlər Bazası: PostgreSQL 18, 13 Sxem, 48 Cədvəl</title>
+<style>
+  :root{
+    --mavi:#0f3d5c; --mavi2:#14557e; --mavi3:#0a2c44;
+    --yasi:#0e9f6e; --yasi2:#0b7a54;
+    --qirmizi:#b91c1c; --boz:#f4f6f8; --metin:#1f2937; --ac:#6b7280;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;color:var(--metin);line-height:1.65;background:#eef1f4}
+  header{background:linear-gradient(135deg,var(--mavi3),var(--mavi) 60%,var(--mavi2));color:#fff;padding:2.2rem 1.5rem 1.8rem;border-bottom:4px solid var(--yasi)}
+  .qab{max-width:1050px;margin:0 auto;padding:0 1rem}
+  header h1{font-size:1.7rem;font-weight:700}
+  header .alt{color:#cfe0ec;margin-top:.4rem;font-size:1rem}
+  header .nişan{display:inline-block;background:var(--yasi);color:#fff;font-size:.75rem;font-weight:700;padding:.25rem .7rem;border-radius:999px;margin-top:.8rem;letter-spacing:.5px}
+  nav{background:#fff;border-bottom:1px solid #dde3e8;position:sticky;top:0;z-index:10;box-shadow:0 2px 6px rgba(15,61,92,.06)}
+  nav .qab{display:flex;flex-wrap:wrap;gap:.3rem;padding:.5rem 1rem;align-items:center}
+  nav a{color:var(--mavi);text-decoration:none;font-size:.85rem;padding:.3rem .65rem;border-radius:6px}
+  nav a:hover{background:#e8f2fa;color:var(--mavi2)}
+  main{max-width:1050px;margin:2rem auto;padding:0 1rem}
+  .kart{background:#fff;border:1px solid #e0e5ea;border-radius:12px;padding:1.8rem 2rem;margin-bottom:1.8rem;box-shadow:0 2px 8px rgba(15,61,92,.05)}
+  h2{color:var(--mavi);font-size:1.35rem;margin-bottom:1rem;padding-bottom:.5rem;border-bottom:2px solid var(--yasi);display:flex;align-items:center;gap:.5rem}
+  h2 .no{background:var(--mavi);color:#fff;font-size:.8rem;padding:.15rem .6rem;border-radius:6px}
+  h3{color:var(--mavi2);font-size:1.08rem;margin:1.4rem 0 .6rem}
+  p{margin-bottom:.9rem}
+  ul,ol{margin:0 0 1rem 1.4rem}
+  li{margin-bottom:.35rem}
+  table{width:100%;border-collapse:collapse;margin:1rem 0 1.4rem;font-size:.9rem}
+  th{background:var(--mavi);color:#fff;text-align:left;padding:.55rem .7rem;font-weight:600}
+  td{padding:.5rem .7rem;border-bottom:1px solid #e8edf1;vertical-align:top}
+  tr:nth-child(even) td{background:#f7fafb}
+  code{font-family:'SF Mono',Consolas,'Courier New',monospace;background:#eef3f7;color:#0b4a6f;padding:.15rem .4rem;border-radius:4px;font-size:.85rem}
+  pre{background:#0f1e2a;color:#dce9f2;padding:1.2rem 1.4rem;border-radius:10px;overflow-x:auto;margin:1rem 0 1.4rem;font-size:.82rem;line-height:1.55;border-left:4px solid var(--yasi)}
+  pre code{background:none;color:inherit;padding:0;font-size:inherit}
+  pre .cm{color:#7d9bb0} pre .kw{color:#7dd3fc} pre .s{color:#86efac} pre .n{color:#fca5a5}
+  .diqqet{background:#fef3f2;border:1px solid #f5c2c0;border-left:4px solid var(--qirmizi);padding:1rem 1.2rem;border-radius:8px;margin:1.2rem 0}
+  .meslehet{background:#e8f6ef;border:1px solid #b9e6d0;border-left:4px solid var(--yasi);padding:1rem 1.2rem;border-radius:8px;margin:1.2rem 0}
+  .info{background:#eaf3fb;border:1px solid #c3dcf0;border-left:4px solid var(--mavi);padding:1rem 1.2rem;border-radius:8px;margin:1.2rem 0}
+  .addim{display:flex;gap:.9rem;margin:1.4rem 0}
+  .addim .n{background:var(--yasi);color:#fff;min-width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0}
+  .addim .b{flex:1}
+  .addim .b h3{margin-top:0}
+  .xerite{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:.8rem;margin:1rem 0}
+  .sxem{background:#f4f8fb;border:1px solid #d3e2ec;border-radius:10px;padding:.9rem 1rem}
+  .sxem h4{color:var(--mavi);font-size:.95rem;margin-bottom:.4rem}
+  .sxem ul{list-style:none;margin:0}
+  .sxem li{font-size:.8rem;padding:.15rem 0;border-bottom:1px dashed #e0e9f0}
+  .sxem li:last-child{border:none}
+  .tebrik{background:#fff8e6;border:1px solid #f0dfa8;border-left:4px solid #f59e0b;padding:1rem 1.2rem;border-radius:8px;margin:1.2rem 0}
+  footer{background:var(--mavi3);color:#b9cfdd;text-align:center;padding:1.5rem;font-size:.85rem;margin-top:2.5rem}
+  .hansı{color:var(--mavi);font-size:.82rem;margin:.4rem 0}
+  @media(max-width:600px){main{padding:0 .5rem}.kart{padding:1.2rem}h1{font-size:1.3rem!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="qab">
+    <div class="nişan">Dərs 1 / 8 · Verilənlər Bazası</div>
+    <h1>PostgreSQL 18, 13 Sxem, 48 Cədvəl və Seed Məlumatları</h1>
+    <div class="alt">DeepSeek-5 ERP — Təhsil Nazirliyinin Təsərrüfathesablı Əsaslı Tikinti və Təchizat İdarəsi üçün sıfırdan baza qurulması</div>
+  </div>
+</header>
+
+<nav>
+  <div class="qab">
+    <a href="#meqsed">Məqsəd</a>
+    <a href="#addim1">1. PostgreSQL</a>
+    <a href="#addim2">2. Baza</a>
+    <a href="#addim3">3. Sxemlər</a>
+    <a href="#addim4">4. Cədvəllər</a>
+    <a href="#addim5">5. Migrasiya</a>
+    <a href="#addim6">6. Seed</a>
+    <a href="#yoxlama">Yoxlama</a>
+    <a href="#tekrar">Tapşırıq</a>
+  </div>
+</nav>
+
+<main>
+
+<section class="kart" id="meqsed">
+  <h2><span class="no">0</span> Dərsin Məqsədi</h2>
+  <p>Bu dərsdə siz <strong>Azərbaycan Respublikası Elm və Təhsil Nazirliyinin Təsərrüfathesablı Əsaslı Tikinti və Təchizat İdarəsi</strong> üçün qurulan ERP sisteminin <strong>verilənlər bazası qatını sıfırdan</strong> quracaqsınız. Layihə <code>DeepSeek-5 ERP</code> adlanır və tam idarəetməsi <em>süni intellekt</em> tərəfindən dəstəklənir.</p>
+  <p>Bu dərsin sonunda aşağıdakılara nail olacaqsınız:</p>
+  <ul>
+    <li>PostgreSQL 18 serverini quraşdıracaqsınız;</li>
+    <li><code>deepseek_erp_v6</code> adlı baza və <code>deepseek_admin</code> istifadəçisi yaradacaqsınız;</li>
+    <li><strong>13 sxem</strong> (ref, layihe, satinalma, maliyye, kadr, hesabat + ai, sened, risk, keyfiyyet, logistika, tehlike, audit) quracaqsınız;</li>
+    <li><strong>48 cədvəlin</strong> hər birini yaradıb, məntiqini anlayacaqsınız;</li>
+    <li>İki <em>seed</em> skripti ilə nümunə məlumatlar yükləyəcəksiniz;</li>
+    <li>Bazanın düzgün qurulduğunu yoxlamağı öyrənəcəksiniz.</li>
+  </ul>
+
+  <div class="info">
+    <strong>Tələb olunan bilik:</strong> Əsas SQL (CREATE TABLE, INSERT, SELECT), psql əmrləri, əməliyyat sistemi terminalı ilə işləmək. PostgreSQL ilə heç işləməmisinizsə, bu dərs sizə addım-addım kömək edəcək.
+  </div>
+
+  <div class="hansı"><strong>Real fayllar:</strong>
+    <code>database/schemas/01_create_tables.sql</code>,
+    <code>database/schemas/02_create_tables_ek.sql</code>,
+    <code>database/seeds/02_seed_data.sql</code>,
+    <code>database/seeds/03_seed_new_tables.sql</code>,
+    <code>database/migrations/*.sql</code>,
+    <code>database/00_drop_all.sql</code>
+  </div>
+</section>
+
+<section class="kart" id="addim1">
+  <h2><span class="no">1</span> PostgreSQL 18 Quraşdırılması</h2>
+
+  <h3>1.1. macOS (Homebrew) üçün</h3>
+  <pre><code><span class="cm"># Homebrew-in quraşdırılıb-olmadığını yoxla</span>
+brew --version
+
+<span class="cm"># PostgreSQL 18-i quraşdır</span>
+brew install postgresql@18
+
+<span class="cm"># Yolu qeyd et (Homebrew 18-i /usr/local/opt/postgresql@18-a qoyur)</span>
+<span class="cm"># Servisi işə sal</span>
+brew services start postgresql@18</code></pre>
+
+  <h3>1.2. Əlaqənin yoxlanması</h3>
+  <pre><code><span class="cm"># psql versiyası</span>
+psql --version
+<span class="cm"># Nəticə: psql (PostgreSQL) 18.x</span>
+
+<span class="cm"># Defolt 'postgres' istifadəçisi ilə əlaqə</span>
+psql -U postgres -h localhost -c "SELECT version();"</code></pre>
+
+  <div class="meslehet">
+    <strong>Meslehet:</strong> macOS-da Homebrew PostgreSQL quraşdırdıqdan sonra süper istifadəçi adətən <em>sistem istifadəçinizin adı</em> olur. <code>whoami</code> ilə yoxlayın; əgər psql sizi qəbul edirsə, istifadəçi adınız işləyir.
+  </div>
+</section>
+
+<section class="kart" id="addim2">
+  <h2><span class="no">2</span> Baza və İstifadəçinin Yaradılması</h2>
+
+  <p>ERP üçün <code>deepseek_erp_v6</code> bazası və <code>deepseek_admin</code> istifadəçisini yaradırıq. Parol mühit faylında (<code>backend/.env</code>) saxlanılır.</p>
+
+  <pre><code><span class="cm">-- super istifadəçi ilə daxil ol</span>
+psql -U postgres -h localhost
+
+<span class="cm">-- Rol (istifadəçi) yarat</span>
+CREATE ROLE deepseek_admin WITH LOGIN PASSWORD 'Deepseek2026';
+<span class="cm">-- Baza yarat</span>
+CREATE DATABASE deepseek_erp_v6 OWNER deepseek_admin;
+<span class="cm">-- Çıx</span>
+\q</code></pre>
+
+  <div class="info">
+    <strong>Konfiqurasiya faylı:</strong> <code>backend/.env</code> faylında baza əlaqə parametrləri belə saxlanılır:
+    <pre><code>DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=deepseek_erp_v6
+DB_USER=deepseek_admin
+DB_PASSWORD=Deepseek2026</code></pre>
+  </div>
+
+  <h3>2.1. Bütün köhnə strukturların təmizlənməsi</h3>
+  <p>Əgər bazanı əvvəlcədən qurmusunuzsa və ya təkrar qurmaq istəyirsinizsə, <code>00_drop_all.sql</code> skripti bütün 13 sxemi (və auth-u) tamamilə silir:</p>
+  <pre><code>psql -U deepseek_admin -h localhost -d deepseek_erp_v6 -f database/00_drop_all.sql</code></pre>
+  <div class="diqqet">
+    <strong>DİQQƏT:</strong> Bu skript bütün məlumatları silir! Yalnız sıfırdan qurmaq üçün istifadə edin. Faylın içində hər sxem <code>DROP SCHEMA ... CASCADE</code> ilə silinir.
+  </div>
+</section>
+
+<section class="kart" id="addim3">
+  <h2><span class="no">3</span> 13 Sxemin Yaradılması</h2>
+
+  <p>Sxemlər (schemas) verilənlər bazasında <strong>məntiqi bölmələrdir</strong>. Hər biznes sahəsi öz sxemində yaşayır. Layihədə <strong>13 sxem</strong> var — 6 əsas (Dərs 1) və 7 əlavə (Dərs 1-də <code>02_create_tables_ek.sql</code> ilə).</p>
+
+  <div class="xerite">
+    <div class="sxem"><h4>ref — İstinad məlumatları</h4><ul><li>region</li><li>seher</li><li>muessise_novu</li><li>muessise</li><li>is_novu</li><li>material_novu</li></ul></div>
+    <div class="sxem"><h4>layihe — Layihə idarəetməsi</h4><ul><li>layihe_status</li><li>layihe</li><li>layihe_merhele</li><li>layihe_material</li><li>layihe_isci</li></ul></div>
+    <div class="sxem"><h4>satinalma — Tender/müqavilə</h4><ul><li>tender_status</li><li>tender</li><li>tender_istirakci</li><li>muqavile</li><li>material_tedaruk</li></ul></div>
+    <div class="sxem"><h4>maliyye — Büdcə/xərc/ödəniş</h4><ul><li>budce_madde</li><li>xerc</li><li>odenis</li></ul></div>
+    <div class="sxem"><h4>kadr — Vəzifə/işçi</h4><ul><li>vezife</li><li>isci</li><li>layihe_isci_teyinat</li></ul></div>
+    <div class="sxem"><h4>hesabat — Analitik view-lər</h4><ul><li>2 view (Dərs 1) + 11 view (Dərs 2)</li></ul></div>
+    <div class="sxem"><h4>ai — AI idarəetmə qatı</h4><ul><li>ai_model</li><li>ai_agent</li><li>ai_teyinat</li><li>ai_qerar</li><li>ai_prognoz</li><li>ai_mesaj</li><li>ai_log</li></ul></div>
+    <div class="sxem"><h4>sened — Sənəd idarəetməsi</h4><ul><li>sened_novu</li><li>sened</li><li>sened_versiya</li><li>tesdiq</li></ul></div>
+    <div class="sxem"><h4>risk — Risk idarəetməsi</h4><ul><li>risk</li><li>risk_mitedaxile</li></ul></div>
+    <div class="sxem"><h4>keyfiyyet — Keyfiyyətə nəzarət</h4><ul><li>yoxlama</li><li>qusur</li><li>qebul_akt</li></ul></div>
+    <div class="sxem"><h4>logistika — Anbar/tədarük</h4><ul><li>anbar</li><li>tedarukcu</li><li>material_hereket</li><li>catdirilma</li></ul></div>
+    <div class="sxem"><h4>tehlike — Əmək təhlükəsizliyi</h4><ul><li>olay</li><li>yoxlama</li><li>telim</li></ul></div>
+    <div class="sxem"><h4>audit — Audit və sistem loqları</h4><ul><li>audit_log</li><li>sistem_log</li><li>giris_log</li></ul></div>
+  </div>
+
+  <p>Sxemlərin yaradılması <code>01_create_tables.sql</code> və <code>02_create_tables_ek.sql</code> skriptlərinin əvvəlində aparılır:</p>
+  <pre><code><span class="cm">-- 01_create_tables.sql-dən (6 əsas sxem)</span>
+CREATE SCHEMA IF NOT EXISTS ref;
+CREATE SCHEMA IF NOT EXISTS layihe;
+CREATE SCHEMA IF NOT EXISTS satinalma;
+CREATE SCHEMA IF NOT EXISTS maliyye;
+CREATE SCHEMA IF NOT EXISTS kadr;
+CREATE SCHEMA IF NOT EXISTS hesabat;
+
+<span class="cm">-- 02_create_tables_ek.sql-dən (7 yeni sxem)</span>
+CREATE SCHEMA IF NOT EXISTS ai;
+CREATE SCHEMA IF NOT EXISTS sened;
+CREATE SCHEMA IF NOT EXISTS risk;
+CREATE SCHEMA IF NOT EXISTS keyfiyyet;
+CREATE SCHEMA IF NOT EXISTS logistika;
+CREATE SCHEMA IF NOT EXISTS tehlike;
+CREATE SCHEMA IF NOT EXISTS audit;</code></pre>
+</section>
+
+<section class="kart" id="addim4">
+  <h2><span class="no">4</span> 48 Cədvəlin Yaradılması (İzahlarla)</h2>
+
+  <p>İki SQL faylını ardıcıl icra edin. Hər ikisi <code>BEGIN; ... COMMIT;</code> blokundadır — yəni <strong>transaksiya</strong> daxilindədir; hər hansı xəta olarsa heç nə yazılmaz.</p>
+
+  <pre><code>psql -U deepseek_admin -h localhost -d deepseek_erp_v6 -f database/schemas/01_create_tables.sql
+psql -U deepseek_admin -h localhost -d deepseek_erp_v6 -f database/schemas/02_create_tables_ek.sql</code></pre>
+
+  <h3>4.1. <code>ref</code> sxemi — İstinad məlumatları</h3>
+  <table>
+    <tr><th>Cədvəl</th><th>Məqsədi</th><th>Əsas xüsusiyyətləri</th></tr>
+    <tr><td><code>region</code></td><td>İqtisadi rayonlar (Bakı, Gəncə-Daşkəsən, Qarabağ...)</td><td><code>ad</code> UNIQUE, <code>kod</code> (BAK, GDK...)</td></tr>
+    <tr><td><code>seher</code></td><td>Şəhərlər/rayonlar</td><td><code>region_id</code> FK → region; <code>UNIQUE(region_id, ad)</code></td></tr>
+    <tr><td><code>muessise_novu</code></td><td>Təhsil müəssisəsi növləri</td><td>məktəb, bağça, lisey, kollec...</td></tr>
+    <tr><td><code>muessise</code></td><td>Təhsil müəssisələri (müştərilər)</td><td><code>seher_id</code>, <code>nov_id</code> FK; VÖEN unikal</td></tr>
+    <tr><td><code>is_novu</code></td><td>Tikinti/təmir iş növləri (hierarxik)</td><td><code>parent_id</code> özünə istinad (self FK)</td></tr>
+    <tr><td><code>material_novu</code></td><td>Tikinti materialları (hierarxik)</td><td><code>parent_id</code> özünə istinad; <code>vahid</code></td></tr>
+  </table>
+
+  <p><code>is_novu</code> nümunəsi — hierarxik struktur:</p>
+  <pre><code>CREATE TABLE IF NOT EXISTS ref.is_novu (
+    is_novu_id  SERIAL PRIMARY KEY,
+    parent_id   INTEGER REFERENCES ref.is_novu(is_novu_id),
+    ad          VARCHAR(150) NOT NULL,
+    kod         VARCHAR(20),
+    vahid       VARCHAR(20) DEFAULT 'm²',
+    aktif       BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);</code></pre>
+  <p>Burada <code>parent_id</code> öz cədvəlinə işarə edir — "Tikinti-quraşdırma işləri" (TQ) ana kateqoriyadır, "Yeni binanın tikintisi" (TQ-01) isə onun uşaqdır.</p>
+
+  <h3>4.2. <code>layihe</code> sxemi — Layihə idarəetməsi</h3>
+  <table>
+    <tr><th>Cədvəl</th><th>Məqsədi</th><th>Əsas xüsusiyyətləri</th></tr>
+    <tr><td><code>layihe_status</code></td><td>Layihə statusları</td><td>plan, tenderde, icra, tamam, dayandi; <code>reng</code>, <code>sira</code></td></tr>
+    <tr><td><code>layihe</code></td><td>Əsas layihə cədvəli</td><td><code>muessise_id</code>, <code>is_novu_id</code>, <code>status_id</code> FK; <code>plan_budce NUMERIC(14,2)</code>; <code>silinib</code> (soft delete)</td></tr>
+    <tr><td><code>layihe_merhele</code></td><td>Layihə mərhələləri</td><td><code>plan_faiz</code> vs <code>real_faiz</code>; <code>ON DELETE CASCADE</code></td></tr>
+    <tr><td><code>layihe_material</code></td><td>Layihəyə aid materiallar</td><td><code>miqdar × qiymet</code> hesablanır</td></tr>
+    <tr><td><code>layihe_isci</code></td><td>Layihənin müvəqqəti işçiləri</td><td><code>gunelik_mebleg</code></td></tr>
+  </table>
+
+  <p>Əsas <code>layihe</code> cədvəli — <code>silinib</code> sütunu <strong>soft delete</strong> texnikasıdır: sətir silinmir, sadəcə işarələnir:</p>
+  <pre><code>CREATE TABLE IF NOT EXISTS layihe.layihe (
+    layihe_id       SERIAL PRIMARY KEY,
+    muessise_id     INTEGER NOT NULL REFERENCES ref.muessise(muessise_id),
+    is_novu_id      INTEGER NOT NULL REFERENCES ref.is_novu(is_novu_id),
+    status_id       INTEGER NOT NULL DEFAULT 1 REFERENCES layihe.layihe_status(status_id),
+    seher_id        INTEGER REFERENCES ref.seher(seher_id),
+    kod             VARCHAR(30) UNIQUE,
+    ad              VARCHAR(255) NOT NULL,
+    tesvir          TEXT,
+    plan_budce      NUMERIC(14,2) NOT NULL DEFAULT 0,
+    bashlama_tarixi DATE,
+    son_tarix       DATE,
+    olcu            NUMERIC(12,2),
+    vahid           VARCHAR(20) DEFAULT 'm²',
+    silinib         BOOLEAN NOT NULL DEFAULT FALSE,
+    created_by      INTEGER,
+    created_at      TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at      TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);</code></pre>
+
+  <h3>4.3. <code>satinalma</code> sxemi — Tender, müqavilə, tədarük</h3>
+  <table>
+    <tr><th>Cədvəl</th><th>Məqsədi</th><th>Əsas xüsusiyyətləri</th></tr>
+    <tr><td><code>tender_status</code></td><td>Tender statusları</td><td>elan, qebul, qiymetlendirme, qalib, legv</td></tr>
+    <tr><td><code>tender</code></td><td>Tenderlər</td><td><code>qiymet_serhedi</code>, <code>qalib_istirakci_id</code></td></tr>
+    <tr><td><code>tender_istirakci</code></td><td>Tender iştirakçıları</td><td><code>teklif_mebleg</code>, <code>qalib BOOLEAN</code>; CASCADE</td></tr>
+    <tr><td><code>muqavile</code></td><td>Müqavilələr</td><td><code>nomre</code> UNIQUE, <code>podratci</code>, <code>mebleg</code></td></tr>
+    <tr><td><code>material_tedaruk</code></td><td>Müqavilə üzrə material tədarükü</td><td><code>muqavile_id</code>, <code>material_novu_id</code> FK; CASCADE</td></tr>
+  </table>
+
+  <h3>4.4. <code>maliyye</code> sxemi — Büdcə, xərc, ödəniş</h3>
+  <table>
+    <tr><th>Cədvəl</th><th>Məqsədi</th><th>Əsas xüsusiyyətləri</th></tr>
+    <tr><td><code>budce_madde</code></td><td>Büdcə maddələri (hierarxik)</td><td><code>tip CHECK IN ('xerc','gelir')</code>; <code>parent_id</code> self-FK</td></tr>
+    <tr><td><code>xerc</code></td><td>Xərclər</td><td><code>mebleg CHECK (mebleg &gt;= 0)</code>; <code>madde_id</code> FK</td></tr>
+    <tr><td><code>odenis</code></td><td>Müqavilə üzrə ödənişlər</td><td><code>odenis_novu CHECK IN ('bank','nağd','hesab')</code></td></tr>
+  </table>
+
+  <h3>4.5. <code>kadr</code> sxemi — Vəzifə, işçi, təyinat</h3>
+  <table>
+    <tr><th>Cədvəl</th><th>Məqsədi</th><th>Əsas xüsusiyyətləri</th></tr>
+    <tr><td><code>vezife</code></td><td>Vəzifələr</td><td><code>maas_alt</code>, <code>maas_ust</code> diapazonu</td></tr>
+    <tr><td><code>isci</code></td><td>İşçilər</td><td><code>fin VARCHAR(7) UNIQUE</code>; <code>status CHECK IN ('aktiv','passiv')</code></td></tr>
+    <tr><td><code>layihe_isci_teyinat</code></td><td>İşçinin layihəyə təyinatı</td><td><code>UNIQUE(layihe_id, isci_id)</code> — bir işçi bir layihəyə bir dəfə</td></tr>
+  </table>
+
+  <h3>4.6. <code>ai</code> sxemi — Süni intellekt idarəetmə qatı (7 yeni sxemdən)</h3>
+  <p>Bu sxem ERP-nin <strong>AI tərəfindən idarə olunması</strong> üçün ürəyidir. 7 cədvəli var:</p>
+  <table>
+    <tr><th>Cədvəl</th><th>Məqsədi</th></tr>
+    <tr><td><code>ai_model</code></td><td>AI modelləri (DeepSeek, GPT-4o, Claude Opus/Sonnet) — provider, model_ref, qiymət/token, temperature</td></tr>
+    <tr><td><code>ai_agent</code></td><td>AI agentləri (Layihə Planlayıcısı, Tender Analitiki, Risk Nəzarətçisi...) — hər biri bir modelə bağlı</td></tr>
+    <tr><td><code>ai_teyinat</code></td><td>Agentlərə verilən tapşırıqlar — giriş/çıxış JSONB, status, prioritet, qiymətləndirmə</td></tr>
+    <tr><td><code>ai_qerar</code></td><td>AI qərarları — qərar növü, məzmun JSONB, əsaslandırma, əminlik faizi, təsdiq statusu</td></tr>
+    <tr><td><code>ai_prognoz</code></td><td>Proqnozlar — xərc aşırlığı, müddət gecikməsi, material qıtlığı; proqnoz vs real dəyər, dəqiqlik</td></tr>
+    <tr><td><code>ai_mesaj</code></td><td>AI-nın insanlara mesajları — mövzu, əhəmiyyət (asagi/normal/yuksek/kritik), oxunub</td></tr>
+    <tr><td><code>ai_log</code></td><td>AI icra loqları — token/xərc izləmə, hadisələr</td></tr>
+  </table>
+
+  <p><code>ai.ai_teyinat</code> — tapşırığın giriş/çıxışını JSONB kimi saxlayır (çevik və mürəkkəb məlumat):</p>
+  <pre><code>CREATE TABLE IF NOT EXISTS ai.ai_teyinat (
+    teyinat_id      SERIAL PRIMARY KEY,
+    agent_id        INTEGER REFERENCES ai.ai_agent(agent_id),
+    layihe_id       INTEGER REFERENCES layihe.layihe(layihe_id),
+    teyinat_novu    VARCHAR(60) NOT NULL,
+    giris_json      JSONB,
+    cixis_json      JSONB,
+    prompt          TEXT,
+    status          VARCHAR(20) DEFAULT 'golecek'
+                    CHECK (status IN ('golecek','islemede','hazir','xesver')),
+    ustunluk        INTEGER DEFAULT 5,
+    netice_qiymeti  NUMERIC(5,2),
+    tesdiq_status   VARCHAR(20) DEFAULT 'golecek'
+                    CHECK (tesdiq_status IN ('golecek','tesdiqlendi','redd_edildi')),
+    yaradan         INTEGER,
+    created_at      TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    tamamlanma_tarixi TIMESTAMPTZ,
+    updated_at      TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);</code></pre>
+
+  <h3>4.7. Qalan 6 yeni sxem (qısa icmal)</h3>
+  <table>
+    <tr><th>Sxem</th><th>Cədvəllər</th><th>Məqsədi</th></tr>
+    <tr><td><code>sened</code></td><td>sened_novu, sened, sened_versiya, tesdiq</td><td>Smeta, akt, müqavilə, hesabat sənədləri; versiya və təsdiq axını</td></tr>
+    <tr><td><code>risk</code></td><td>risk, risk_mitedaxile</td><td>Layihə riskləri (ehtimal × təsir = dərəcə) və müdaxilə planları</td></tr>
+    <tr><td><code>keyfiyyet</code></td><td>yoxlama, qusur, qebul_akt</td><td>Keyfiyyət yoxlamaları, qüsurlar, qəbul aktları</td></tr>
+    <tr><td><code>logistika</code></td><td>anbar, tedarukcu, material_hereket, catdirilma</td><td>Anbar balansı, təchizatçılar, material hərəkəti, çatdırılma</td></tr>
+    <tr><td><code>tehlike</code></td><td>olay, yoxlama, telim</td><td>Əmək təhlükəsizliyi: hadisələr, yoxlamalar, təlimlər</td></tr>
+    <tr><td><code>audit</code></td><td>audit_log, sistem_log, giris_log</td><td>Dəyişiklik izi (trigger-lə doldurulur), sistem və giriş loqları</td></tr>
+  </table>
+
+  <div class="meslehet">
+    <strong>Maraqlı detal — <code>risk.risk</code> cədvəlindəki GENERATED kolonu:</strong>
+    <code>derece NUMERIC(5,2) GENERATED ALWAYS AS (ehtimal * tesir / 100) STORED</code> — bu sütun <em>avtomatik hesablanır</em>, ona yazmaq mümkün deyil. Dəyəri PostgreSQL özü hesablayır. Seed faylında bu sütuna yazılmır, amma oxuyanda dəyər görünür.
+  </div>
+
+  <div class="diqqet">
+    <strong>QEYD:</strong> <code>02_create_tables_ek.sql</code>-də bəzi cədvəllərdə qəsdən <code>REFERENCES layihe.layihe</code> kimi istinadlar var — yəni <code>01</code> faylı <strong>əvvəlcə</strong> icra olunmalıdır, sonra <code>02</code>.
+  </div>
+</section>
+
+<section class="kart" id="addim5">
+  <h2><span class="no">5</span> Migrasiya Faylları</h2>
+
+  <p>Layihədə <code>database/migrations/</code> qovluğunda iki əlavə dəyişiklik var:</p>
+
+  <h3>5.1. <code>002_create_users.sql</code> — İstifadəçilər (auth)</h3>
+  <p>Auth sxemi və istifadəçi cədvəli. Parollar backend tərəfindən <strong>bcrypt</strong> ilə heşlənir (Dərs 3-də görəcəksiniz). Rol məhdudiyyəti CHECK ilə:</p>
+  <pre><code>CREATE SCHEMA IF NOT EXISTS auth;
+
+CREATE TABLE IF NOT EXISTS auth.users (
+    user_id     SERIAL PRIMARY KEY,
+    username    VARCHAR(50)  NOT NULL UNIQUE,
+    email       VARCHAR(150) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    full_name   VARCHAR(150),
+    role        VARCHAR(30) NOT NULL DEFAULT 'istifadeci'
+                CHECK (role IN ('admin','mudir','muellim','istifadeci','auditor')),
+    is_active   BOOLEAN NOT NULL DEFAULT TRUE,
+    last_login  TIMESTAMPTZ,
+    created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);</code></pre>
+
+  <h3>5.2. <code>005_add_progres.sql</code> — Layihə progress kolonu</h3>
+  <p>Dərs 2-də yaradılacaq trigger bu kolonu mərhələ progressindən avtomatik hesablayacaq:</p>
+  <pre><code>ALTER TABLE layihe.layihe
+    ADD COLUMN IF NOT EXISTS progres NUMERIC(5,2) NOT NULL DEFAULT 0;</code></pre>
+
+  <p>Migrasiya fayllarını da icra edin:</p>
+  <pre><code>psql -U deepseek_admin -h localhost -d deepseek_erp_v6 -f database/migrations/002_create_users.sql
+psql -U deepseek_admin -h localhost -d deepseek_erp_v6 -f database/migrations/005_add_progres.sql</code></pre>
+</section>
+
+<section class="kart" id="addim6">
+  <h2><span class="no">6</span> Seed Məlumatlarının Yüklənməsi</h2>
+
+  <p><em>Seed</em> = bazanın ilkin (nümunə) məlumatlarla doldurulması. İki seed faylı var.</p>
+
+  <h3>6.1. <code>02_seed_data.sql</code> — 6 əsas sxemin məlumatları</h3>
+  <p>Bu fayl aşağıdakıları doldurur:</p>
+  <ul>
+    <li><strong>13 iqtisadi rayon</strong> (Bakı, Qarabağ, Naxçıvan...) — <code>ON CONFLICT (ad) DO NOTHING</code> ilə təkrardan qorunma;</li>
+    <li><strong>9 şəhər</strong> (Bakı, Gəncə, Mingəçevir...);</li>
+    <li><strong>7 müəssisə növü</strong> və <strong>7 təhsil müəssisəsi</strong> (müştəri bazası);</li>
+    <li><strong>7 + 6 = 13 iş növü</strong> (hierarxik: TQ → TQ-01, TQ-02...);</li>
+    <li><strong>7 + 7 = 14 material növü</strong> (SB → SB-01, SB-02...);</li>
+    <li><strong>5 layihə statusu</strong> və <strong>5 layihə</strong> (L-2026-001 ... 005);</li>
+    <li><strong>7 mərhələ</strong>, <strong>6 layihə materialı</strong>;</li>
+    <li><strong>5 tender statusu</strong>, <strong>3 tender</strong>, <strong>5 iştirakçı</strong>;</li>
+    <li><strong>2 müqavilə</strong> (MQ-2026-015, MQ-2026-008), <strong>3 material tədarükü</strong>;</li>
+    <li><strong>5 + 5 = 10 büdcə maddəsi</strong>, <strong>7 xərc</strong>, <strong>4 ödəniş</strong>;</li>
+    <li><strong>7 vəzifə</strong>, <strong>8 işçi</strong>, <strong>4 təyinat</strong>.</li>
+  </ul>
+
+  <p>Seed üsulunun vacib nümunəsi — <em>subquery</em> ilə FK dəyərlərini adla tapmaq:</p>
+  <pre><code>INSERT INTO ref.muessise (seher_id, nov_id, ad, voen, unvan, telefon) VALUES
+((SELECT seher_id FROM ref.seher WHERE ad='Bakı'),
+ (SELECT nov_id FROM ref.muessise_novu WHERE ad='Ümumtəhsil məktəbi'),
+ 'N. Nərimanov adına 20 nömrəli tam orta məktəb', '1234567890',
+ 'Bakı, Nərimanov r.', '+994 12 123 45 01')
+ON CONFLICT (ad) DO NOTHING;</code></pre>
+  <p><code>ON CONFLICT DO NOTHING</code> — əgər eyni adlı sətir varsa, səhv vermədən atlanır. Bu, seed faylını <strong>dəfələrlə icra etməyi təhlükəsiz</strong> edir.</p>
+
+  <h3>6.2. <code>03_seed_new_tables.sql</code> — 7 yeni sxemin məlumatları</h3>
+  <p>Bu fayl AI qatı və digər modulları doldurur:</p>
+  <ul>
+    <li><strong>5 AI modeli</strong> — DeepSeek Chat, DeepSeek Reasoner, GPT-4o, Claude Opus, Claude Sonnet;</li>
+    <li><strong>6 AI agenti</strong> — hərəsi bir modelə bağlı;</li>
+    <li><strong>9 AI tapşırığı</strong> (ai_teyinat) — müxtəlif statuslarda (hazir, islemede, golecek, xesver);</li>
+    <li><strong>6 AI qərarı</strong>, <strong>6 proqnoz</strong>, <strong>6 mesaj</strong>, <strong>6 icra loqu</strong>;</li>
+    <li><strong>8 sənəd növü</strong>, <strong>10 sənəd</strong>, <strong>5 versiya</strong>, <strong>5 təsdiq</strong>;</li>
+    <li><strong>8 risk</strong> + <strong>5 müdaxilə</strong>;</li>
+    <li><strong>7 yoxlama</strong>, <strong>5 qüsur</strong>, <strong>5 qəbul aktı</strong>;</li>
+    <li><strong>3 anbar</strong>, <strong>6 təchizatçı</strong>, <strong>10 material hərəkəti</strong>, <strong>6 çatdırılma</strong>;</li>
+    <li><strong>5 hadisə</strong>, <strong>5 təhlükəsizlik yoxlaması</strong>, <strong>6 təlim</strong>;</li>
+    <li><strong>4 audit loqu</strong>, <strong>4 sistem loqu</strong>, <strong>5 giriş loqu</strong>.</li>
+  </ul>
+
+  <p>Seed fayllarını icra edin:</p>
+  <pre><code>psql -U deepseek_admin -h localhost -d deepseek_erp_v6 -f database/seeds/02_seed_data.sql
+psql -U deepseek_admin -h localhost -d deepseek_erp_v6 -f database/seeds/03_seed_new_tables.sql</code></pre>
+</section>
+
+<section class="kart" id="yoxlama">
+  <h2><span class="no">7</span> Gözlənilən Nəticə və Yoxlama Yolları</h2>
+
+  <h3>7.1. Sxem və cədvəl sayının yoxlanması</h3>
+  <p>Bütün 13 sxemdəki cədvəl sayını göstərən sorğu (bu, həm də AI-ya baza xəritəsi kimi verilir — Dərs 6-dakı Q36 sorğusu):</p>
+  <pre><code>SELECT schemaname, COUNT(*) AS cedvel_sayi
+FROM pg_tables
+WHERE schemaname IN ('ref','layihe','satinalma','maliyye','kadr','hesabat',
+                     'ai','sened','risk','keyfiyyet','logistika','tehlike','audit')
+GROUP BY schemaname ORDER BY schemaname;</code></pre>
+
+  <p><strong>Gözlənilən nəticə</strong> (13 sətir, cəmi 48 cədvəl):</p>
+  <pre><code> schemaname | cedvel_sayi
+------------+-------------
+ ai         |           7
+ audit      |           3
+ hesabat    |           0   <span class="cm">-- view-lər cədvəl sayılmır</span>
+ kadr       |           3
+ keyfiyyet  |           3
+ layihe     |           5
+ logistika  |           4
+ maliyye    |           3
+ ref        |           6
+ risk       |           2
+ satinalma  |           5
+ sened      |           4
+ tehlike    |           3
+(13 sətir)</code></pre>
+
+  <h3>7.2. Seed məlumat sayları</h3>
+  <pre><code>SELECT
+  (SELECT COUNT(*) FROM ref.region)        AS region,
+  (SELECT COUNT(*) FROM ref.muessise)      AS muessise,
+  (SELECT COUNT(*) FROM layihe.layihe)     AS layihe,
+  (SELECT COUNT(*) FROM satinalma.tender)  AS tender,
+  (SELECT COUNT(*) FROM satinalma.muqavile)AS muqavile,
+  (SELECT COUNT(*) FROM kadr.isci)         AS isci,
+  (SELECT COUNT(*) FROM ai.ai_agent)       AS agent,
+  (SELECT COUNT(*) FROM risk.risk)         AS risk;</code></pre>
+  <p><strong>Gözlənilən nəticə:</strong> region=13, muessise=7, layihe=5, tender=3, muqavile=2, isci=8, agent=6, risk=8.</p>
+
+  <h3>7.3. Bir neçə nümunə sorğu</h3>
+  <pre><code><span class="cm">-- Layihələr və büdcələri</span>
+SELECT kod, ad, plan_budce FROM layihe.layihe ORDER BY kod;
+
+<span class="cm">-- AI agentləri və bağlı olduqları modellər</span>
+SELECT a.ad AS agent, a.vezife, m.ad AS model, m.provider
+FROM ai.ai_agent a
+JOIN ai.ai_model m ON m.model_id = a.model_id
+WHERE a.aktif = TRUE;</code></pre>
+</section>
+
+<section class="kart" id="tekrar">
+  <h2><span class="no">8</span> Təkrarlama Tapşırığı</h2>
+  <div class="tebrik">
+    <strong>Ev tapşırığı:</strong> Aşağıdakıları <strong>özünüz</strong> edin — bu dərsə baxmadan:
+  </div>
+  <ol>
+    <li>PostgreSQL 18-i quraşdırın və versiyanı yoxlayın.</li>
+    <li><code>deepseek_erp_v6</code> bazası və <code>deepseek_admin</code> istifadəçisini yaradın (parol <code>Deepseek2026</code>).</li>
+    <li>13 sxemi əl ilə (psql-də) yaradın: ref, layihe, satinalma, maliyye, kadr, hesabat, ai, sened, risk, keyfiyyet, logistika, tehlike, audit.</li>
+    <li><code>ref.region</code> cədvəlini əl ilə yazın (SERIAL PK, ad UNIQUE, kod UNIQUE, aktif BOOLEAN, timestamplar).</li>
+    <li>İki seed faylını icra edin və <code>layihe.layihe</code>-də 5 sətir olduğunu yoxlayın.</li>
+    <li>İzah edin: <code>ON CONFLICT DO NOTHING</code> nəyə xidmət edir? <code>NUMERIC(14,2)</code> nə deməkdir?</li>
+  </ol>
+
+  <div class="meslehet">
+    <strong>Bu addımda nə öyrəndin?</strong> PostgreSQL quraşdırma və baza yaratma; sxemlərin məntiqi bölgüsü (13 sxem); 48 cədvəlin hər birinin məqsədi; xarici açarlar (FK), özünə istinad (self FK), CHECK məhdudiyyətləri, soft delete, GENERATED STORED sütunu; transaksiya blokları; seed fayllarında <code>ON CONFLICT</code> və subquery ilə FK tapma üsulları.
+  </div>
+</section>
+
+</main>
+
+<footer>
+  DeepSeek-5 ERP · Tədris Sənədləri · Dərs 1/8 — Verilənlər Bazası · <span style="color:#7dd3fc">docs/lessons/ders_01_verilenler_bazasi.html</span>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dərs 3 — Backend: Express Server, Config, Modellər, API</title>
+<style>
+  :root{
+    --mavi:#0f3d5c; --mavi2:#14557e; --mavi3:#0a2c44;
+    --yasi:#0e9f6e; --yasi2:#0b7a54;
+    --qirmizi:#b91c1c; --boz:#f4f6f8; --metin:#1f2937; --ac:#6b7280;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;color:var(--metin);line-height:1.65;background:#eef1f4}
+  header{background:linear-gradient(135deg,var(--mavi3),var(--mavi) 60%,var(--mavi2));color:#fff;padding:2.2rem 1.5rem 1.8rem;border-bottom:4px solid var(--yasi)}
+  .qab{max-width:1050px;margin:0 auto;padding:0 1rem}
+  header h1{font-size:1.7rem;font-weight:700}
+  header .alt{color:#cfe0ec;margin-top:.4rem;font-size:1rem}
+  header .nişan{display:inline-block;background:var(--yasi);color:#fff;font-size:.75rem;font-weight:700;padding:.25rem .7rem;border-radius:999px;margin-top:.8rem;letter-spacing:.5px}
+  nav{background:#fff;border-bottom:1px solid #dde3e8;position:sticky;top:0;z-index:10;box-shadow:0 2px 6px rgba(15,61,92,.06)}
+  nav .qab{display:flex;flex-wrap:wrap;gap:.3rem;padding:.5rem 1rem;align-items:center}
+  nav a{color:var(--mavi);text-decoration:none;font-size:.85rem;padding:.3rem .65rem;border-radius:6px}
+  nav a:hover{background:#e8f2fa;color:var(--mavi2)}
+  main{max-width:1050px;margin:2rem auto;padding:0 1rem}
+  .kart{background:#fff;border:1px solid #e0e5ea;border-radius:12px;padding:1.8rem 2rem;margin-bottom:1.8rem;box-shadow:0 2px 8px rgba(15,61,92,.05)}
+  h2{color:var(--mavi);font-size:1.35rem;margin-bottom:1rem;padding-bottom:.5rem;border-bottom:2px solid var(--yasi);display:flex;align-items:center;gap:.5rem}
+  h2 .no{background:var(--mavi);color:#fff;font-size:.8rem;padding:.15rem .6rem;border-radius:6px}
+  h3{color:var(--mavi2);font-size:1.08rem;margin:1.4rem 0 .6rem}
+  h4{color:var(--mavi2);font-size:.98rem;margin:1.1rem 0 .4rem}
+  p{margin-bottom:.9rem}
+  ul,ol{margin:0 0 1rem 1.4rem}
+  li{margin-bottom:.35rem}
+  table{width:100%;border-collapse:collapse;margin:1rem 0 1.4rem;font-size:.88rem}
+  th{background:var(--mavi);color:#fff;text-align:left;padding:.55rem .7rem;font-weight:600}
+  td{padding:.5rem .7rem;border-bottom:1px solid #e8edf1;vertical-align:top}
+  tr:nth-child(even) td{background:#f7fafb}
+  code{font-family:'SF Mono',Consolas,'Courier New',monospace;background:#eef3f7;color:#0b4a6f;padding:.15rem .4rem;border-radius:4px;font-size:.85rem}
+  pre{background:#0f1e2a;color:#dce9f2;padding:1.2rem 1.4rem;border-radius:10px;overflow-x:auto;margin:1rem 0 1.4rem;font-size:.8rem;line-height:1.55;border-left:4px solid var(--yasi)}
+  pre code{background:none;color:inherit;padding:0;font-size:inherit}
+  pre .cm{color:#7d9bb0} pre .kw{color:#7dd3fc} pre .s{color:#86efac} pre .n{color:#fca5a5}
+  .diqqet{background:#fef3f2;border:1px solid #f5c2c0;border-left:4px solid var(--qirmizi);padding:1rem 1.2rem;border-radius:8px;margin:1.2rem 0}
+  .meslehet{background:#e8f6ef;border:1px solid #b9e6d0;border-left:4px solid var(--yasi);padding:1rem 1.2rem;border-radius:8px;margin:1.2rem 0}
+  .info{background:#eaf3fb;border:1px solid #c3dcf0;border-left:4px solid var(--mavi);padding:1rem 1.2rem;border-radius:8px;margin:1.2rem 0}
+  .tebrik{background:#fff8e6;border:1px solid #f0dfa8;border-left:4px solid #f59e0b;padding:1rem 1.2rem;border-radius:8px;margin:1.2rem 0}
+  footer{background:var(--mavi3);color:#b9cfdd;text-align:center;padding:1.5rem;font-size:.85rem;margin-top:2.5rem}
+  .hansı{color:var(--mavi);font-size:.82rem;margin:.4rem 0}
+  @media(max-width:600px){main{padding:0 .5rem}.kart{padding:1.2rem}h1{font-size:1.3rem!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="qab">
+    <div class="nişan">Dərs 3 / 8 · Backend</div>
+    <h1>Express Server: Konfiqurasiya, 7 Model-Controller-Route, Health Check, 10 Test</h1>
+    <div class="alt">DeepSeek-5 ERP — Node.js + Express + pg REST API qatını qururuq</div>
+  </div>
+</header>
+
+<nav>
+  <div class="qab">
+    <a href="#meqsed">Məqsəd</a>
+    <a href="#quruluş">Quruluş</a>
+    <a href="#addim1">1. Layihə</a>
+    <a href="#addim2">2. Config</a>
+    <a href="#addim3">3. Modellər</a>
+    <a href="#addim4">4. Controller</a>
+    <a href="#addim5">5. Routes</a>
+    <a href="#addim6">6. Server</a>
+    <a href="#addim7">7. Testlər</a>
+    <a href="#yoxlama">Yoxlama</a>
+    <a href="#tekrar">Tapşırıq</a>
+  </div>
+</nav>
+
+<main>
+
+<section class="kart" id="meqsed">
+  <h2><span class="no">0</span> Dərsin Məqsədi</h2>
+  <p>Bu dərsdə backend <strong>əsas qatını</strong> qururuq: Express server, baza əlaqəsi, JWT auth, 7 əsas model-controller-route dəsti, health check və <strong>10 test</strong>. Dərs 4-də bu qata AI idarəetmə qatı əlavə olunacaq.</p>
+  <p><strong>Texnologiya:</strong> Node.js 20+, Express 4, <code>pg</code> (PostgreSQL sürücüsü), <code>jsonwebtoken</code> (JWT), <code>bcryptjs</code> (parol heşi), <code>dotenv</code> (konfiqurasiya), <code>cors</code>, <code>express-rate-limit</code>.</p>
+  <div class="hansı"><strong>Real fayllar:</strong> <code>backend/.env</code>, <code>backend/.env.example</code>; <code>backend/src/</code> qovluğunda qurulacaq struktur: config, models, controllers, routes, middlewares, services, utils, validators</div>
+</section>
+
+<section class="kart" id="quruluş">
+  <h2><span class="no">1</span> Backend Qovluq Quruluşu</h2>
+  <p>Layihənin backend qatı bu strukturu izləyir:</p>
+  <pre><code>backend/
+├── .env                  <span class="cm"># mühit dəyişənləri (gizli!)</span>
+├── .env.example          <span class="cm"># nümunə konfiqurasiya</span>
+├── package.json
+├── logs/                 <span class="cm"># log faylları</span>
+├── src/
+│   ├── server.js         <span class="cm"># giriş nöqtəsi</span>
+│   ├── app.js            <span class="cm"># Express tətbiqi</span>
+│   ├── config/
+│   │   ├── db.js         <span class="cm"># PostgreSQL pool</span>
+│   │   └── auth.js       <span class="cm"># JWT helper</span>
+│   ├── middlewares/
+│   │   ├── auth.js       <span class="cm"># JWT yoxlayan</span>
+│   │   ├── error.js      <span class="cm"># xəta idarəçisi</span>
+│   │   └── rateLimit.js  <span class="cm"># sürət məhdudiyyəti</span>
+│   ├── models/           <span class="cm"># SQL sorğuları</span>
+│   │   ├── layiheModel.js
+│   │   ├── muessiseModel.js
+│   │   ├── tenderModel.js
+│   │   ├── muqavileModel.js
+│   │   ├── xercModel.js
+│   │   ├── isciModel.js
+│   │   └── istifadeciModel.js
+│   ├── controllers/      <span class="cm"># HTTP sorğularını idarə edir</span>
+│   │   └── *.controller.js
+│   ├── routes/           <span class="cm"># URL marşrutları</span>
+│   │   └── *.routes.js
+│   └── validators/       <span class="cm"># məlumat yoxlaması</span>
+└── tests/
+    ├── unit/             <span class="cm"># vahid testlər</span>
+    └── integration/      <span class="cm"># API testləri</span></code></pre>
+  <div class="info"><strong>Dizayn prinsipi:</strong> Model = məlumat (SQL), Controller = məntiq, Route = URL. Bu üçlük ayrılığı (MVC) test etməyi və dəyişdirməyi asanlaşdırır.</div>
+</section>
+
+<section class="kart" id="addim1">
+  <h2><span class="no">2</span> Layihənin Başlanğıcı və package.json</h2>
+  <pre><code>mkdir -p backend/src/{config,models,controllers,routes,middlewares,services,utils,validators}
+mkdir -p backend/tests/{unit,integration} backend/logs
+cd backend
+npm init -y
+npm install express pg dotenv cors jsonwebtoken bcryptjs express-rate-limit
+npm install --save-dev jest supertest nodemon</code></pre>
+
+  <p><code>package.json</code>-a skriptlər əlavə edin:</p>
+  <pre><code><span class="s">"scripts"</span>: {
+  <span class="s">"start"</span>: "node src/server.js",
+  <span class="s">"dev"</span>: "nodemon src/server.js",
+  <span class="s">"test"</span>: "jest --runInBand"
+}</code></pre>
+</section>
+
+<section class="kart" id="addim2">
+  <h2><span class="no">3</span> Konfiqurasiya Qatı</h2>
+
+  <h3>3.1. <code>.env</code> faylı (Dərs 1-dən)</h3>
+  <p>Dərs 1-də gördüyümüz <code>backend/.env</code> bütün parametrləri saxlayır:</p>
+  <pre><code>PORT=5001
+NODE_ENV=development
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=deepseek_erp_v6
+DB_USER=deepseek_admin
+DB_PASSWORD=Deepseek2026
+JWT_SECRET=DeepSeek5_ERP_2026_Guclu_Maxfi_Acar_8f7e6d5c4b3a2f1e0d9c
+JWT_EXPIRES_IN=7d
+CORS_ORIGIN=http://localhost:5174,http://localhost:3000
+RATE_LIMIT_WINDOW_MS=900000
+RATE_LIMIT_MAX=200
+LOG_DIR=logs
+AI_MODE=mock
+DEEPSEEK_API_KEY=
+DEEPSEEK_BASE_URL=https://api.deepseek.com
+DEEPSEEK_MODEL=deepseek-chat
+ANTHROPIC_API_KEY=
+ANTHROPIC_BASE_URL=https://api.anthropic.com
+ANTHROPIC_MODEL=claude-sonnet-5</code></pre>
+
+  <h3>3.2. <code>src/config/db.js</code> — PostgreSQL pool</h3>
+  <p><code>pg</code> kitabxanasının <em>Pool</em>-u bağlantıları idarə edir. Bütün modellər buradan <code>pool.query()</code> çağırır:</p>
+  <pre><code>const { Pool } = require('pg');
+require('dotenv').config();
+
+const pool = new Pool({
+  host: process.env.DB_HOST || 'localhost',
+  port: Number(process.env.DB_PORT) || 5432,
+  database: process.env.DB_NAME,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  max: 10,               <span class="cm">// maksimum 10 bağlantı</span>
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 5000,
+});
+
+<span class="cm">// Əlaqəni yoxlama üçün köməkçi</span>
+async function testConnection() {
+  const res = await pool.query('SELECT NOW() AS vaxt');
+  return res.rows[0].vaxt;
+}
+
+module.exports = { pool, testConnection };</code></pre>
+
+  <h3>3.3. <code>src/config/auth.js</code> — JWT helper</h3>
+  <pre><code>const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+
+<span class="cm">// Parolu heşlə (bcrypt — geri qaytarılmaz)</span>
+async function hashPassword(parol) {
+  return bcrypt.hash(parol, 10);
+}
+
+<span class="cm">// Parolu yoxla</span>
+async function verifyPassword(parol, hash) {
+  return bcrypt.compare(parol, hash);
+}
+
+<span class="cm">// JWT tokeni yarat</span>
+function signToken(payload) {
+  return jwt.sign(payload, process.env.JWT_SECRET,
+                  { expiresIn: process.env.JWT_EXPIRES_IN || '7d' });
+}
+
+<span class="cm">// JWT tokeni yoxla</span>
+function verifyToken(token) {
+  return jwt.verify(token, process.env.JWT_SECRET);
+}
+
+module.exports = { hashPassword, verifyPassword, signToken, verifyToken };</code></pre>
+
+  <h3>3.4. <code>src/middlewares/auth.js</code> — qoruyucu</h3>
+  <pre><code>const { verifyToken } = require('../config/auth');
+
+<span class="cm">// İcazə tələb edən marşrutlara əlavə edilir</span>
+function authMiddleware(req, res, next) {
+  const auth = req.headers.authorization || '';
+  const token = auth.startsWith('Bearer ') ? auth.slice(7) : null;
+  if (!token) return res.status(401).json({ xeta: 'Token tələb olunur' });
+  try {
+    req.user = verifyToken(token);   <span class="cm">// { user_id, role, ... }</span>
+    next();
+  } catch (e) {
+    return res.status(401).json({ xeta: 'Yanlış və ya müddəti bitmiş token' });
+  }
+}
+
+<span class="cm">// Rol əsaslı məhdudiyyət</span>
+function roleMiddleware(...icazeler) {
+  return (req, res, next) => {
+    if (!icazeler.includes(req.user.role)) {
+      return res.status(403).json({ xeta: 'İcazəniz yoxdur' });
+    }
+    next();
+  };
+}
+
+module.exports = { authMiddleware, roleMiddleware };</code></pre>
+</section>
+
+<section class="kart" id="addim3">
+  <h2><span class="no">4</span> 7 Əsas Model</h2>
+  <p>Hər model SQL sorğularını saxlayır. Nümunə olaraq <code>layiheModel</code> və <code>istifadeciModel</code>-i tam göstəririk, qalanları qısa təqdim edirik.</p>
+
+  <h3>4.1. <code>src/models/layiheModel.js</code></h3>
+  <pre><code>const { pool } = require('../config/db');
+
+<span class="cm">// Bütün layihələr (view ilə tam icmal)</span>
+async function findAll() {
+  const { rows } = await pool.query(
+    `SELECT * FROM hesabat.layihe_tam_icmal ORDER BY layihe_id`
+  );
+  return rows;
+}
+
+<span class="cm">// ID ilə bir layihə</span>
+async function findById(layiheId) {
+  const { rows } = await pool.query(
+    `SELECT * FROM layihe.layihe WHERE layihe_id = $1 AND silinib = FALSE`,
+    [layiheId]
+  );
+  return rows[0];
+}
+
+<span class="cm">// Yeni layihə (parametrlər $1, $2... — SQL injection qoruması)</span>
+async function create(data) {
+  const { muessise_id, is_novu_id, seher_id, kod, ad, plan_budce,
+          bashlama_tarixi, son_tarix } = data;
+  const { rows } = await pool.query(
+    `INSERT INTO layihe.layihe
+       (muessise_id, is_novu_id, seher_id, kod, ad, plan_budce, bashlama_tarixi, son_tarix)
+     VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
+     RETURNING *`,
+    [muessise_id, is_novu_id, seher_id, kod, ad, plan_budce, bashlama_tarixi, son_tarix]
+  );
+  return rows[0];
+}
+
+<span class="cm">// Plan büdcəni yenilə</span>
+async function updateBudget(layiheId, plan_budce) {
+  const { rows } = await pool.query(
+    `UPDATE layihe.layihe SET plan_budce = $2 WHERE layihe_id = $1 RETURNING *`,
+    [layiheId, plan_budce]
+  );
+  return rows[0];
+}
+
+module.exports = { findAll, findById, create, updateBudget };</code></pre>
+
+  <h3>4.2. <code>src/models/istifadeciModel.js</code> (auth)</h3>
+  <pre><code>const { pool } = require('../config/db');
+
+async function findByUsername(username) {
+  const { rows } = await pool.query(
+    `SELECT * FROM auth.users WHERE username = $1`, [username]
+  );
+  return rows[0];
+}
+
+async function create({ username, email, password_hash, full_name, role }) {
+  const { rows } = await pool.query(
+    `INSERT INTO auth.users (username, email, password_hash, full_name, role)
+     VALUES ($1,$2,$3,$4,$5) RETURNING user_id, username, role`,
+    [username, email, password_hash, full_name, role || 'istifadeci']
+  );
+  return rows[0];
+}
+
+module.exports = { findByUsername, create };</code></pre>
+
+  <h3>4.3. Qalan 5 model — ümumi cədvəl</h3>
+  <table>
+    <tr><th>Model</th><th>Əsas metodlar</th><th>Əsas cədvəl/view</th></tr>
+    <tr><td><code>muessiseModel</code></td><td>findAll, findById, create</td><td>ref.muessise</td></tr>
+    <tr><td><code>tenderModel</code></td><td>findAll, findById, iştirakçılar, qalibiElanEt</td><td>satinalma.tender + tender_istirakci</td></tr>
+    <tr><td><code>muqavileModel</code></td><td>findAll, findById, ödənişVəziyyəti</td><td>satinalma.muqavile + hesabat.muqavile_odenis_veziyyeti</td></tr>
+    <tr><td><code>xercModel</code></td><td>findAll, create, büdcəAşırlığı</td><td>maliyye.xerc + audit.sistem_log</td></tr>
+    <tr><td><code>isciModel</code></td><td>findAll, findById, təyinatlar</td><td>kadr.isci + kadr.layihe_isci_teyinat</td></tr>
+  </table>
+</section>
+
+<section class="kart" id="addim4">
+  <h2><span class="no">5</span> Controller və Routes</h2>
+
+  <h3>5.1. <code>src/controllers/layihe.controller.js</code></h3>
+  <pre><code>const layiheModel = require('../models/layiheModel');
+
+<span class="cm">// GET /api/layihe</span>
+async function getLayiheler(req, res, next) {
+  try {
+    const layiheler = await layiheModel.findAll();
+    res.json(layiheler);
+  } catch (e) { next(e); }
+}
+
+<span class="cm">// POST /api/layihe</span>
+async function createLayihe(req, res, next) {
+  try {
+    const yeni = await layiheModel.create(req.body);
+    res.status(201).json(yeni);
+  } catch (e) { next(e); }
+}
+
+module.exports = { getLayiheler, createLayihe };</code></pre>
+
+  <h3>5.2. <code>src/routes/layihe.routes.js</code></h3>
+  <pre><code>const { Router } = require('express');
+const { authMiddleware } = require('../middlewares/auth');
+const controller = require('../controllers/layihe.controller');
+
+const router = Router();
+
+<span class="cm">// Auth qoruyucusu bütün layihe marşrutlarına tətbiq olunur</span>
+router.use(authMiddleware);
+
+router.get('/', controller.getLayiheler);
+router.post('/', controller.createLayihe);
+
+module.exports = router;</code></pre>
+
+  <h3>5.3. <code>src/routes/index.js</code> — birləşdirici</h3>
+  <pre><code>const { Router } = require('express');
+const router = Router();
+
+router.use('/auth', require('./auth.routes'));
+router.use('/layihe', require('./layihe.routes'));
+router.use('/muessise', require('./muessise.routes'));
+router.use('/tender', require('./tender.routes'));
+router.use('/muqavile', require('./muqavile.routes'));
+router.use('/xerc', require('./xerc.routes'));
+router.use('/isci', require('./isci.routes'));
+
+module.exports = router;</code></pre>
+
+  <h3>5.4. Auth controller — login</h3>
+  <pre><code>const { hashPassword, verifyPassword, signToken } = require('../config/auth');
+const istifadeciModel = require('../models/istifadeciModel');
+
+async function login(req, res, next) {
+  try {
+    const { username, parol } = req.body;
+    const istifadeci = await istifadeciModel.findByUsername(username);
+    if (!istifadeci) return res.status(401).json({ xeta: 'İstifadəçi tapılmadı' });
+
+    const duz = await verifyPassword(parol, istifadeci.password_hash);
+    if (!duz) return res.status(401).json({ xeta: 'Şifrə yanlışdır' });
+
+    <span class="cm">// Giriş logu (audit.giris_log)</span>
+    await pool.query(
+      `INSERT INTO audit.giris_log (istifadeci_id, istifadeci_ad, ip, success)
+       VALUES ($1,$2,$3,TRUE)`,
+      [istifadeci.user_id, istifadeci.username, req.ip]
+    );
+
+    const token = signToken({ user_id: istifadeci.user_id,
+                              username: istifadeci.username,
+                              role: istifadeci.role });
+    res.json({ token, istifadeci: { user_id: istifadeci.user_id,
+                                    username: istifadeci.username,
+                                    role: istifadeci.role } });
+  } catch (e) { next(e); }
+}
+
+module.exports = { login };</code></pre>
+</section>
+
+<section class="kart" id="addim6">
+  <h2><span class="no">6</span> Express Tətbiqi və Server</h2>
+
+  <h3>6.1. <code>src/app.js</code></h3>
+  <pre><code>const express = require('express');
+const cors = require('cors');
+const rateLimit = require('express-rate-limit');
+const routes = require('./routes');
+const { xetaMiddleware } = require('./middlewares/error');
+
+const app = express();
+app.use(express.json());
+
+<span class="cm">// CORS — frontend ünvanları</span>
+const originlar = (process.env.CORS_ORIGIN || '').split(',');
+app.use(cors({ origin: originlar }));
+
+<span class="cm">// Sürət məhdudiyyəti</span>
+const limiter = rateLimit({
+  windowMs: Number(process.env.RATE_LIMIT_WINDOW_MS) || 900000,
+  max: Number(process.env.RATE_LIMIT_MAX) || 200,
+});
+app.use('/api', limiter);
+
+<span class="cm">// Health check — Dərsin əsas yoxlama nöqtəsi</span>
+app.get('/health', async (req, res) => {
+  try {
+    const vaxt = await require('./config/db').testConnection();
+    res.json({ status: 'ok', baza: vaxt, vaxt: new Date().toISOString() });
+  } catch (e) {
+    res.status(503).json({ status: 'xeta', baza: e.message });
+  }
+});
+
+app.use('/api', routes);
+
+<span class="cm">// 404 və xəta idarəçisi</span>
+app.use((req, res) => res.status(404).json({ xeta: 'Marşrut tapılmadı' }));
+app.use(xetaMiddleware);
+
+module.exports = app;</code></pre>
+
+  <h3>6.2. <code>src/middlewares/error.js</code></h3>
+  <pre><code>function xetaMiddleware(err, req, res, next) {
+  <span class="cm">// unikal sütun xətası (23505)</span>
+  if (err.code === '23505') {
+    return res.status(409).json({ xeta: 'Bu qeyd artıq mövcuddur', detay: err.detail });
+  }
+  <span class="cm">// xarici açar xətası (23503)</span>
+  if (err.code === '23503') {
+    return res.status(400).json({ xeta: 'İstinad edilən qeyd tapılmadı', detay: err.detail });
+  }
+  console.error(err);
+  res.status(500).json({ xeta: 'Daxili server xətası' });
+}
+module.exports = { xetaMiddleware };</code></pre>
+
+  <h3>6.3. <code>src/server.js</code> — giriş nöqtəsi</h3>
+  <pre><code>require('dotenv').config();
+const app = require('./app');
+
+const PORT = Number(process.env.PORT) || 5001;
+
+app.listen(PORT, () => {
+  console.log(`DeepSeek-5 ERP API ${PORT} portunda işləyir (${process.env.NODE_ENV})`);
+});</code></pre>
+
+  <p>Serveri işə salın:</p>
+  <pre><code>cd backend
+npm run dev
+<span class="cm"># Çıxış: DeepSeek-5 ERP API 5001 portunda işləyir (development)</span></code></pre>
+
+  <div class="meslehet"><strong>Health check:</strong> <code>curl http://localhost:5001/health</code> → <code>{"status":"ok","baza":"2026-08-25T...","vaxt":"..."}</code> — baza əlaqəsi də burada yoxlanır.</div>
+</section>
+
+<section class="kart" id="addim7">
+  <h2><span class="no">7</span> 10 Test (Jest + Supertest)</h2>
+  <p>Jest test çərçivəsidir, Supertest HTTP sorğularını simulyasiya edir. <code>tests/integration/api.test.js</code>:</p>
+  <pre><code>const request = require('supertest');
+const app = require('../../src/app');
+
+describe('DeepSeek-5 ERP API', () => {
+
+  <span class="cm">// 1. Health check</span>
+  test('GET /health → status ok', async () => {
+    const res = await request(app).get('/health');
+    expect(res.status).toBe(200);
+    expect(res.body.status).toBe('ok');
+  });
+
+  <span class="cm">// 2. Auth tələb olunan marşrut token olmadan 401 qaytarmalıdır</span>
+  test('GET /api/layihe tokensiz → 401', async () => {
+    const res = await request(app).get('/api/layihe');
+    expect(res.status).toBe(401);
+  });
+
+  <span class="cm">// 3. Login ilə token əldə et (sintetik istifadəçi)</span>
+  test('POST /api/auth/login düzgün parol ilə → token', async () => {
+    const res = await request(app)
+      .post('/api/auth/login')
+      .send({ username: 'test_admin', parol: 'test123' });
+    expect(res.status).toBe(200);
+    expect(res.body.token).toBeDefined();
+  });
+
+  <span class="cm">// 4. Layihələrin siyahısı token ilə</span>
+  test('GET /api/layihe token ilə → 5 layihə', async () => {
+    const login = await request(app)
+      .post('/api/auth/login')
+      .send({ username: 'test_admin', parol: 'test123' });
+    const res = await request(app)
+      .get('/api/layihe')
+      .set('Authorization', 'Bearer ' + login.body.token);
+    expect(res.status).toBe(200);
+    expect(Array.isArray(res.body)).toBe(true);
+  });
+
+  <span class="cm">// 5. Yeni layihə yaradılması</span>
+  test('POST /api/layihe yeni layihə yaradır', async () => {
+    const login = await request(app)
+      .post('/api/auth/login')
+      .send({ username: 'test_admin', parol: 'test123' });
+    const res = await request(app)
+      .post('/api/layihe')
+      .set('Authorization', 'Bearer ' + login.body.token)
+      .send({
+        muessise_id: 1, is_novu_id: 1, seher_id: 1,
+        kod: 'T-2026-TEST', ad: 'Test layihəsi', plan_budce: 10000
+      });
+    expect(res.status).toBe(201);
+    expect(res.body.kod).toBe('T-2026-TEST');
+  });
+
+  <span class="cm">// 6. Müqavilə ödəniş vəziyyəti</span>
+  test('GET /api/muqavile → borc siyahısı', async () => {
+    const login = await request(app)
+      .post('/api/auth/login')
+      .send({ username: 'test_admin', parol: 'test123' });
+    const res = await request(app)
+      .get('/api/muqavile')
+      .set('Authorization', 'Bearer ' + login.body.token);
+    expect(res.status).toBe(200);
+  });
+
+  <span class="cm">// 7. Tender siyahısı</span>
+  test('GET /api/tender → tenderlər', async () => {
+    const login = await request(app)
+      .post('/api/auth/login')
+      .send({ username: 'test_admin', parol: 'test123' });
+    const res = await request(app)
+      .get('/api/tender')
+      .set('Authorization', 'Bearer ' + login.body.token);
+    expect(res.status).toBe(200);
+  });
+
+  <span class="cm">// 8. İşçilər siyahısı</span>
+  test('GET /api/isci → işçilər', async () => {
+    const login = await request(app)
+      .post('/api/auth/login')
+      .send({ username: 'test_admin', parol: 'test123' });
+    const res = await request(app)
+      .get('/api/isci')
+      .set('Authorization', 'Bearer ' + login.body.token);
+    expect(res.status).toBe(200);
+    expect(res.body.length).toBeGreaterThanOrEqual(1);
+  });
+
+  <span class="cm">// 9. Yanlış parol → 401</span>
+  test('POST /api/auth/login yanlış parol → 401', async () => {
+    const res = await request(app)
+      .post('/api/auth/login')
+      .send({ username: 'test_admin', parol: 'yanlis' });
+    expect(res.status).toBe(401);
+  });
+
+  <span class="cm">// 10. Mövcud olmayan marşrut → 404</span>
+  test('GET /api/movcuddeyil → 404', async () => {
+    const res = await request(app).get('/api/movcuddeyil');
+    expect(res.status).toBe(404);
+  });
+});</code></pre>
+
+  <div class="diqqet">
+    <strong>Test məlumatı:</strong> Testlər <code>test_admin</code> istifadəçisinə ehtiyac duyur. Test üçün auth.users cədvəlinə sintetik istifadəçi əlavə edin:
+    <pre><code>INSERT INTO auth.users (username, email, password_hash, full_name, role)
+VALUES ('test_admin', 'test@deepseek.az', '$2a$10$...bcrypt_hash...', 'Test Admin', 'admin');</code></pre>
+    (bcrypt hash-ini <code>node -e "console.log(require('bcryptjs').hashSync('test123',10))"</code> ilə yaradın.)
+  </div>
+
+  <pre><code>npm test
+<span class="cm"># Nəticə: 10 test keçdi (Test Suites: 1 passed, Tests: 10 passed)</span></code></pre>
+</section>
+
+<section class="kart" id="yoxlama">
+  <h2><span class="no">8</span> Gözlənilən Nəticə və Yoxlama Yolları</h2>
+
+  <h3>8.1. curl ilə yoxlama</h3>
+  <pre><code><span class="cm"># Health check</span>
+curl http://localhost:5001/health
+
+<span class="cm"># Login → token əldə et</span>
+curl -X POST http://localhost:5001/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"username":"test_admin","parol":"test123"}'
+
+<span class="cm"># Token ilə layihələr</span>
+curl http://localhost:5001/api/layihe \
+  -H "Authorization: Bearer TOKEN_BURAYA"</code></pre>
+
+  <h3>8.2. Səhv halları</h3>
+  <pre><code><span class="cm"># Tokensiz → 401</span>
+curl http://localhost:5001/api/layihe
+<span class="cm"># → {"xeta":"Token tələb olunur"}</span>
+
+<span class="cm"># Yanlış marşrut → 404</span>
+curl http://localhost:5001/api/yoxdur
+<span class="cm"># → {"xeta":"Marşrut tapılmadı"}</span></code></pre>
+</section>
+
+<section class="kart" id="tekrar">
+  <h2><span class="no">9</span> Təkrarlama Tapşırığı</h2>
+  <div class="tebrik"><strong>Ev tapşırığı:</strong> Dərsə baxmadan:</div>
+  <ol>
+    <li>Express layihəsini sıfırdan qurun (npm init, asılılıqlar).</li>
+    <li><code>config/db.js</code> və <code>config/auth.js</code>-ni yazın.</li>
+    <li><code>tenderModel</code>-i yazın: findAll + qalibiElanEt (iştirakçını qalib et).</li>
+    <li><code>GET /api/muessise</code> üçün route + controller + model yaradın.</li>
+    <li>Health check-i işə salıb curl ilə yoxlayın.</li>
+    <li>Jest ilə 10 testdən ən az 5-ni yazıb keçirin.</li>
+  </ol>
+  <div class="meslehet">
+    <strong>Bu addımda nə öyrəndin?</strong> MVC arxitekturası (model-controller-route); <code>pg</code> Pool; parametrləşdirilmiş sorğular (SQL injection qoruması); JWT ilə auth; bcrypt parol heşi; CORS, rate-limit, xəta idarəçiliyi; health check; Jest + Supertest ilə API testi.
+  </div>
+</section>
+
+</main>
+
+<footer>
+  DeepSeek-5 ERP · Tədris Sənədləri · Dərs 3/8 — Backend Əsasları · <span style="color:#7dd3fc">docs/lessons/ders_03_backend_esas.html</span>
+</footer>
+
+</body>
+</html>

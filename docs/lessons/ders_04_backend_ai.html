@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dərs 4 — Backend AI: aiService, promptBuilder, Mock Rejimi</title>
+<style>
+  :root{
+    --mavi:#0f3d5c; --mavi2:#14557e; --mavi3:#0a2c44;
+    --yasi:#0e9f6e; --yasi2:#0b7a54;
+    --qirmizi:#b91c1c; --boz:#f4f6f8; --metin:#1f2937; --ac:#6b7280;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;color:var(--metin);line-height:1.65;background:#eef1f4}
+  header{background:linear-gradient(135deg,var(--mavi3),var(--mavi) 60%,var(--mavi2));color:#fff;padding:2.2rem 1.5rem 1.8rem;border-bottom:4px solid var(--yasi)}
+  .qab{max-width:1050px;margin:0 auto;padding:0 1rem}
+  header h1{font-size:1.7rem;font-weight:700}
+  header .alt{color:#cfe0ec;margin-top:.4rem;font-size:1rem}
+  header .nişan{display:inline-block;background:var(--yasi);color:#fff;font-size:.75rem;font-weight:700;padding:.25rem .7rem;border-radius:999px;margin-top:.8rem;letter-spacing:.5px}
+  nav{background:#fff;border-bottom:1px solid #dde3e8;position:sticky;top:0;z-index:10;box-shadow:0 2px 6px rgba(15,61,92,.06)}
+  nav .qab{display:flex;flex-wrap:wrap;gap:.3rem;padding:.5rem 1rem;align-items:center}
+  nav a{color:var(--mavi);text-decoration:none;font-size:.85rem;padding:.3rem .65rem;border-radius:6px}
+  nav a:hover{background:#e8f2fa;color:var(--mavi2)}
+  main{max-width:1050px;margin:2rem auto;padding:0 1rem}
+  .kart{background:#fff;border:1px solid #e0e5ea;border-radius:12px;padding:1.8rem 2rem;margin-bottom:1.8rem;box-shadow:0 2px 8px rgba(15,61,92,.05)}
+  h2{color:var(--mavi);font-size:1.35rem;margin-bottom:1rem;padding-bottom:.5rem;border-bottom:2px solid var(--yasi);display:flex;align-items:center;gap:.5rem}
+  h2 .no{background:var(--mavi);color:#fff;font-size:.8rem;padding:.15rem .6rem;border-radius:6px}
+  h3{color:var(--mavi2);font-size:1.08rem;margin:1.4rem 0 .6rem}
+  h4{color:var(--mavi2);font-size:.98rem;margin:1.1rem 0 .4rem}
+  p{margin-bottom:.9rem}
+  ul,ol{margin:0 0 1rem 1.4rem}
+  li{margin-bottom:.35rem}
+  table{width:100%;border-collapse:collapse;margin:1rem 0 1.4rem;font-size:.88rem}
+  th{background:var(--mavi);color:#fff;text-align:left;padding:.55rem .7rem;font-weight:600}
+  td{padding:.5rem .7rem;border-bottom:1px solid #e8edf1;vertical-align:top}
+  tr:nth-child(even) td{background:#f7fafb}
+  code{font-family:'SF Mono',Consolas,'Courier New',monospace;background:#eef3f7;color:#0b4a6f;padding:.15rem .4rem;border-radius:4px;font-size:.85rem}
+  pre{background:#0f1e2a;color:#dce9f2;padding:1.2rem 1.4rem;border-radius:10px;overflow-x:auto;margin:1rem 0 1.4rem;font-size:.8rem;line-height:1.55;border-left:4px solid var(--yasi)}
+  pre code{background:none;color:inherit;padding:0;font-size:inherit}
+  pre .cm{color:#7d9bb0} pre .kw{color:#7dd3fc} pre .s{color:#86efac} pre .n{color:#fca5a5}
+  .diqqet{background:#fef3f2;border:1px solid #f5c2c0;border-left:4px solid var(--qirmizi);padding:1rem 1.2rem;border-radius:8px;margin:1.2rem 0}
+  .meslehet{background:#e8f6ef;border:1px solid #b9e6d0;border-left:4px solid var(--yasi);padding:1rem 1.2rem;border-radius:8px;margin:1.2rem 0}
+  .info{background:#eaf3fb;border:1px solid #c3dcf0;border-left:4px solid var(--mavi);padding:1rem 1.2rem;border-radius:8px;margin:1.2rem 0}
+  .tebrik{background:#fff8e6;border:1px solid #f0dfa8;border-left:4px solid #f59e0b;padding:1rem 1.2rem;border-radius:8px;margin:1.2rem 0}
+  footer{background:var(--mavi3);color:#b9cfdd;text-align:center;padding:1.5rem;font-size:.85rem;margin-top:2.5rem}
+  .hansı{color:var(--mavi);font-size:.82rem;margin:.4rem 0}
+  @media(max-width:600px){main{padding:0 .5rem}.kart{padding:1.2rem}h1{font-size:1.3rem!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="qab">
+    <div class="nişan">Dərs 4 / 8 · Backend AI</div>
+    <h1>AI İdarəetmə Qatı: aiService, promptBuilder, aiModel, Mock Rejim</h1>
+    <div class="alt">DeepSeek-5 ERP — DeepSeek + Anthropic Claude iki provider-lə AI inteqrasiyası</div>
+  </div>
+</header>
+
+<nav>
+  <div class="qab">
+    <a href="#meqsed">Məqsəd</a>
+    <a href="#memari">Memarlıq</a>
+    <a href="#addim1">1. Asılılıqlar</a>
+    <a href="#addim2">2. aiService</a>
+    <a href="#addim3">3. promptBuilder</a>
+    <a href="#addim4">4. aiModel</a>
+    <a href="#addim5">5. Controller</a>
+    <a href="#addim6">6. Routes</a>
+    <a href="#addim7">7. Mock</a>
+    <a href="#yoxlama">Yoxlama</a>
+    <a href="#tekrar">Tapşırıq</a>
+  </div>
+</nav>
+
+<main>
+
+<section class="kart" id="meqsed">
+  <h2><span class="no">0</span> Dərsin Məqsədi</h2>
+  <p>Bu dərs backend-ə <strong>AI idarəetmə qatını</strong> əlavə edir. Məqsəd — AI modellərinin (DeepSeek və Anthropic Claude) vahid interfeysdən çağırılması, tapşırıqların <code>ai</code> sxemindəki cədvəllərə yazılması və <strong>mock rejimində</strong> real API xərci olmadan test edilməsidir.</p>
+  <ul>
+    <li><code>aiService</code> — iki provider-i (DeepSeek + Anthropic) birləşdirən vahid xidmət;</li>
+    <li><code>promptBuilder</code> — sorğu mətnlərini (prompt) verilənlər bazası məlumatlarından qurur;</li>
+    <li><code>aiModel</code> — <code>ai</code> sxem cədvəlləri ilə işləyən model (ai_teyinat, ai_agent, ai_log);</li>
+    <li><code>aiController</code> + <code>aiRoutes</code> — HTTP API;</li>
+    <li><strong>Mock rejimi</strong> — <code>AI_MODE=mock</code> olduqda real API çağırışı etmədən nəticə qaytarmaq.</li>
+  </ul>
+  <div class="hansı"><strong>Real fayllar:</strong> <code>backend/.env</code> (AI_MODE, DEEPSEEK_*, ANTHROPIC_*), <code>database/schemas/02_create_tables_ek.sql</code> (ai sxemi), <code>database/seeds/03_seed_new_tables.sql</code> (AI seed məlumatları)</div>
+</section>
+
+<section class="kart" id="memari">
+  <h2><span class="no">1</span> AI Qatının Memarlığı</h2>
+  <pre><code>┌─────────────────────────────────────────────────────┐
+│  aiRoutes  →  aiController  →  aiService          │
+│                                    │  ├─ DeepSeek │
+│                                    │  └─ Anthropic│
+│                                    ▼              │
+│                         promptBuilder (prompt qurur)│
+│                                    ▼              │
+│                        aiModel (ai_teyinat, ai_log)│
+└─────────────────────────────────────────────────────┘</code></pre>
+  <ol>
+    <li>İstifadəçi <code>POST /api/ai/sorgu</code>-ya tapşırıq göndərir;</li>
+    <li><code>aiController</code> istəyi yoxlayır, <code>aiModel</code>-ə tapşırığı yazdırır (status: islemede);</li>
+    <li><code>aiService</code> <code>promptBuilder</code>-ın qurduğu promptu seçilmiş provider-ə göndərir;</li>
+    <li>Nəticə <code>ai_teyinat.cixis_json</code>-a yazılır, status <code>hazir</code> olur, <code>ai_log</code>-a token/xərc yazılır;</li>
+    <li><code>AI_MODE=mock</code> olduqda <code>aiService</code> real API əvəzinə nümunə nəticə qaytarır.</li>
+  </ol>
+
+  <table>
+    <tr><th>Fayl</th><th>Vəzifəsi</th></tr>
+    <tr><td><code>src/services/aiService.js</code></td><td>Provider-lərə sorğu göndərir, mock rejimi, nəticəni formatlayır</td></tr>
+    <tr><td><code>src/services/promptBuilder.js</code></td><td>Baza məlumatı + tapşırıq növü → prompt mətni</td></tr>
+    <tr><td><code>src/models/aiModel.js</code></td><td>ai_agent, ai_teyinat, ai_log cədvəlləri ilə iş</td></tr>
+    <tr><td><code>src/controllers/ai.controller.js</code></td><td>HTTP sorğu/cavab idarəsi</td></tr>
+    <tr><td><code>src/routes/ai.routes.js</code></td><td><code>/api/ai</code> marşrutları</td></tr>
+  </table>
+</section>
+
+<section class="kart" id="addim1">
+  <h2><span class="no">2</span> AI Kitabxanalarının Quraşdırılması</h2>
+  <pre><code>cd backend
+npm install @anthropic-ai/sdk
+<span class="cm"># DeepSeek OpenAI-uyumlu API istifadə edir — fetch ilə birbaşa da işləyir.
+# İstəyə bağlı: npm install openai</span></code></pre>
+  <p>Hər iki provider-ə sorğu göndərmək üçün Node 20+ daxili <code>fetch</code>-indən istifadə edəcəyik — beləliklə əlavə asılılıq tələb olunmur (yalnız Anthropic SDK-nı quraşdırırıq, onu da birbaşa REST-ə də çevirə bilərik).</p>
+</section>
+
+<section class="kart" id="addim2">
+  <h2><span class="no">3</span> aiService — İki Providerli Vahid Xidmət</h2>
+
+  <p><code>src/services/aiService.js</code> — ən vacib fayl. <code>AI_MODE</code>-a görə <code>mock</code> və ya <code>live</code> rejimini seçir:</p>
+  <pre><code>require('dotenv').config();
+
+<span class="cm">// Provider konfiqurasiyası .env-dən</span>
+const AI_MODE = process.env.AI_MODE || 'mock';   <span class="cm">// 'mock' | 'live'</span>
+
+const PROVIDERS = {
+  deepseek: {
+    baseUrl: process.env.DEEPSEEK_BASE_URL || 'https://api.deepseek.com',
+    apiKey: process.env.DEEPSEEK_API_KEY,
+    model: process.env.DEEPSEEK_MODEL || 'deepseek-chat',
+  },
+  anthropic: {
+    baseUrl: process.env.ANTHROPIC_BASE_URL || 'https://api.anthropic.com',
+    apiKey: process.env.ANTHROPIC_API_KEY,
+    model: process.env.ANTHROPIC_MODEL || 'claude-sonnet-5',
+  },
+};
+
+<span class="cm">// DeepSeek-ə sorğu (OpenAI-uyumlu /chat/completions)</span>
+async function callDeepSeek(prompt, sistem) {
+  const { baseUrl, apiKey, model } = PROVIDERS.deepseek;
+  const res = await fetch(`${baseUrl}/chat/completions`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify({
+      model,
+      messages: [
+        { role: 'system', content: sistem },
+        { role: 'user', content: prompt },
+      ],
+      temperature: 0.3,
+    }),
+  });
+  if (!res.ok) throw new Error(`DeepSeek xətası: ${res.status} ${await res.text()}`);
+  const data = await res.json();
+  return {
+    metin: data.choices[0].message.content,
+    tokens: data.usage.total_tokens,
+  };
+}
+
+<span class="cm">// Anthropic Claude-a sorğu (messages API)</span>
+async function callAnthropic(prompt, sistem) {
+  const { baseUrl, apiKey, model } = PROVIDERS.anthropic;
+  const res = await fetch(`${baseUrl}/v1/messages`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+    },
+    body: JSON.stringify({
+      model,
+      max_tokens: 4096,
+      system: sistem,
+      messages: [{ role: 'user', content: prompt }],
+    }),
+  });
+  if (!res.ok) throw new Error(`Anthropic xətası: ${res.status} ${await res.text()}`);
+  const data = await res.json();
+  return {
+    metin: data.content[0].text,
+    tokens: data.usage.input_tokens + data.usage.output_tokens,
+  };
+}
+
+<span class="cm">// Mock rejim — real API xərci olmadan test üçün nümunə cavab</span>
+function callMock(prompt, tapşırıqNovu) {
+  <span class="cm">// Realist görünən nümunə nəticə — AI_MODE=mock olduğu üçün heç bir API çağırılmır</span>
+  const cavablar = {
+    budce_prognozu: {
+      prognoz_budce: 823000,
+      sapma_faizi: -3.2,
+      tovsiye: 'Material alışını rübün sonuna saxlayın',
+    },
+    tender_qiymetlendirme: {
+      en_yaxsi_teklif: 2210000,
+      tovsiye_edilen: 'AZKURTİK MMC',
+      eminlik: 87,
+    },
+    risk_analizi: {
+      kritik_risk: 'material_qiymet',
+      derece: 42,
+      mudaxile_plani: 'Alternativ təchizatçı ilə opsion müqavilə',
+    },
+  };
+  return {
+    metin: JSON.stringify(cavablar[tapşırıqNovu] || {
+      nəticə: 'Mock nəticə', tapşırıq: tapşırıqNovu,
+    }),
+    tokens: 0,
+  };
+}
+
+<span class="cm">// Vahid giriş nöqtəsi</span>
+async function execute({ provider = 'deepseek', tapşırıqNovu, prompt, sistem }) {
+  if (AI_MODE === 'mock') return callMock(prompt, tapşırıqNovu);
+
+  if (provider === 'anthropic') return callAnthropic(prompt, sistem);
+  return callDeepSeek(prompt, sistem);
+}
+
+module.exports = { execute, AI_MODE, PROVIDERS };</code></pre>
+
+  <div class="meslehet">
+    <strong>İki provider niyə?</strong> DeepSeek iqtisadi və sürətlidir (analitika, adi tapşırıqlar); Claude daha güclüdür (strateji planlama, mürəkkəb qərarlar). <code>ai_model</code> cədvəlində hər agent öz modelinə bağlıdır — <code>provider</code> sahəsi seçimi aparır.
+  </div>
+</section>
+
+<section class="kart" id="addim3">
+  <h2><span class="no">4</span> promptBuilder — Promptların Qurulması</h2>
+
+  <p><code>src/services/promptBuilder.js</code> baza məlumatlarını insan oxuya bilən prompt mətninə çevirir:</p>
+  <pre><code><span class="cm">// Sistem mesajı — AI-ya rolu verir</span>
+function sistemMesaji(rol) {
+  const rolar = {
+    planlayici: 'Sən təcrübəli tikinti layihələri planlayıcısısan. ' +
+                'Layihə mərhələlərini, vaxt və resurs bölgüsünü hazırlayırsan.',
+    tender_analitiki: 'Sən tender təkliflərini qiymətləndirən maliyyə analitikisən. ' +
+                      'Qiymət və texniki meyarlara görə ən optimal təklifi tövsiyə edirsən.',
+    risk_nezaretcisi: 'Sən layihə risklərini izləyən risk idarəçisisən. ' +
+                      'Risk dərəcəsini (ehtimal × təsir) hesablayıb müdaxilə planı təklif edirsən.',
+  };
+  return rolar[rol] || 'Sən ERP sisteminin AI köməkçisisən.';
+}
+
+<span class="cm">// Tapşırıq növünə görə prompt qurur</span>
+function build({ tapşırıqNovu, layihe, verilənlər }) {
+  const baza = [
+    `Verilənlər bazasından məlumatlar:`,
+    `Layihə: ${layihe.kod} — ${layihe.ad}`,
+    `Plan büdcə: ${layihe.plan_budce} AZN`,
+    `Cari xərc: ${verilənlər.xerc_umumi || 'yoxdur'} AZN`,
+    `Progress: ${verilənlər.progres || 0}%`,
+    '',
+  ].join('\n');
+
+  const istəklər = {
+    budce_prognozu: 'Bu məlumatlara əsasən layihənin tamamlanma büdcəsini proqnozlaşdır. ' +
+                    'Sapma faizini göstər və qənaət üçün 1-2 tövsiyə ver.',
+    tender_qiymetlendirme: 'Tender təkliflərini qiymət meyarına görə dərəcələndir, ' +
+                           'ən yaxşı təklifi və əminlik faizini qeyd et.',
+    risk_analizi: 'Risk amillərini təhlil edərək hər biri üçün ehtimal və təsir ver, ' +
+                  'kritik riski və müdaxilə planını qeyd et.',
+  };
+
+  return `${baza}\nTapşırıq: ${istəklər[tapşırıqNovu] || verilənlər.sual || 'Təhlil apar.'}`;
+}
+
+module.exports = { sistemMesaji, build };</code></pre>
+</section>
+
+<section class="kart" id="addim4">
+  <h2><span class="no">5</span> aiModel — Verilənlər Bazası İnteqrasiyası</h2>
+
+  <p><code>src/models/aiModel.js</code> Dərs 1-də qurduğumuz <code>ai</code> sxem cədvəlləri ilə işləyir:</p>
+  <pre><code>const { pool } = require('../config/db');
+
+<span class="cm">// Aktiv agentləri modelləri ilə birlikdə gətir</span>
+async function agentler() {
+  const { rows } = await pool.query(
+    `SELECT a.agent_id, a.ad, a.vezife, m.provider, m.model_ref
+     FROM ai.ai_agent a
+     JOIN ai.ai_model m ON m.model_id = a.model_id
+     WHERE a.aktif = TRUE`
+  );
+  return rows;
+}
+
+<span class="cm">// Yeni AI tapşırığı yarat</span>
+async function teyinatYarat({ agent_id, layihe_id, teyinat_novu, giris_json, prompt, yaradan }) {
+  const { rows } = await pool.query(
+    `INSERT INTO ai.ai_teyinat
+       (agent_id, layihe_id, teyinat_novu, giris_json, prompt, status, yaradan)
+     VALUES ($1,$2,$3,$4,$5,'islemede',$6)
+     RETURNING teyinat_id`,
+    [agent_id, layihe_id, teyinat_novu, giris_json, prompt, yaradan]
+  );
+  return rows[0];
+}
+
+<span class="cm">// Nəticəni yaz, statusu 'hazir' et</span>
+async function teyinatBitir(teyinatId, cixis_json) {
+  await pool.query(
+    `UPDATE ai.ai_teyinat
+     SET cixis_json = $2, status = 'hazir',
+         tamamlanma_tarixi = NOW(), updated_at = NOW()
+     WHERE teyinat_id = $1`,
+    [teyinatId, cixis_json]
+  );
+}
+
+<span class="cm">// Xəta halı — status 'xesver'</span>
+async function teyinatXeta(teyinatId) {
+  await pool.query(
+    `UPDATE ai.ai_teyinat SET status = 'xesver', updated_at = NOW()
+     WHERE teyinat_id = $1`, [teyinatId]
+  );
+}
+
+<span class="cm">// İcra loqu — token və xərc izləmə</span>
+async function logYaz({ teyinat_id, agent_id, hadise, mesaj, tokens, xerc }) {
+  await pool.query(
+    `INSERT INTO ai.ai_log (teyinat_id, agent_id, hadise, mesaj, serf_olunan_tokens, serf_olunan_xerc)
+     VALUES ($1,$2,$3,$4,$5,$6)`,
+    [teyinat_id, agent_id, hadise, mesaj, tokens, xerc]
+  );
+}
+
+module.exports = { agentler, teyinatYarat, teyinatBitir, teyinatXeta, logYaz };</code></pre>
+</section>
+
+<section class="kart" id="addim5">
+  <h2><span class="no">6</span> aiController — Əsas Sorğu Axını</h2>
+
+  <pre><code>const aiModel = require('../models/aiModel');
+const aiService = require('../services/aiService');
+const promptBuilder = require('../services/promptBuilder');
+
+<span class="cm">// POST /api/ai/sorgu</span>
+async function sorgu(req, res, next) {
+  try {
+    const { agent_id, layihe_id, teyinat_novu, verilənlər, provider } = req.body;
+
+    <span class="cm">// 1. Agent və layihə məlumatını tap</span>
+    const agent = (await aiModel.agentler()).find(a => a.agent_id === agent_id);
+    if (!agent) return res.status(404).json({ xeta: 'Agent tapılmadı' });
+
+    const layiheRes = await require('../models/layiheModel').findById(layihe_id);
+
+    <span class="cm">// 2. Prompt qur</span>
+    const prompt = promptBuilder.build({
+      tapşırıqNovu: teyinat_novu,
+      layihe: layiheRes,
+      verilənlər,
+    });
+    const sistem = promptBuilder.sistemMesaji(agent.vezife);
+
+    <span class="cm">// 3. Tapşırığı bazaya yaz (islemede)</span>
+    const teyinat = await aiModel.teyinatYarat({
+      agent_id, layihe_id, teyinat_novu,
+      giris_json: verilənlər || {}, prompt,
+      yaradan: req.user?.user_id || 1,
+    });
+
+    <span class="cm">// 4. AI-a göndər (mock və ya live)</span>
+    const nəticə = await aiService.execute({
+      provider: provider || agent.provider,
+      tapşırıqNovu: teyinat_novu,
+      prompt, sistem,
+    });
+
+    <span class="cm">// 5. Nəticəni JSON olaraq saxla (cavab mətnidirsə parse et)</span>
+    let cixis;
+    try { cixis = JSON.parse(nəticə.metin); }
+    catch { cixis = { metin: nəticə.metin }; }
+    await aiModel.teyinatBitir(teyinat.teyinat_id, cixis);
+
+    <span class="cm">// 6. Loq yaz</span>
+    await aiModel.logYaz({
+      teyinat_id: teyinat.teyinat_id, agent_id,
+      hadise: 'bitdi', mesaj: 'Tapşırıq uğurla tamamlandı',
+      tokens: nəticə.tokens || 0,
+      xerc: 0,
+    });
+
+    res.json({ teyinat_id: teyinat.teyinat_id, status: 'hazir', cixis });
+  } catch (e) {
+    <span class="cm">// Xəta olarsa statusu xesver et</span>
+    next(e);
+  }
+}
+
+<span class="cm">// GET /api/ai/teyinatlar — AI tapşırıqlarının siyahısı</span>
+async function teyinatlar(req, res, next) {
+  try {
+    const { rows } = await require('../config/db').pool.query(
+      `SELECT t.teyinat_id, a.ad AS agent, t.teyinat_novu, t.status,
+              t.tesdiq_status, t.netice_qiymeti, l.kod AS layihe
+       FROM ai.ai_teyinat t
+       JOIN ai.ai_agent a ON a.agent_id = t.agent_id
+       LEFT JOIN layihe.layihe l ON l.layihe_id = t.layihe_id
+       ORDER BY t.teyinat_id DESC`
+    );
+    res.json(rows);
+  } catch (e) { next(e); }
+}
+
+module.exports = { sorgu, teyinatlar };</code></pre>
+</section>
+
+<section class="kart" id="addim6">
+  <h2><span class="no">7</span> aiRoutes və Qeydiyyat</h2>
+
+  <pre><code><span class="cm">// src/routes/ai.routes.js</span>
+const { Router } = require('express');
+const { authMiddleware } = require('../middlewares/auth');
+const controller = require('../controllers/ai.controller');
+
+const router = Router();
+router.use(authMiddleware);
+
+router.post('/sorgu', controller.sorgu);
+router.get('/teyinatlar', controller.teyinatlar);
+
+module.exports = router;</code></pre>
+
+  <p><code>src/routes/index.js</code>-a əlavə edin:</p>
+  <pre><code>router.use('/ai', require('./ai.routes'));</code></pre>
+</section>
+
+<section class="kart" id="addim7">
+  <h2><span class="no">8</span> Mock Rejimi və Nümunə Sorğu</h2>
+
+  <div class="info">
+    <strong>Mock rejim nədir?</strong> <code>AI_MODE=mock</code> olduqda <code>aiService.execute()</code> heç bir xarici API çağırmır — əvvəlcədən hazırlanmış realist nümunə cavabı qaytarır. Bu, tərtibatçının <strong>pulsuz</strong> və <strong>sürətli</strong> test etməsinə imkan verir. Real açarlar olmadan da bütün axını yoxlamaq olar.
+  </div>
+
+  <h3>8.1. Sorğunu işə sal</h3>
+  <pre><code>curl -X POST http://localhost:5001/api/ai/sorgu \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer TOKEN" \
+  -d '{
+    "agent_id": 4,
+    "layihe_id": 1,
+    "teyinat_novu": "budce_prognozu",
+    "verilənlər": {"xerc_umumi": 68700, "progres": 60}
+  }'</code></pre>
+
+  <p><strong>Gözlənilən nəticə (mock):</strong></p>
+  <pre><code>{
+  "teyinat_id": 10,
+  "status": "hazir",
+  "cixis": {
+    "prognoz_budce": 823000,
+    "sapma_faizi": -3.2,
+    "tovsiye": "Material alışını rübün sonuna saxlayın"
+  }
+}</code></pre>
+
+  <h3>8.2. Nəticəni bazada yoxla</h3>
+  <pre><code>SELECT t.teyinat_id, a.ad AS agent, t.teyinat_novu, t.status,
+       t.cixis_json, t.tamamlanma_tarixi
+FROM ai.ai_teyinat t
+JOIN ai.ai_agent a ON a.agent_id = t.agent_id
+ORDER BY t.teyinat_id DESC LIMIT 3;</code></pre>
+
+  <div class="diqqet">
+    <strong>Təhlükəsizlik qeydi:</strong> <code>.env</code> faylındakı <code>DEEPSEEK_API_KEY</code> və <code>ANTHROPIC_API_KEY</code> boşdur. <code>AI_MODE=mock</code> qalır — real açarları Dərs 8-də əlavə edəcəyik. Heç vaxt .env faylını GitHub-a yükləməyin!
+  </div>
+
+  <h3>8.3. Mock rejimdə bütün tapşırıq növlərinin sınağı</h3>
+  <p><code>callMock</code> hazırda 3 tapşırıq növü üçün nümunə cavab saxlayır. Hər agenti ayrıca sınayın:</p>
+  <table>
+    <tr><th>agent_id</th><th>Agent</th><th>teyinat_novu</th><th>Mock nəticə</th></tr>
+    <tr><td>4</td><td>Xərc Analitiki</td><td><code>budce_prognozu</code></td><td>prognoz_budce: 823000, sapma: -3.2</td></tr>
+    <tr><td>2</td><td>Tender Analitiki</td><td><code>tender_qiymetlendirme</code></td><td>ən yaxşı təklif: 2210000, AZKURTİK MMC</td></tr>
+    <tr><td>3</td><td>Risk Nəzarətçisi</td><td><code>risk_analizi</code></td><td>kritik risk: material_qiymet, dərəcə: 42</td></tr>
+  </table>
+
+  <h3>8.4. Xəta idarəçiliyi — provider xətaları</h3>
+  <p>Live rejimdə API xətası olarsa, <code>aiService</code> xətanı qaldırır və <code>aiController</code> onu emal edir. Tapşırığın statusu <code>xesver</code> olmalıdır:</p>
+  <pre><code>async function sorgu(req, res, next) {
+  try {
+    ...
+  } catch (e) {
+    <span class="cm">// Tapşırıq varsa statusu xesver et</span>
+    if (req.teyinat_id) await aiModel.teyinatXeta(req.teyinat_id);
+    next(e);
+  }
+}</code></pre>
+  <p><code>ai_log</code>-da xəta hadisəsi də qeyd oluna bilər:</p>
+  <pre><code>INSERT INTO ai.ai_log (teyinat_id, agent_id, hadise, mesaj, serf_olunan_tokens, serf_olunan_xerc)
+VALUES ($1, $2, 'xesver', 'Provider xətası: ' || $3, 0, 0);</code></pre>
+</section>
+
+<section class="kart" id="yoxlama">
+  <h2><span class="no">9</span> Gözlənilən Nəticə və Yoxlama</h2>
+  <table>
+    <tr><th>Yoxlama</th><th>Əmr</th><th>Gözlənilən</th></tr>
+    <tr><td>Server işləyir</td><td><code>npm run dev</code></td><td>5001 portunda mesaj</td></tr>
+    <tr><td>AI sorğusu</td><td><code>curl -X POST /api/ai/sorgu</code></td><td><code>status: hazir</code> + cixis</td></tr>
+    <tr><td>Agentlər bazada</td><td><code>SELECT ad, vezife FROM ai.ai_agent</code></td><td>6 agent</td></tr>
+    <tr><td>Tapşırıqlar siyahısı</td><td><code>GET /api/ai/teyinatlar</code></td><td>9 seed + yeni tapşırıq</td></tr>
+  </table>
+
+  <p>Dərs 6-da <code>05_ai_nuyis_sorgular.sql</code> faylındakı 36 sorğunun hər birinin AI-ya necə veriləcəyini görəcəksiniz.</p>
+</section>
+
+<section class="kart" id="tekrar">
+  <h2><span class="no">10</span> Təkrarlama Tapşırığı</h2>
+  <div class="tebrik"><strong>Ev tapşırığı:</strong> Dərsə baxmadan:</div>
+  <ol>
+    <li><code>aiService</code>-də yeni bir provider (məsələn <code>openai</code>) necə əlavə edərdiniz? İzah edin.</li>
+    <li><code>callMock</code>-a <code>material_planlamasi</code> üçün nümunə cavab əlavə edin.</li>
+    <li><code>promptBuilder.build</code>-a <code>keyfiyyet_hesabati</code> tapşırıq növü əlavə edin.</li>
+    <li>Bir AI tapşırığını işə salıb <code>ai_log</code>-da qeydin yarandığını yoxlayın.</li>
+    <li>İzah edin: <code>AI_MODE=live</code> olduqda nə dəyişir? Mock-un üstünlükləri nələrdir?</li>
+  </ol>
+  <div class="meslehet">
+    <strong>Bu addımda nə öyrəndin?</strong> Provider abstraksiyası (vahid interfeyslə iki fərqli AI API-si); fetch ilə REST çağırışları; Anthropic Messages API vs DeepSeek Chat Completions; prompt mühəndisliyi (sistem mesajı + kontekst + tapşırıq); AI tapşırıq həyat dövrünün (islemede → hazir/xesver) bazada izlənməsi; mock rejimin dəyəri.
+  </div>
+</section>
+
+</main>
+
+<footer>
+  DeepSeek-5 ERP · Tədris Sənədləri · Dərs 4/8 — Backend AI Qatı · <span style="color:#7dd3fc">docs/lessons/ders_04_backend_ai.html</span>
+</footer>
+
+</body>
+</html>

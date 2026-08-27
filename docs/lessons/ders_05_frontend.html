@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dərs 5 — Frontend: React 19 + Vite 6, Login, Dashboard, Layihələr, Tenderlər</title>
+<style>
+  :root{
+    --mavi:#0f3d5c; --mavi2:#14557e; --mavi3:#0a2c44;
+    --yasi:#0e9f6e; --yasi2:#0b7a54;
+    --qirmizi:#b91c1c; --boz:#f4f6f8; --metin:#1f2937; --ac:#6b7280;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;color:var(--metin);line-height:1.65;background:#eef1f4}
+  header{background:linear-gradient(135deg,var(--mavi3),var(--mavi) 60%,var(--mavi2));color:#fff;padding:2.2rem 1.5rem 1.8rem;border-bottom:4px solid var(--yasi)}
+  .qab{max-width:1050px;margin:0 auto;padding:0 1rem}
+  header h1{font-size:1.7rem;font-weight:700}
+  header .alt{color:#cfe0ec;margin-top:.4rem;font-size:1rem}
+  header .nişan{display:inline-block;background:var(--yasi);color:#fff;font-size:.75rem;font-weight:700;padding:.25rem .7rem;border-radius:999px;margin-top:.8rem;letter-spacing:.5px}
+  nav{background:#fff;border-bottom:1px solid #dde3e8;position:sticky;top:0;z-index:10;box-shadow:0 2px 6px rgba(15,61,92,.06)}
+  nav .qab{display:flex;flex-wrap:wrap;gap:.3rem;padding:.5rem 1rem;align-items:center}
+  nav a{color:var(--mavi);text-decoration:none;font-size:.85rem;padding:.3rem .65rem;border-radius:6px}
+  nav a:hover{background:#e8f2fa;color:var(--mavi2)}
+  main{max-width:1050px;margin:2rem auto;padding:0 1rem}
+  .kart{background:#fff;border:1px solid #e0e5ea;border-radius:12px;padding:1.8rem 2rem;margin-bottom:1.8rem;box-shadow:0 2px 8px rgba(15,61,92,.05)}
+  h2{color:var(--mavi);font-size:1.35rem;margin-bottom:1rem;padding-bottom:.5rem;border-bottom:2px solid var(--yasi);display:flex;align-items:center;gap:.5rem}
+  h2 .no{background:var(--mavi);color:#fff;font-size:.8rem;padding:.15rem .6rem;border-radius:6px}
+  h3{color:var(--mavi2);font-size:1.08rem;margin:1.4rem 0 .6rem}
+  h4{color:var(--mavi2);font-size:.98rem;margin:1.1rem 0 .4rem}
+  p{margin-bottom:.9rem}
+  ul,ol{margin:0 0 1rem 1.4rem}
+  li{margin-bottom:.35rem}
+  table{width:100%;border-collapse:collapse;margin:1rem 0 1.4rem;font-size:.88rem}
+  th{background:var(--mavi);color:#fff;text-align:left;padding:.55rem .7rem;font-weight:600}
+  td{padding:.5rem .7rem;border-bottom:1px solid #e8edf1;vertical-align:top}
+  tr:nth-child(even) td{background:#f7fafb}
+  code{font-family:'SF Mono',Consolas,'Courier New',monospace;background:#eef3f7;color:#0b4a6f;padding:.15rem .4rem;border-radius:4px;font-size:.85rem}
+  pre{background:#0f1e2a;color:#dce9f2;padding:1.2rem 1.4rem;border-radius:10px;overflow-x:auto;margin:1rem 0 1.4rem;font-size:.8rem;line-height:1.55;border-left:4px solid var(--yasi)}
+  pre code{background:none;color:inherit;padding:0;font-size:inherit}
+  pre .cm{color:#7d9bb0} pre .kw{color:#7dd3fc} pre .s{color:#86efac} pre .n{color:#fca5a5}
+  .diqqet{background:#fef3f2;border:1px solid #f5c2c0;border-left:4px solid var(--qirmizi);padding:1rem 1.2rem;border-radius:8px;margin:1.2rem 0}
+  .meslehet{background:#e8f6ef;border:1px solid #b9e6d0;border-left:4px solid var(--yasi);padding:1rem 1.2rem;border-radius:8px;margin:1.2rem 0}
+  .info{background:#eaf3fb;border:1px solid #c3dcf0;border-left:4px solid var(--mavi);padding:1rem 1.2rem;border-radius:8px;margin:1.2rem 0}
+  .tebrik{background:#fff8e6;border:1px solid #f0dfa8;border-left:4px solid #f59e0b;padding:1rem 1.2rem;border-radius:8px;margin:1.2rem 0}
+  footer{background:var(--mavi3);color:#b9cfdd;text-align:center;padding:1.5rem;font-size:.85rem;margin-top:2.5rem}
+  .hansı{color:var(--mavi);font-size:.82rem;margin:.4rem 0}
+  @media(max-width:600px){main{padding:0 .5rem}.kart{padding:1.2rem}h1{font-size:1.3rem!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="qab">
+    <div class="nişan">Dərs 5 / 8 · Frontend</div>
+    <h1>React 19 + Vite 6 Skeleton: Login, Dashboard, Layihələr, Tenderlər</h1>
+    <div class="alt">DeepSeek-5 ERP — İstifadəçi interfeysini qururuq</div>
+  </div>
+</header>
+
+<nav>
+  <div class="qab">
+    <a href="#meqsed">Məqsəd</a>
+    <a href="#addim1">1. Vite</a>
+    <a href="#addim2">2. Struktur</a>
+    <a href="#addim3">3. API xidməti</a>
+    <a href="#addim4">4. Login</a>
+    <a href="#addim5">5. Dashboard</a>
+    <a href="#addim6">6. Layihələr</a>
+    <a href="#addim7">7. Tenderlər</a>
+    <a href="#addim8">8. App</a>
+    <a href="#yoxlama">Yoxlama</a>
+    <a href="#tekrar">Tapşırıq</a>
+  </div>
+</nav>
+
+<main>
+
+<section class="kart" id="meqsed">
+  <h2><span class="no">0</span> Dərsin Məqsədi</h2>
+  <p>Bu dərs backend-ə qoşulan <strong>frontend qatını</strong> qurur: React 19 + Vite 6, Login səhifəsi (JWT auth), Dashboard (statistika), Layihələr siyahısı və Tenderlər siyahısı. Dərs sonunda frontend backend-dən real məlumat göstərəcək.</p>
+  <p><strong>Texnologiya:</strong> React 19, Vite 6, React Router 7 (routing), fetch (API), localStorage (token saxlama).</p>
+  <div class="hansı"><strong>Real fayllar:</strong> <code>frontend/src/</code> qovluğunda components, pages, services, utils strukturu; <code>backend/.env</code> CORS_ORIGIN=<code>http://localhost:5174</code></div>
+</section>
+
+<section class="kart" id="addim1">
+  <h2><span class="no">1</span> Vite Layihəsinin Yaradılması</h2>
+  <pre><code><span class="cm"># Vite + React 19 (JavaScript) layihəsi</span>
+npm create vite@latest frontend -- --template react
+cd frontend
+npm install
+npm install react-router-dom
+
+<span class="cm"># CORS üçün vacib: backend 5174 portunu icazəli siyahıya salıb
+# (backend/.env-də: CORS_ORIGIN=http://localhost:5174,http://localhost:3000)</span>
+npm run dev
+<span class="cm"># → Vite dev server 5174 portunda açılır</span></code></pre>
+  <p>Backend-də CORS artıq <code>http://localhost:5174</code>-ə icazə verir (Dərs 3-də gördük).</p>
+</section>
+
+<section class="kart" id="addim2">
+  <h2><span class="no">2</span> Qovluq Strukturu</h2>
+  <pre><code>frontend/src/
+├── main.jsx              <span class="cm"># giriş nöqtəsi</span>
+├── App.jsx               <span class="cm"># Router + səhifələr</span>
+├── services/
+│   └── api.js            <span class="cm"># fetch funksiyaları</span>
+├── utils/
+│   └── auth.js           <span class="cm"># token saxlama</span>
+├── components/
+│   ├── Navbar.jsx
+│   └── ProtectedRoute.jsx
+└── pages/
+    ├── Login.jsx
+    ├── Dashboard.jsx
+    ├── Layiheler.jsx
+    └── Tenderler.jsx</code></pre>
+</section>
+
+<section class="kart" id="addim3">
+  <h2><span class="no">3</span> API Xidməti və Auth Util</h2>
+
+  <h3>3.1. <code>src/utils/auth.js</code> — token idarəsi</h3>
+  <pre><code><span class="cm">// Tokeni localStorage-da saxlayırıq</span>
+const TOKEN_KEY = 'deepseek_token';
+
+export function tokenSaxla(token) {
+  localStorage.setItem(TOKEN_KEY, token);
+}
+export function tokenAl() {
+  return localStorage.getItem(TOKEN_KEY);
+}
+export function tokenSil() {
+  localStorage.removeItem(TOKEN_KEY);
+}
+export function daxilOlubmu() {
+  return Boolean(tokenAl());
+}</code></pre>
+
+  <h3>3.2. <code>src/services/api.js</code> — fetch sarmalayıcı</h3>
+  <pre><code>import { tokenAl } from '../utils/auth';
+
+const BASE = 'http://localhost:5001/api';
+
+async function istek(url, seçimler = {}) {
+  const basliqlar = { 'Content-Type': 'application/json' };
+  const token = tokenAl();
+  if (token) basliqlar['Authorization'] = 'Bearer ' + token;
+
+  const res = await fetch(BASE + url, {
+    ...seçimler,
+    headers: { ...basliqlar, ...seçimler.headers },
+  });
+
+  if (res.status === 401) {
+    <span class="cm">// Token bitibsə — login səhifəsinə yönləndir</span>
+    window.location.href = '/login';
+    throw new Error('Sessiya bitib');
+  }
+  if (!res.ok) {
+    const xeta = await res.json().catch(() => ({}));
+    throw new Error(xeta.xeta || 'Sorğu xətası');
+  }
+  return res.json();
+}
+
+<span class="cm">// Auth</span>
+export const login = (username, parol) =>
+  istek('/auth/login', { method: 'POST', body: JSON.stringify({ username, parol }) });
+
+<span class="cm">// Layihələr</span>
+export const layiheleriGetir = () => istek('/layihe');
+export const layiheYarat = (data) =>
+  istek('/layihe', { method: 'POST', body: JSON.stringify(data) });
+
+<span class="cm">// Tenderlər</span>
+export const tenderleriGetir = () => istek('/tender');
+export const muqavileleriGetir = () => istek('/muqavile');
+
+<span class="cm">// Dashboard üçün xülasə</span>
+export const xulasaGetir = async () => {
+  const [layiheler, tenderler, muqavileler] = await Promise.all([
+    layiheleriGetir(), tenderleriGetir(), muqavileleriGetir(),
+  ]);
+  return { layiheler, tenderler, muqavileler };
+};</code></pre>
+</section>
+
+<section class="kart" id="addim4">
+  <h2><span class="no">4</span> Login Səhifəsi</h2>
+
+  <pre><code><span class="cm">// src/pages/Login.jsx</span>
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { login } from '../services/api';
+import { tokenSaxla } from '../utils/auth';
+
+export default function Login() {
+  const [username, setUsername] = useState('');
+  const [parol, setParol] = useState('');
+  const [xeta, setXeta] = useState('');
+  const [yuklenir, setYuklenir] = useState(false);
+  const naviqasiya = useNavigate();
+
+  async function tesdiqle(e) {
+    e.preventDefault();
+    setYuklenir(true); setXeta('');
+    try {
+      const cavab = await login(username, parol);
+      tokenSaxla(cavab.token);
+      naviqasiya('/');   <span class="cm">// dashboard-a keç</span>
+    } catch (err) {
+      setXeta(err.message);
+    } finally {
+      setYuklenir(false);
+    }
+  }
+
+  return (
+    &lt;div style={{ maxWidth: 380, margin: '4rem auto', padding: '2rem',
+                   border: '1px solid #dde3e8', borderRadius: 12 }}>
+      &lt;h2 style={{ color: '#0f3d5c', marginBottom: '1rem' }}>DeepSeek-5 ERP&lt;/h2>
+      &lt;p style={{ color: '#6b7280', marginBottom: '1.5rem' }}>Daxil olun&lt;/p>
+      {xeta && &lt;p style={{ color: '#b91c1c' }}>{xeta}&lt;/p>}
+      &lt;form onSubmit={tesdiqle}>
+        &lt;input
+          placeholder="İstifadəçi adı"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          style={girisStili} />
+        &lt;input
+          type="password"
+          placeholder="Şifrə"
+          value={parol}
+          onChange={(e) => setParol(e.target.value)}
+          style={girisStili} />
+        &lt;button disabled={yuklenir}
+          style={{ width: '100%', background: '#0e9f6e', color: '#fff',
+                   padding: '.7rem', border: 'none', borderRadius: 8,
+                   fontWeight: 600, cursor: 'pointer' }}>
+          {yuklenir ? 'Yüklənir...' : 'Daxil ol'}
+        &lt;/button>
+      &lt;/form>
+    &lt;/div>
+  );
+}
+
+const girisStili = {
+  width: '100%', padding: '.7rem', marginBottom: '.8rem',
+  border: '1px solid #cbd5e1', borderRadius: 8, fontSize: '1rem',
+};</code></pre>
+</section>
+
+<section class="kart" id="addim5">
+  <h2><span class="no">5</span> Dashboard Səhifəsi</h2>
+
+  <p>Backend-in <code>hesabat.layihe_tam_icmal</code> view-indən gələn məlumatları xülasə kartlarında göstərir:</p>
+  <pre><code><span class="cm">// src/pages/Dashboard.jsx</span>
+import { useEffect, useState } from 'react';
+import { xulasaGetir } from '../services/api';
+
+export default function Dashboard() {
+  const [data, setData] = useState(null);
+  const [xeta, setXeta] = useState('');
+
+  useEffect(() => {
+    xulasaGetir()
+      .then(setData)
+      .catch((e) => setXeta(e.message));
+  }, []);
+
+  if (xeta) return &lt;p style={{ color: '#b91c1c', padding: '1rem' }}>{xeta}&lt;/p>;
+  if (!data) return &lt;p style={{ padding: '1rem' }}>Yüklənir...&lt;/p>;
+
+  const toplamBudce = data.layiheler.reduce((s, l) => s + Number(l.plan_budce || 0), 0);
+  const aktivLayihe = data.layiheler.filter(
+    (l) => l.status && l.status !== 'Tamamlanıb' && l.status !== 'Dayandırılıb').length;
+
+  const kart = (ad, deyer, reng) =&gt; (
+    &lt;div style={{ background: '#fff', border: '1px solid #e0e5ea',
+                  borderTop: `4px solid ${reng}`, borderRadius: 10,
+                  padding: '1.2rem', flex: 1, minWidth: 200 }}>
+      &lt;div style={{ color: '#6b7280', fontSize: '.85rem' }}>{ad}&lt;/div>
+      &lt;div style={{ fontSize: '1.6rem', fontWeight: 700, color: '#0f3d5c' }}>{deyer}&lt;/div>
+    &lt;/div>
+  );
+
+  return (
+    &lt;div>
+      &lt;h1 style={{ color: '#0f3d5c', marginBottom: '1.2rem' }}>Xülasə&lt;/h1>
+      &lt;div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
+        {kart('Ümumi büdcə (AZN)', toplamBudce.toLocaleString('az-AZ'), '#0f3d5c')}
+        {kart('Layihə sayı', data.layiheler.length, '#0e9f6e')}
+        {kart('Aktiv layihə', aktivLayihe, '#f59e0b')}
+        {kart('Tender sayı', data.tenderler.length, '#8b5cf6')}
+      &lt;/div>
+
+      &lt;h2 style={{ color: '#0f3d5c', marginBottom: '1rem' }}>Layihə plan-fakt cədvəli&lt;/h2>
+      &lt;table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '.9rem' }}>
+        &lt;thead>
+          &lt;tr style={{ background: '#0f3d5c', color: '#fff' }}>
+            &lt;th style={{ padding: '.5rem' }}>Kod&lt;/th>
+            &lt;th style={{ padding: '.5rem' }}>Layihə&lt;/th>
+            &lt;th style={{ padding: '.5rem' }}>Plan (AZN)&lt;/th>
+            &lt;th style={{ padding: '.5rem' }}>Fakt (AZN)&lt;/th>
+            &lt;th style={{ padding: '.5rem' }}>Qalıq (AZN)&lt;/th>
+            &lt;th style={{ padding: '.5rem' }}>Status&lt;/th>
+          &lt;/tr>
+        &lt;/thead>
+        &lt;tbody>
+          {data.layiheler.map((l) =&gt; (
+            &lt;tr key={l.layihe_id} style={{ borderBottom: '1px solid #e8edf1' }}>
+              &lt;td style={{ padding: '.5rem' }}>{l.kod}&lt;/td>
+              &lt;td style={{ padding: '.5rem' }}>{l.layihe_adi}&lt;/td>
+              &lt;td style={{ padding: '.5rem' }}>{Number(l.plan_budce).toLocaleString('az-AZ')}&lt;/td>
+              &lt;td style={{ padding: '.5rem' }}>{Number(l.fakt_xerc).toLocaleString('az-AZ')}&lt;/td>
+              &lt;td style={{ padding: '.5rem' }}>{Number(l.qaliq).toLocaleString('az-AZ')}&lt;/td>
+              &lt;td style={{ padding: '.5rem' }}>{l.status}&lt;/td>
+            &lt;/tr>
+          ))}
+        &lt;/tbody>
+      &lt;/table>
+    &lt;/div>
+  );
+}</code></pre>
+</section>
+
+<section class="kart" id="addim6">
+  <h2><span class="no">6</span> Layihələr Səhifəsi</h2>
+
+  <p>Yeni layihə yaratma formalı siyahı. Backend-ə <code>POST /api/layihe</code> ilə göndərir:</p>
+  <pre><code><span class="cm">// src/pages/Layiheler.jsx</span>
+import { useEffect, useState } from 'react';
+import { layiheleriGetir, layiheYarat } from '../services/api';
+
+export default function Layiheler() {
+  const [layiheler, setLayiheler] = useState([]);
+  const [form, setForm] = useState({ kod: '', ad: '', plan_budce: '' });
+  const [mesaj, setMesaj] = useState('');
+
+  useEffect(() => {
+    layiheleriGetir().then(setLayiheler).catch((e) => setMesaj(e.message));
+  }, []);
+
+  async function elaveEt(e) {
+    e.preventDefault();
+    try {
+      const yeni = await layiheYarat({ ...form, plan_budce: Number(form.plan_budce) });
+      setLayiheler((m) =&gt; [yeni, ...m]);
+      setForm({ kod: '', ad: '', plan_budce: '' });
+      setMesaj('Layihə əlavə olundu');
+    } catch (err) { setMesaj(err.message); }
+  }
+
+  return (
+    &lt;div>
+      &lt;h1 style={{ color: '#0f3d5c', marginBottom: '1rem' }}>Layihələr&lt;/h1>
+      {mesaj && &lt;p style={{ color: mesaj.includes('xəta') ? '#b91c1c' : '#0e9f6e' }}>{mesaj}&lt;/p>}
+
+      &lt;form onSubmit={elaveEt}
+            style={{ display: 'flex', gap: '.5rem', marginBottom: '1.5rem' }}>
+        &lt;input placeholder="Kod (L-2026-006)"
+               value={form.kod} onChange={(e) =&gt; setForm({ ...form, kod: e.target.value })}
+               style={inp} />
+        &lt;input placeholder="Ad"
+               value={form.ad} onChange={(e) =&gt; setForm({ ...form, ad: e.target.value })}
+               style={{ ...inp, flex: 2 }} />
+        &lt;input placeholder="Büdcə"
+               type="number" value={form.plan_budce}
+               onChange={(e) =&gt; setForm({ ...form, plan_budce: e.target.value })}
+               style={{ ...inp, width: 140 }} />
+        &lt;button style={btn}>Əlavə et&lt;/button>
+      &lt;/form>
+
+      &lt;ul style={{ listStyle: 'none', padding: 0 }}>
+        {layiheler.map((l) =&gt; (
+          &lt;li key={l.layihe_id}
+              style={{ background: '#f8fafb', border: '1px solid #e0e5ea',
+                       borderRadius: 8, padding: '1rem', marginBottom: '.5rem' }}>
+            &lt;strong>{l.kod}&lt;/strong> — {l.layihe_adi}
+            &lt;span style={{ float: 'right', color: '#0f3d5c', fontWeight: 600 }}>
+              {Number(l.plan_budce).toLocaleString('az-AZ')} AZN
+            &lt;/span>
+          &lt;/li>
+        ))}
+      &lt;/ul>
+    &lt;/div>
+  );
+}
+
+const inp = { padding: '.6rem', border: '1px solid #cbd5e1', borderRadius: 8, fontSize: '.9rem' };
+const btn = { background: '#0e9f6e', color: '#fff', border: 'none',
+              padding: '.6rem 1.2rem', borderRadius: 8, cursor: 'pointer', fontWeight: 600 };</code></pre>
+</section>
+
+<section class="kart" id="addim7">
+  <h2><span class="no">7</span> Tenderlər Səhifəsi</h2>
+
+  <p>Tender siyahısını və qənaət analizini göstərir. Backend <code>GET /api/tender</code> qaytarır (qalib iştirakçı ilə JOIN):</p>
+  <pre><code><span class="cm">// src/pages/Tenderler.jsx</span>
+import { useEffect, useState } from 'react';
+import { tenderleriGetir } from '../services/api';
+
+export default function Tenderler() {
+  const [tenderler, setTenderler] = useState([]);
+  const [xeta, setXeta] = useState('');
+
+  useEffect(() => {
+    tenderleriGetir().then(setTenderler).catch((e) =&gt; setXeta(e.message));
+  }, []);
+
+  if (xeta) return &lt;p style={{ color: '#b91c1c', padding: '1rem' }}>{xeta}&lt;/p>;
+
+  return (
+    &lt;div>
+      &lt;h1 style={{ color: '#0f3d5c', marginBottom: '1rem' }}>Tenderlər&lt;/h1>
+      &lt;table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '.9rem' }}>
+        &lt;thead>
+          &lt;tr style={{ background: '#0f3d5c', color: '#fff' }}>
+            &lt;th style={{ padding: '.5rem' }}>Kod&lt;/th>
+            &lt;th style={{ padding: '.5rem' }}>Tender&lt;/th>
+            &lt;th style={{ padding: '.5rem' }}>Status&lt;/th>
+            &lt;th style={{ padding: '.5rem' }}>Elan həddi (AZN)&lt;/th>
+            &lt;th style={{ padding: '.5rem' }}>Qalib&lt;/th>
+            &lt;th style={{ padding: '.5rem' }}>Qənaət (AZN)&lt;/th>
+          &lt;/tr>
+        &lt;/thead>
+        &lt;tbody>
+          {tenderler.map((t) =&gt; (
+            &lt;tr key={t.tender_id} style={{ borderBottom: '1px solid #e8edf1' }}>
+              &lt;td style={{ padding: '.5rem' }}>{t.kod}&lt;/td>
+              &lt;td style={{ padding: '.5rem' }}>{t.ad}&lt;/td>
+              &lt;td style={{ padding: '.5rem' }}>{t.status}&lt;/td>
+              &lt;td style={{ padding: '.5rem' }}>
+                {Number(t.qiymet_serhedi).toLocaleString('az-AZ')}
+              &lt;/td>
+              &lt;td style={{ padding: '.5rem' }}>{t.qalib || '—'}&lt;/td>
+              &lt;td style={{ padding: '.5rem', color: '#0e9f6e', fontWeight: 600 }}>
+                {t.qenayet ? Number(t.qenayet).toLocaleString('az-AZ') : '—'}
+              &lt;/td>
+            &lt;/tr>
+          ))}
+        &lt;/tbody>
+      &lt;/table>
+    &lt;/div>
+  );
+}</code></pre>
+</section>
+
+<section class="kart" id="addim8">
+  <h2><span class="no">8</span> App.jsx, ProtectedRoute və main.jsx</h2>
+
+  <h3>8.1. <code>src/App.jsx</code></h3>
+  <pre><code>import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import Login from './pages/Login';
+import Dashboard from './pages/Dashboard';
+import Layiheler from './pages/Layiheler';
+import Tenderler from './pages/Tenderler';
+import Navbar from './components/Navbar';
+import ProtectedRoute from './components/ProtectedRoute';
+
+export default function App() {
+  return (
+    &lt;BrowserRouter>
+      &lt;Routes>
+        &lt;Route path="/login" element={&lt;Login />} />
+        &lt;Route element={&lt;ProtectedRoute />}>
+          &lt;Route path="/" element={&lt;Navbar />}>
+            &lt;Route index element={&lt;Dashboard />} />
+            &lt;Route path="layiheler" element={&lt;Layiheler />} />
+            &lt;Route path="tenderler" element={&lt;Tenderler />} />
+          &lt;/Route>
+        &lt;/Route>
+        &lt;Route path="*" element={&lt;Navigate to="/" replace />} />
+      &lt;/Routes>
+    &lt;/BrowserRouter>
+  );
+}</code></pre>
+
+  <h3>8.2. <code>src/components/ProtectedRoute.jsx</code></h3>
+  <pre><code>import { Navigate, Outlet } from 'react-router-dom';
+import { daxilOlubmu } from '../utils/auth';
+
+<span class="cm">// Giriş olunmayıbsa → /login</span>
+export default function ProtectedRoute() {
+  return daxilOlubmu() ? &lt;Outlet /> : &lt;Navigate to="/login" replace />;
+}</code></pre>
+
+  <h3>8.3. <code>src/components/Navbar.jsx</code></h3>
+  <pre><code>import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { tokenSil } from '../utils/auth';
+
+export default function Navbar() {
+  const naviqasiya = useNavigate();
+  function cixis() {
+    tokenSil();
+    naviqasiya('/login');
+  }
+  return (
+    &lt;div>
+      &lt;nav style={{ background: '#0f3d5c', padding: '.9rem 1.5rem',
+                     display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
+        &lt;strong style={{ color: '#fff' }}>DeepSeek-5 ERP&lt;/strong>
+        &lt;NavLink to="/" style={link}>Dashboard&lt;/NavLink>
+        &lt;NavLink to="/layiheler" style={link}>Layihələr&lt;/NavLink>
+        &lt;NavLink to="/tenderler" style={link}>Tenderlər&lt;/NavLink>
+        &lt;button onClick={cixis} style={{ marginLeft: 'auto', background: 'none',
+          border: '1px solid #fff', color: '#fff', borderRadius: 6,
+          padding: '.3rem .9rem', cursor: 'pointer' }}>Çıxış&lt;/button>
+      &lt;/nav>
+      &lt;main style={{ maxWidth: 1050, margin: '2rem auto', padding: '0 1rem' }}>
+        &lt;Outlet />
+      &lt;/main>
+    &lt;/div>
+  );
+}
+const link = { color: '#cfe0ec', textDecoration: 'none', fontSize: '.95rem' };</code></pre>
+
+  <h3>8.4. <code>src/main.jsx</code></h3>
+  <pre><code>import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import App from './App';
+import './index.css';
+
+createRoot(document.getElementById('root')).render(
+  &lt;StrictMode>
+    &lt;App />
+  &lt;/StrictMode>
+);</code></pre>
+</section>
+
+<section class="kart" id="yoxlama">
+  <h2><span class="no">9</span> Gözlənilən Nəticə və Yoxlama</h2>
+
+  <ol>
+    <li><code>npm run dev</code> (frontend) və <code>npm run dev</code> (backend) işləyin;</li>
+    <li>Brauzerdə <code>http://localhost:5174</code> açın → Login səhifəsi;</li>
+    <li>Daxil olun (test istifadəçisi) → Dashboard-da 4 xülasə kartı və plan-fakt cədvəli;</li>
+    <li><code>/layiheler</code> səhifəsində 5 seed layihəsi + yeni əlavə etmə;</li>
+    <li><code>/tenderler</code> səhifəsində tenderlər və qənaət sütunu.</li>
+  </ol>
+
+  <div class="diqqet">
+    <strong>Gözlənilən problem:</strong> Login üçün test istifadəçisi lazımdır. Dərs 3-də yaratdığınız <code>test_admin</code> / <code>test123</code> istifadəçisindən istifadə edin.
+  </div>
+
+  <div class="meslehet">
+    <strong>Backend nə qaytarmalıdır:</strong> <code>GET /api/layihe</code> → <code>hesabat.layihe_tam_icmal</code> view-indən JSON massivi. Hər sətirdə <code>layihe_id, kod, layihe_adi, plan_budce, fakt_xerc, qaliq, status</code> olur.
+  </div>
+</section>
+
+<section class="kart" id="tekrar">
+  <h2><span class="no">10</span> Təkrarlama Tapşırığı</h2>
+  <div class="tebrik"><strong>Ev tapşırığı:</strong> Dərsə baxmadan:</div>
+  <ol>
+    <li>Vite layihəsini sıfırdan yaradın və <code>react-router-dom</code> qurun.</li>
+    <li><code>utils/auth.js</code> və <code>services/api.js</code>-ni yazın.</li>
+    <li>Login səhifəsini qurun: istifadəçi adı + şifrə, token-i localStorage-a yazın.</li>
+    <li><code>Maliyye</code> adlı yeni səhifə yaradın: <code>GET /api/xerc</code> məlumatını cədvəldə göstərin.</li>
+    <li><code>Navbar</code>-a "Maliyyə" linki əlavə edin.</li>
+    <li>İzah edin: <code>ProtectedRoute</code> niyə vacibdir?</li>
+  </ol>
+  <div class="meslehet">
+    <strong>Bu addımda nə öyrəndin?</strong> Vite 6 layihə quruluşu; React 19 komponentləri (useState, useEffect); React Router 7 (Route, Outlet, Navigate); fetch əsaslı API xidməti; JWT token-in localStorage-da saxlanması; protected route; xülasə kartları və cədvəl renderi.
+  </div>
+</section>
+
+</main>
+
+<footer>
+  DeepSeek-5 ERP · Tədris Sənədləri · Dərs 5/8 — Frontend · <span style="color:#7dd3fc">docs/lessons/ders_05_frontend.html</span>
+</footer>
+
+</body>
+</html>
